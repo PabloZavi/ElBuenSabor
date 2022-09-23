@@ -14,7 +14,21 @@ const initialState = {
 function reducer(state, action) {
   switch (action.type) {
     case 'CART_ADD_ITEM':
-      return {
+      //Guardamos en una constante el ítem que vamos a agregar al carrito como nuevo ítem
+      const newItem = action.payload;
+      //Comprobamos si ya existe en el carrito el ítem o no
+      const existItem = state.cart.cartItems.find(
+        (item) => item._id === newItem._id
+      );
+      const cartItems = existItem //Si existe el ítem en el carrito...
+        ? state.cart.cartItems.map(
+            (
+              item //Actualizamos el ítem "nuevo" con el ítem que ya existía en el carrito
+            ) => (item._id === existItem._id ? newItem : item)
+          )
+        : [...state.cart.cartItems, newItem]; //Si no le agregamos el nuevo ítem al carrito
+      return { ...state, cart: { ...state.cart, cartItems } }; //y actualizamos el carrito basado en la const 'cartItems'
+    /* return {
         ...state, //the object keep all the previous values in the field
         cart: {
           ...state.cart, //but for the cart object all the previous values in the cart object in the state
@@ -22,7 +36,7 @@ function reducer(state, action) {
           //y agregamos el nuevo item ('action.payload')
           cartItems: [...state.cart.cartItems, action.payload],
         },
-      };
+      }; */
     default:
       return state;
   }

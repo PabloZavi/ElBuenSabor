@@ -26,7 +26,7 @@ function App() {
                 Carrito
                 {cart.cartItems.length>0&&(
                   <Badge pill bg="danger">
-                    {cart.cartItems.length}
+                    {cart.cartItems.reduce((a,c)=> a + c.cantidad, 0)}
                   </Badge>
                 )}
                 </Link>
@@ -39,7 +39,7 @@ function App() {
           <Container className="mt-3">
             <Routes>
               <Route path="/" element={<HomeScreen />} />
-              <Route path="/producto/:id" element={<ProductScreen />} />
+              <Route path="/producto/:_id" element={<ProductScreen />} />
             </Routes>
           </Container>
         </main>

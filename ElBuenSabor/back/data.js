@@ -1,7 +1,7 @@
 const data = {
   productos: [
     {
-      id: 1,
+      _id: '1',
       denominacion: 'Hamburguesa doble con cheddar',
       rubro: 'Hamburguesa',
       imagen: '/images/hambdobleconqueso.jpg',
@@ -12,7 +12,7 @@ const data = {
       stock: 0
     },
     {
-      id: 2,
+      _id: '2',
       denominacion: 'Hamburguesa Guacamole',
       rubro: 'Hamburguesa',
       imagen: '/images/hambguacamole.jpg',
@@ -23,7 +23,7 @@ const data = {
       stock: 1
     },
     {
-      id: 3,
+      _id: '3',
       denominacion: 'Hamburguesa de Pollo',
       rubro: 'Hamburguesa',
       imagen: '/images/hambpollo.jpg',
@@ -34,7 +34,7 @@ const data = {
       stock: 2
     },
     {
-      id: 4,
+      _id: '4',
       denominacion: 'Hamburguesa Vegana',
       rubro: 'Hamburguesa',
       imagen: '/images/hambvegana.jpg',

@@ -7,8 +7,8 @@ app.get('/api/productos', (req, res) => {
   res.send(data.productos);
 });
 
-app.get('/api/productos/id/:id', (req, res) => {
-  const producto = data.productos.find(x => x.id == req.params.id);
+app.get('/api/productos/:id', (req, res) => {
+  const producto = data.productos.find(x => x._id === req.params.id);
   if (producto) {
     res.send(producto);
   } else {

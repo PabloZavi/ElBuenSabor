@@ -30,7 +30,7 @@ const reducer = (state, action) => {
 
 function ProductScreen() {
   const params = useParams();
-  const { id } = params;
+  const { _id } = params;
 
   const [{ loading, error, producto }, dispatch] = useReducer(reducer, {
     producto: [],
@@ -41,26 +41,41 @@ function ProductScreen() {
     const fetchData = async () => {
       dispatch({ type: 'FETCH_REQUEST' });
       try {
-        const result = await axios.get(`/api/productos/id/${id}`);
+        const result = await axios.get(`/api/productos/${_id}`);
         dispatch({ type: 'FETCH_SUCCESS', payload: result.data });
       } catch (error) {
         dispatch({ type: 'FETCH_FAIL', payload: getError(error) });
       }
     };
     fetchData();
-  }, [id]);
+  }, [_id]);
 
   //Para agregar un ítem al carrito de compras necesito primero tener el contexto, entonces...
   //definimos el state y renombramos dispatch por ctxDispatch para distinguirlo del dispatch
   //de este componente en el reducer (arriba) y...
   //usamos useContext para acceder al estado del context y cambiarlo
   const { state, dispatch: ctxDispatch } = useContext(Store);
+  //Antes de agregar algo al carrito, vemos que no esté ya agregado
+  //Traemos 'cart' desde state y la usamos en addCartToHandler
+  const { cart } = state;
   //Esta será la función que se ejecuta al hacer clic en "Agregar al carrito"
-  const addToCartHandler = () =>
+  const addToCartHandler = async () => {
+    //Comprobamos si ya existe en el carrito el item que queremos agregar
+    const existItem = cart.cartItems.find((x) => x._id === producto._id);
+    //si existe le agregamos 1 a la cantidad, si no la ponemos en 1
+    const cantidad = existItem ? existItem.cantidad + 1 : 1;
+    //Nos traemos los datos del producto que queremos agregar...
+    const { data } = await axios.get(`/api/productos/${producto._id}`);
+    //y verificamos si hay stock
+    if (data.stock < cantidad) {
+      window.alert('No hay stock del producto');
+      return;
+    }
     ctxDispatch({
       type: 'CART_ADD_ITEM',
-      payload: { ...producto, cantidad: 1 },
+      payload: { ...producto, cantidad },
     });
+  };
 
   return loading ? (
     //<div>Cargando...</div>
