@@ -24,3 +24,27 @@ header a {
   font-weight: bold;
   text-decoration: none;
 }
+
+main{
+  padding: 1rem;
+}
+
+.productos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.producto {
+  border: 1px #404040 solid;
+  margin: 1rem;
+}
+
+.producto img {
+  width: 100%;
+  max-width: 400px;
+}
+
+.producto-info {
+  padding: 1rem;
+}
