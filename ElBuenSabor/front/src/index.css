@@ -34,7 +34,6 @@ main {
   flex: 1;
 }
 
-
 /* Color "agregar al carrito" */
 .btn-primary {
   background-color: #f0c040;
@@ -59,4 +58,8 @@ main {
 
 .producto-info {
   padding: 1rem;
+}
+
+.img-large {
+  max-width: 100%;
 }

@@ -9,6 +9,7 @@ const data = {
       tiempoCocina: 12,
       receta: 'receta hamburguesa doble con cheddar',
       descripcion: 'descripción hamburguesa doble con cheddar',
+      stock: 0
     },
     {
       id: 2,
@@ -19,6 +20,7 @@ const data = {
       tiempoCocina: 15,
       receta: 'receta hamburguesa guacamole',
       descripcion: 'descripción hamburguesa guacamole',
+      stock: 1
     },
     {
       id: 3,
@@ -29,6 +31,7 @@ const data = {
       tiempoCocina: 22,
       receta: 'receta hamburguesa pollo',
       descripcion: 'descripción hamburguesa pollo',
+      stock: 2
     },
     {
       id: 4,
@@ -39,6 +42,7 @@ const data = {
       tiempoCocina: 28,
       receta: 'receta hamburguesa vegana',
       descripcion: 'descripción hamburguesa vegana',
+      stock: 0
     },
   ],
 };

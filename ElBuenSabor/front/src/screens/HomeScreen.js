@@ -5,6 +5,7 @@ import logger from 'use-reducer-logger';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Producto from '../components/Producto';
+import { Helmet } from 'react-helmet-async';
 //import data from '../data';
 
 //reducer acepta dos parámetros, el primero es el estado actual y el segundo es la acción que cambia
@@ -50,6 +51,9 @@ function HomeScreen() {
   //Se le agrega un mensaje mientras carga y si hay un error lo muestra, si no muestra los productos.
   return (
     <div>
+      <Helmet>
+        <title>El Buen Sabor</title>
+      </Helmet>
       <h1> ¡Nuestros Productos! </h1>
       <div className="productos">
         {loading ? (
