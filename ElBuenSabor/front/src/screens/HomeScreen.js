@@ -1,7 +1,10 @@
 import { useEffect, useReducer, useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import axios from 'axios';
 import logger from 'use-reducer-logger';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Producto from '../components/Producto';
 //import data from '../data';
 
 //reducer acepta dos parámetros, el primero es el estado actual y el segundo es la acción que cambia
@@ -47,30 +50,20 @@ function HomeScreen() {
   //Se le agrega un mensaje mientras carga y si hay un error lo muestra, si no muestra los productos.
   return (
     <div>
-      <h1> Featured Products </h1>
+      <h1> ¡Nuestros Productos! </h1>
       <div className="productos">
-        
         {loading ? (
           <div>Cargando...</div>
         ) : error ? (
           <div>{error}</div>
         ) : (
-          productos.map((producto) => (
-            <div className="producto" key={producto.id}>
-              <Link to={`/producto/${producto.id}`}>
-                <img src={producto.imagen} alt={producto.denominacion} />
-              </Link>
-              <div className="producto-info">
-                <Link to={`/producto/${producto.id}`}>
-                  <p>{producto.denominacion}</p>
-                </Link>
-                <p>
-                  <strong>{producto.precioVenta}</strong>
-                </p>
-                <button>Agregar al carrito</button>
-              </div>
-            </div>
-          ))
+          <Row>
+            {productos.map((producto) => (
+              <Col key={producto.id} sm={6} md={4} lg={3} className="mb-3">
+                <Producto producto={producto}></Producto>
+              </Col>
+            ))}
+          </Row>
         )}
       </div>
     </div>

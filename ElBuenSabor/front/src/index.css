@@ -34,6 +34,13 @@ main {
   flex: 1;
 }
 
+
+/* Color "agregar al carrito" */
+.btn-primary {
+  background-color: #f0c040;
+  color: black;
+}
+
 .productos {
   display: flex;
   flex-wrap: wrap;
