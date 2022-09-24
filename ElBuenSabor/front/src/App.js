@@ -8,10 +8,11 @@ import Container from 'react-bootstrap/Container';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useContext } from 'react';
 import { Store } from './Store';
+import CartScreen from './screens/CartScreen';
 
 function App() {
-  const { state} = useContext(Store);
-  const {cart} = state;
+  const { state } = useContext(Store);
+  const { cart } = state;
   return (
     <BrowserRouter>
       <div className="d-flex flex-column site-container">
@@ -23,12 +24,12 @@ function App() {
               </LinkContainer>
               <Nav className="me-auto">
                 <Link to="/cart" className="nav-link">
-                Carrito
-                {cart.cartItems.length>0&&(
-                  <Badge pill bg="danger">
-                    {cart.cartItems.reduce((a,c)=> a + c.cantidad, 0)}
-                  </Badge>
-                )}
+                  Carrito
+                  {cart.cartItems.length > 0 && (
+                    <Badge pill bg="danger">
+                      {cart.cartItems.reduce((a, c) => a + c.cantidad, 0)}
+                    </Badge>
+                  )}
                 </Link>
               </Nav>
             </Container>
@@ -40,6 +41,7 @@ function App() {
             <Routes>
               <Route path="/" element={<HomeScreen />} />
               <Route path="/producto/:_id" element={<ProductScreen />} />
+              <Route path="/cart" element={<CartScreen />} />
             </Routes>
           </Container>
         </main>
