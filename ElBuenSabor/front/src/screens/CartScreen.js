@@ -44,20 +44,20 @@ export default function CartScreen() {
                     </Col>
                     <Col md={3}>
                       <Button variant="light" disabled={item.cantidad === 1}>
-                        <i className="fas fa-minus-circle"></i>
+                        <i className="bi bi-file-minus-fill"></i>
                       </Button>{' '}
                       <span>{item.cantidad}</span>{' '}
                       <Button
                         variant="light"
                         disabled={item.cantidad === item.stock}
                       >
-                        <i className="fas fa-plus-circle">+</i>
+                        <i className="bi bi-file-plus-fill"></i>
                       </Button>
                     </Col>
                     <Col md={3}>$ {item.precioVenta}</Col>
                     <Col md={2}>
                       <Button variant="light">
-                        <i className="fas fa-trash"></i>
+                        <i className="bi bi-trash-fill"></i>
                       </Button>
                     </Col>
                   </Row>
