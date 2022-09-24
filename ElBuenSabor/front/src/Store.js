@@ -6,7 +6,11 @@ export const Store = createContext();
 //Será un objeto. Su campo 'cart' tendrá otro object que su atributo será un array vacío de ítems
 const initialState = {
   cart: {
-    cartItems: [],
+    //cartItems tiene que venir del localStorage
+
+    cartItems: localStorage.getItem('cartItems') //Si cartItems existe en el localStorage...
+      ? JSON.parse(localStorage.getItem('cartItems')) //usamos parse para convertir el string en un jsObject
+      : [], //si no lo seteamos como un array vacío
   },
 };
 
@@ -27,6 +31,10 @@ function reducer(state, action) {
             ) => (item._id === existItem._id ? newItem : item)
           )
         : [...state.cart.cartItems, newItem]; //Si no le agregamos el nuevo ítem al carrito
+      //Para que se conserven los productos en el carrito cuando actualizamos la página...
+      //usando setItem de localStorage, que acepta dos parámetros, la key en el localStorage...
+      //y los valores para guardar en la key. Usamos stringfy para convertir los cartItems a un string
+      localStorage.setItem('cartItems', JSON.stringify(cartItems));
       return { ...state, cart: { ...state.cart, cartItems } }; //y actualizamos el carrito basado en la const 'cartItems'
     /* return {
         ...state, //the object keep all the previous values in the field
@@ -37,6 +45,15 @@ function reducer(state, action) {
           cartItems: [...state.cart.cartItems, action.payload],
         },
       }; */
+    //Ojo, usamos llaves para que cartItems de abajo no se mezcle con la de arriba
+    case 'CART_REMOVE_ITEM': {
+      const cartItems = state.cart.cartItems.filter(
+        (item) => item._id !== action.payload._id
+      );
+      localStorage.setItem('cartItems', JSON.stringify(cartItems));
+      return { ...state, cart: { ...state.cart, cartItems } };
+    }
+
     default:
       return state;
   }

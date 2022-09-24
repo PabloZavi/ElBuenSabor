@@ -31,7 +31,7 @@ const data = {
       tiempoCocina: 22,
       receta: 'receta hamburguesa pollo',
       descripcion: 'descripción hamburguesa pollo',
-      stock: 2
+      stock: 3
     },
     {
       _id: '4',
