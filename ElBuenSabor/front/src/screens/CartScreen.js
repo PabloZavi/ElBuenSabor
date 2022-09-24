@@ -36,7 +36,7 @@ export default function CartScreen() {
   const checkoutHandler = () => {
     //En signinScreen comprobamos que el usuario esté autenticado
     //si lo está, lo redirigimos a shipping
-    navigate('signin?redirect=/shipping');
+    navigate('/signin?redirect=/shipping');
   };
 
   return (
