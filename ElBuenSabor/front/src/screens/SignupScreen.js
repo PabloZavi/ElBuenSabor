@@ -9,7 +9,7 @@ import { Store } from '../Store';
 import { toast } from 'react-toastify';
 import { getError } from '../utils';
 
-export default function SigninScreen() {
+export default function SignupScreen() {
   const navigate = useNavigate();
   //useLocation es un hook de react, y usaremos la información del objeto 'search'...
   const { search } = useLocation();
@@ -19,8 +19,10 @@ export default function SigninScreen() {
   //Comprobamos que exista y lo seteamos en la variable redirect, si no le seteamos '/'
   const redirect = redirectInUrl ? redirectInUrl : '/';
 
+  const [nombreUsuario, setNombreUsuario] = useState('');
   const [emailUsuario, setEmailUsuario] = useState('');
   const [passwordUsuario, setPasswordUsuario] = useState('');
+  const [confirmPasswordUsuario, setConfirmPasswordUsuario] = useState('');
 
   //Guardamos el usuario en el store si el login es exitoso
 
@@ -30,8 +32,13 @@ export default function SigninScreen() {
   //Creamos la función async submitHandler que recibe un evento como parámetro
   const submitHandler = async (e) => {
     e.preventDefault();
+    if (passwordUsuario !== confirmPasswordUsuario) {
+      toast.error('Las contraseñas no coinciden');
+      return;
+    }
     try {
-      const { data } = await Axios.post('/api/users/signin', {
+      const { data } = await Axios.post('/api/users/signup', {
+        nombreUsuario,
         emailUsuario,
         passwordUsuario,
       });
@@ -62,9 +69,16 @@ export default function SigninScreen() {
       <Helmet>
         <title>Acceso</title>
       </Helmet>
-      
+
       <h1 className="my-3">Acceso</h1>
       <Form onSubmit={submitHandler}>
+        <Form.Group className="mb-3" controlId="nombreUsuario">
+          <Form.Label>Nombre</Form.Label>
+          <Form.Control
+            required
+            onChange={(e) => setNombreUsuario(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
         <Form.Group className="mb-3" controlId="emailUsuario">
           <Form.Label>Email</Form.Label>
           <Form.Control
@@ -81,15 +95,23 @@ export default function SigninScreen() {
             onChange={(e) => setPasswordUsuario(e.target.value)}
           ></Form.Control>
         </Form.Group>
+        <Form.Group className="mb-3" controlId="confirmPasswordUsuario">
+          <Form.Label>Confirmar contraseña</Form.Label>
+          <Form.Control
+            type="password"
+            required
+            onChange={(e) => setConfirmPasswordUsuario(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
         <div className="mb-3">
-          <Button type="submit">Ingresa</Button>
+          <Button type="submit">Registrate</Button>
         </div>
         <div className="mb-3">
-          ¿Nuevo usuario?{' '}
-          {/* Se dirigirá al usuario a la pantalla de Sign Up y después a la dirección
+          ¿Ya tenés una cuenta?{' '}
+          {/* Se dirigirá al usuario a la pantalla de Sign In y después a la dirección
           definida por la variable 'redirect' que dependerá de en dónde estemos. Esto se define
           con la lógica de arriba antes del return */}
-          <Link to={`/signup?redirect=${redirect}`}>Crea tu cuenta</Link>
+          <Link to={`/signin?redirect=${redirect}`}>Ingresa</Link>
         </div>
       </Form>
     </Container>

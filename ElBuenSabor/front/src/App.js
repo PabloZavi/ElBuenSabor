@@ -14,6 +14,7 @@ import SigninScreen from './screens/SigninScreen';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ShipingAdressScreen from './screens/ShipingAdressScreen';
+import SignupScreen from './screens/SignupScreen';
 
 function App() {
   //Traemos el estado de la app desde el store
@@ -82,6 +83,7 @@ function App() {
               <Route path="/producto/:_id" element={<ProductScreen />} />
               <Route path="/cart" element={<CartScreen />} />
               <Route path="/signin" element={<SigninScreen />} />
+              <Route path="/signup" element={<SignupScreen />} />
               <Route path="/" element={<HomeScreen />} />
               <Route path="/shipping" element={<ShipingAdressScreen />} />
             </Routes>
