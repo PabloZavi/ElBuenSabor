@@ -4,8 +4,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import seedRouter from './routes/seedRoutes.js';
 import productoRouter from './routes/productoRoutes.js';
-
-
+import userRouter from './routes/userRoutes.js';
 
 //fetch con las variables
 dotenv.config();
@@ -21,13 +20,21 @@ mongoose
   });
 
 const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use('/api/seed', seedRouter);
 app.use('/api/productos', productoRouter);
+app.use('/api/users', userRouter);
 /* app.get('/api/productos', (req, res) => {
   res.send(data.productos);
 }); */
 
-
+//Maneja las excepciones dentro de las async express routes (express-async-handler)
+app.use((err, req, res, next) => {
+  res.status(500).send({ message: err.message });
+});
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
