@@ -19,7 +19,7 @@ function Producto(props) {
     //si existe le agregamos 1 a la cantidad, si no la ponemos en 1
     const cantidad = existItem ? existItem.cantidad + 1 : 1;
     const { data } = await axios.get(`api/productos/${item._id}`);
-    if (data.stock < cantidad) {
+    if (data.stockProducto < cantidad) {
       window.alert('No hay stock del producto');
       return;
     }
@@ -32,17 +32,17 @@ function Producto(props) {
     <Card>
       <Link to={`/producto/${producto._id}`}>
         <img
-          src={producto.imagen}
+          src={producto.imagenProducto}
           className="card-img-top"
-          alt={producto.denominacion}
+          alt={producto.nombreProducto}
         />
       </Link>
       <Card.Body>
         <Link to={`/producto/${producto.id}`}>
-          <Card.Title>{producto.denominacion}</Card.Title>
+          <Card.Title>{producto.nombreProducto}</Card.Title>
         </Link>
-        <Card.Text>${producto.precioVenta}</Card.Text>
-        {producto.stock === 0 ? (
+        <Card.Text>${producto.precioVentaProducto}</Card.Text>
+        {producto.stockProducto === 0 ? (
           <Button variant="light" disabled>
             Sin stock
           </Button>

@@ -19,7 +19,7 @@ export default function CartScreen() {
 
   const updateCartHandler = async (item, cantidad) => {
     const { data } = await axios.get(`api/productos/${item._id}`);
-    if (data.stock < cantidad) {
+    if (data.stockProducto < cantidad) {
       window.alert('No hay stock del producto');
       return;
     }
@@ -58,12 +58,12 @@ export default function CartScreen() {
                   <Row className="align-items-center">
                     <Col md={4}>
                       <img
-                        src={item.imagen}
-                        alt={item.denominacion}
+                        src={item.imagenProducto}
+                        alt={item.nombreProducto}
                         className="img-fluid rounded img-thumbnail"
                       ></img>{' '}
                       <Link to={`/producto/${item._id}`}>
-                        {item.denominacion}
+                        {item.nombreProducto}
                       </Link>
                     </Col>
                     <Col md={3}>
@@ -82,12 +82,12 @@ export default function CartScreen() {
                         onClick={() =>
                           updateCartHandler(item, item.cantidad + 1)
                         }
-                        disabled={item.cantidad === item.stock}
+                        disabled={item.cantidad === item.stockProducto}
                       >
                         <i className="bi bi-file-plus-fill"></i>
                       </Button>
                     </Col>
-                    <Col md={3}>$ {item.precioVenta}</Col>
+                    <Col md={3}>$ {item.precioVentaProducto}</Col>
                     <Col md={2}>
                       <Button
                         onClick={() => removeItemHandler(item)}
@@ -111,7 +111,7 @@ export default function CartScreen() {
                     Subtotal ({cartItems.reduce((a, c) => a + c.cantidad, 0)}{' '}
                     productos) : $
                     {cartItems.reduce(
-                      (a, c) => a + c.precioVenta * c.cantidad,
+                      (a, c) => a + c.precioVentaProducto * c.cantidad,
                       0
                     )}
                   </h3>

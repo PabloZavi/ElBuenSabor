@@ -92,23 +92,23 @@ function ProductScreen() {
         <Col md={6}>
           <img
             className="img-large"
-            src={producto.imagen}
-            alt={producto.denominacion}
+            src={producto.imagenProducto}
+            alt={producto.nombreProducto}
           ></img>
         </Col>
         <Col md={3}>
           <ListGroup variant="flush">
             <ListGroup.Item>
               <Helmet>
-                <title>{producto.denominacion}</title>
+                <title>{producto.nombreProducto}</title>
               </Helmet>
-              <h1>{producto.denominacion}</h1>
+              <h1>{producto.nombreProducto}</h1>
             </ListGroup.Item>
             <ListGroup.Item>
-              <p>$ {producto.precioVenta}</p>
+              <p>$ {producto.precioVentaProducto}</p>
             </ListGroup.Item>
             <ListGroup.Item>
-              <p>{producto.descripcion}</p>
+              <p>{producto.descripcionProducto}</p>
             </ListGroup.Item>
           </ListGroup>
         </Col>
@@ -119,14 +119,14 @@ function ProductScreen() {
                 <ListGroup.Item>
                   <Row>
                     <Col>Precio: </Col>
-                    <Col>$ {producto.precioVenta}</Col>
+                    <Col>$ {producto.precioVentaProducto}</Col>
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <Row>
                     <Col>Estado: </Col>
                     <Col>
-                      {producto.stock > 0 ? (
+                      {producto.stockProducto > 0 ? (
                         <Badge bg="success"> Disponible </Badge>
                       ) : (
                         <Badge bg="danger"> Sin stock </Badge>
@@ -135,7 +135,7 @@ function ProductScreen() {
                   </Row>
                 </ListGroup.Item>
 
-                {producto.stock > 0 && (
+                {producto.stockProducto > 0 && (
                   <ListGroup.Item>
                     <div className="d-grid">
                       <Button onClick={addToCartHandler} variant="primary">
