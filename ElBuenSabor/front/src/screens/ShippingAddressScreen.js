@@ -9,19 +9,19 @@ import CheckoutSteps from '../components/CheckoutSteps';
 export default function ShipingAdressScreen() {
   const navigate = useNavigate();
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  //Me traigo del estado el shippingAdress que está en el cart (si es que existe)
+  //Me traigo del estado el shippingAddress que está en el cart (si es que existe)
   //para usar la info en los hooks
   const {
     userInfo,
-    cart: { shippingAdress },
+    cart: { shippingAddress },
   } = state;
 
-  const [fullName, setFullName] = useState(shippingAdress.fullName || '');
-  const [adress, setAdress] = useState(shippingAdress.adress || '');
-  const [location, setLocation] = useState(shippingAdress.location || '');
-  const [phone, setPhone] = useState(shippingAdress.phone || '');
+  const [fullName, setFullName] = useState(shippingAddress.fullName || '');
+  const [address, setAddress] = useState(shippingAddress.adress || '');
+  const [location, setLocation] = useState(shippingAddress.location || '');
+  const [phone, setPhone] = useState(shippingAddress.phone || '');
 
-  //Si el usuario no está logueado, no podré ingresar a shippingAdress
+  //Si el usuario no está logueado, no podré ingresar a shippingAddress
   useEffect(() => {
     if (!userInfo) {
       navigate('/signin?redirect=/shipping');
@@ -31,19 +31,19 @@ export default function ShipingAdressScreen() {
   const submitHandler = (e) => {
     e.preventDefault();
     ctxDispatch({
-      type: 'SAVE_SHIPPING_ADRESS',
+      type: 'SAVE_SHIPPING_ADDRESS',
       payload: {
         fullName,
-        adress,
+        address,
         location,
         phone,
       },
     });
     localStorage.setItem(
-      'shippingAdress',
+      'shippingAddress',
       JSON.stringify({
         fullName,
-        adress,
+        address,
         location,
         phone,
       })
@@ -71,8 +71,8 @@ export default function ShipingAdressScreen() {
           <Form.Group className="mb-3" controlId="adress">
             <Form.Label>Dirección</Form.Label>
             <Form.Control
-              value={adress}
-              onChange={(e) => setAdress(e.target.value)}
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
               required
             ></Form.Control>
           </Form.Group>

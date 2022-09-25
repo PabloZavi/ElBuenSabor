@@ -11,9 +11,13 @@ const initialState = {
     : null,
 
   cart: {
-    shippingAdress: localStorage.getItem('shippingAdress')
-      ? JSON.parse(localStorage.getItem('shippingAdress'))
+    shippingAddress: localStorage.getItem('shippingAddress')
+      ? JSON.parse(localStorage.getItem('shippingAddress'))
       : {},
+
+    paymentMethod: localStorage.getItem('paymentMethod')
+      ? localStorage.getItem('paymentMethod')
+      : '',
 
     //cartItems tiene que venir del localStorage
     cartItems: localStorage.getItem('cartItems') //Si cartItems existe en el localStorage...
@@ -71,18 +75,24 @@ function reducer(state, action) {
       return {
         ...state,
         userInfo: null,
-        cart: { cartItems: [], shippingAdress: {} },
+        cart: { cartItems: [], shippingAddress: {}, paymentMethod: '' },
       };
     }
-    //Lo único que se cambiará en el estado es el cart, y lo único del cart es la shippingAdress
+    //Lo único que se cambiará en el estado es el cart, y lo único del cart es la shippingAddress
     //entonces...
-    case 'SAVE_SHIPPING_ADRESS':
+    case 'SAVE_SHIPPING_ADDRESS':
       return {
         ...state, //no tocamos otros campos en el state más que el cart
         cart: {
-          ...state.cart, //y del cart lo único es la shippingAdress
-          shippingAdress: action.payload,
+          ...state.cart, //y del cart lo único es la shippingAddress
+          shippingAddress: action.payload,
         },
+      };
+
+    case 'SAVE_PAYMENT_METHOD':
+      return {
+        ...state,
+        cart: { ...state.cart, paymentMethod: action.payload },
       };
     default:
       return state;
