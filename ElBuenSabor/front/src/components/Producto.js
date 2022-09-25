@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useContext } from 'react';
 import { Store } from '../Store';
+import { toast } from 'react-toastify';
 
 function Producto(props) {
   const { producto } = props;
@@ -20,7 +21,7 @@ function Producto(props) {
     const cantidad = existItem ? existItem.cantidad + 1 : 1;
     const { data } = await axios.get(`api/productos/${item._id}`);
     if (data.stockProducto < cantidad) {
-      window.alert('No hay stock del producto');
+      toast.error('No hay stock del producto');
       return;
     }
     ctxDispatch({

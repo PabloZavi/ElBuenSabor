@@ -4,7 +4,12 @@ export const Store = createContext();
 
 //Tenemos que definir reducer e initialState del useReducer para el StoreProvider
 //Será un objeto. Su campo 'cart' tendrá otro object que su atributo será un array vacío de ítems
+//Comprobamos en el local storage si hay un usuario
 const initialState = {
+  userInfo: localStorage.getItem('userInfo')
+    ? JSON.parse(localStorage.getItem('userInfo'))
+    : null,
+
   cart: {
     //cartItems tiene que venir del localStorage
 
@@ -53,7 +58,15 @@ function reducer(state, action) {
       localStorage.setItem('cartItems', JSON.stringify(cartItems));
       return { ...state, cart: { ...state.cart, cartItems } };
     }
+    case 'USER_SIGNIN': {
+      //Mantenemos el estado anterior y actualizamos la info del usuario con la info
+      //que vino desde el back
+      return { ...state, userInfo: action.payload };
+    }
 
+    case 'USER_SIGNOUT': {
+      return { ...state, userInfo: null };
+    }
     default:
       return state;
   }

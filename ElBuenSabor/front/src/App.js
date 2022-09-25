@@ -4,19 +4,31 @@ import ProductScreen from './screens/ProductScreen';
 import NavBar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Badge from 'react-bootstrap/Badge';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 import Container from 'react-bootstrap/Container';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useContext } from 'react';
 import { Store } from './Store';
 import CartScreen from './screens/CartScreen';
 import SigninScreen from './screens/SigninScreen';
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  const { state } = useContext(Store);
-  const { cart } = state;
+  //Traemos el estado de la app desde el store
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  //De la info traída del store, traemos el estado de cart y de userInfo
+  const { cart, userInfo } = state;
+
+  //Signout de un usuario. Limpiamos el Store y también el de navegador
+  const signoutHandler =()=>{
+    ctxDispatch({type:'USER_SIGNOUT'});
+    localStorage.removeItem('userInfo');
+  }
   return (
     <BrowserRouter>
       <div className="d-flex flex-column site-container">
+        <ToastContainer position="top-center" limit={1}></ToastContainer>
         <header>
           <NavBar bg="dark" variant="dark">
             <Container>
@@ -32,6 +44,31 @@ function App() {
                     </Badge>
                   )}
                 </Link>
+                {userInfo ? (
+                  <NavDropdown
+                    title={userInfo.nombreUsuario}
+                    id="basic-nav-dropdown"
+                  >
+                    <LinkContainer to="/profile">
+                      <NavDropdown.Item>Perfil</NavDropdown.Item>
+                    </LinkContainer>
+                    <LinkContainer to="/orderhistory">
+                      <NavDropdown.Item>Historial de pedidos</NavDropdown.Item>
+                    </LinkContainer>
+                    <NavDropdown.Divider></NavDropdown.Divider>
+                    <Link
+                    className="dropdown-item"
+                    to="#signout"
+                    onClick={signoutHandler}
+                    >
+                      Desconectarse
+                    </Link>
+                  </NavDropdown>
+                ) : (
+                  <Link className="nav-link" to="/signin">
+                    Sign In{' '}
+                  </Link>
+                )}
               </Nav>
             </Container>
           </NavBar>
