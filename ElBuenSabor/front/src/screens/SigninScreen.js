@@ -8,6 +8,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Store } from '../Store';
 import { toast } from 'react-toastify';
 import { getError } from '../utils';
+import CheckoutSteps from '../components/CheckoutSteps';
 
 export default function SigninScreen() {
   const navigate = useNavigate();
@@ -62,6 +63,7 @@ export default function SigninScreen() {
       <Helmet>
         <title>Acceso</title>
       </Helmet>
+      
       <h1 className="my-3">Acceso</h1>
       <Form onSubmit={submitHandler}>
         <Form.Group className="mb-3" controlId="emailUsuario">

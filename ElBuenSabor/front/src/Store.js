@@ -11,8 +11,11 @@ const initialState = {
     : null,
 
   cart: {
-    //cartItems tiene que venir del localStorage
+    shippingAdress: localStorage.getItem('shippingAdress')
+      ? JSON.parse(localStorage.getItem('shippingAdress'))
+      : {},
 
+    //cartItems tiene que venir del localStorage
     cartItems: localStorage.getItem('cartItems') //Si cartItems existe en el localStorage...
       ? JSON.parse(localStorage.getItem('cartItems')) //usamos parse para convertir el string en un jsObject
       : [], //si no lo seteamos como un array vacío
@@ -65,8 +68,22 @@ function reducer(state, action) {
     }
 
     case 'USER_SIGNOUT': {
-      return { ...state, userInfo: null };
+      return {
+        ...state,
+        userInfo: null,
+        cart: { cartItems: [], shippingAdress: {} },
+      };
     }
+    //Lo único que se cambiará en el estado es el cart, y lo único del cart es la shippingAdress
+    //entonces...
+    case 'SAVE_SHIPPING_ADRESS':
+      return {
+        ...state, //no tocamos otros campos en el state más que el cart
+        cart: {
+          ...state.cart, //y del cart lo único es la shippingAdress
+          shippingAdress: action.payload,
+        },
+      };
     default:
       return state;
   }

@@ -13,6 +13,7 @@ import CartScreen from './screens/CartScreen';
 import SigninScreen from './screens/SigninScreen';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ShipingAdressScreen from './screens/ShipingAdressScreen';
 
 function App() {
   //Traemos el estado de la app desde el store
@@ -24,6 +25,7 @@ function App() {
   const signoutHandler =()=>{
     ctxDispatch({type:'USER_SIGNOUT'});
     localStorage.removeItem('userInfo');
+    localStorage.removeItem('shippingAdress');
   }
   return (
     <BrowserRouter>
@@ -81,6 +83,7 @@ function App() {
               <Route path="/cart" element={<CartScreen />} />
               <Route path="/signin" element={<SigninScreen />} />
               <Route path="/" element={<HomeScreen />} />
+              <Route path="/shipping" element={<ShipingAdressScreen />} />
             </Routes>
           </Container>
         </main>
