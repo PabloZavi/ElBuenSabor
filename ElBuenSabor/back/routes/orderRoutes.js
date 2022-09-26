@@ -29,4 +29,19 @@ orderRouter.post(
   })
 );
 
+orderRouter.get(
+  //Uso el middleware 'isAuth' que filtrará el user request _id de abajo
+  '/:id',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    //Buscamos el pedido en la base de datos
+    const order = await Order.findById(req.params.id);
+    if (order) {
+      res.send(order);
+    } else {
+      res.status(404).send({ message: 'Pedido no encontrado' });
+    }
+  })
+);
+
 export default orderRouter;
