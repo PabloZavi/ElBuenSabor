@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import seedRouter from './routes/seedRoutes.js';
 import productoRouter from './routes/productoRoutes.js';
 import userRouter from './routes/userRoutes.js';
+import orderRouter from './routes/orderRoutes.js';
 
 //fetch con las variables
 dotenv.config();
@@ -27,6 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/seed', seedRouter);
 app.use('/api/productos', productoRouter);
 app.use('/api/users', userRouter);
+app.use('/api/orders', orderRouter);
 /* app.get('/api/productos', (req, res) => {
   res.send(data.productos);
 }); */
