@@ -17,7 +17,7 @@ export default function ShipingAdressScreen() {
   } = state;
 
   const [fullName, setFullName] = useState(shippingAddress.fullName || '');
-  const [address, setAddress] = useState(shippingAddress.adress || '');
+  const [address, setAddress] = useState(shippingAddress.address || '');
   const [location, setLocation] = useState(shippingAddress.location || '');
   const [phone, setPhone] = useState(shippingAddress.phone || '');
 
