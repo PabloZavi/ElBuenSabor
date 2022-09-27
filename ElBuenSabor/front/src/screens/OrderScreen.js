@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import LoadingBox from '../components/LoadingBox';
@@ -10,6 +10,10 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
+import Button from 'react-bootstrap/Button';
+import { toast } from 'react-toastify';
+//const mercadopago = require('mercadopago');
+//import mercadopago from 'mercadopago';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -28,10 +32,14 @@ export default function OrderScreen() {
   const { state } = useContext(Store);
   const { userInfo } = state;
 
+  //const [isPending, setIsPending] = useState(false);
+
   //El id viene de los parámetros
   const params = useParams();
   //el id lo sacamos de los parámetros y lo renombramos como 'orderId'
   const { id: orderId } = params;
+
+  const [totalPrice, setTotalPrice] = useState(55);
 
   const navigate = useNavigate();
 
@@ -40,6 +48,92 @@ export default function OrderScreen() {
     order: {},
     error: '',
   });
+
+  const pagoMercadoPagoHandler = async (e) => {
+    e.preventDefault();
+    try {
+      console.log(order.totalPrice);
+      console.log(orderId);
+      const { data } = await axios.post('/pago', {
+        orderId,
+        totalPrice,
+      });
+      //data.message contiene la dirección!
+      
+      order.isPaid = true;
+      //Abre en la misma ventana
+      window.location.href = data.message;
+      //Abre en otra
+      window.open (data.message);
+
+      //console.log(data);
+    } catch (error) {
+      toast.error(getError(error));
+    }
+  };
+
+  /* const pagoMercadoPagoHandler = (e) => {
+    e.preventDefault();
+    // Crea un objeto de preferencia
+    let preference = {
+      items: [
+        {
+          title: orderId,
+          unit_price: order.totalPrice.toFixed(2),
+          quantity: 1,
+        },
+      ],
+    };
+
+    const responseMercadoPago = await mercadopago.preferences.create(preference);
+
+     mercadopago.preferences
+      .create(preference)
+      .then(function (response) {
+        const external_referenceMP = response.body.id;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });  
+  }; 
+
+
+  const redirectToMercadoPago = (preferenceId) => {
+    const loadScript = (url, callback) => {
+      let script = document.createElement('script');
+      script.type = 'text/javascript';
+  
+      if (script.readyState) {
+        script.onreadystatechange = () => {
+          if (
+            script.readyState === 'loaded' ||
+            script.readyState === 'complete'
+          ) {
+            script.onreadystatechange = null;
+            callback();
+          }
+        };
+      } else {
+        script.onload = () => callback();
+      }
+      script.src = url;
+      document.getElementsByTagName('head')[0].appendChild(script);
+    };
+  
+    const handleScriptLoad = () => {
+      const mp = new window.MercadoPago(process.env.REACT_APP_MERCADOPAGO_KEY, {
+        locale: 'es-AR'
+      });
+      mp.checkout({
+        preference: {
+          id: preferenceId
+        },
+        autoOpen: true
+      });
+    };
+  
+    loadScript('https://sdk.mercadopago.com/js/v2', handleScriptLoad);
+  }; */
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -57,9 +151,22 @@ export default function OrderScreen() {
     if (!userInfo) {
       return navigate('/login');
     }
+
+    setTotalPrice(order.totalPrice);
+
     if (!order._id || (order._id && order._id !== orderId)) {
       fetchOrder();
     }
+    //Si tenemos la orden ... obtenemos el token de MP y lo configuramos
+    /* else {
+      const loadMercadoPagoScript = async () => {
+        const mercadopagotoken = await axios.get('/api/keys/mercadopago', {
+          headers: { authorization: `Bearer ${userInfo.token}` },
+        });
+        mercadopago.configure({ access_token: mercadopagotoken });
+      };
+      loadMercadoPagoScript();
+    } */
   }, [order, userInfo, orderId, navigate]);
 
   return loading ? (
@@ -147,14 +254,8 @@ export default function OrderScreen() {
               <ListGroup variant="flush">
                 <ListGroup.Item>
                   <Row>
-                    <Col>Productos</Col>
+                    <Col>Subtotal</Col>
                     <Col>${order.itemsPrice.toFixed(2)}</Col>
-                  </Row>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <Row>
-                    <Col>Descuento</Col>
-                    <Col>${order.discount.toFixed(2)}</Col>
                   </Row>
                 </ListGroup.Item>
 
@@ -167,10 +268,29 @@ export default function OrderScreen() {
 
                 <ListGroup.Item>
                   <Row>
+                    <Col>Descuento</Col>
+                    <Col>${order.discount.toFixed(2)}</Col>
+                  </Row>
+                </ListGroup.Item>
+
+                <ListGroup.Item>
+                  <Row>
                     <Col>Total</Col>
                     <Col>${order.totalPrice.toFixed(2)}</Col>
                   </Row>
                 </ListGroup.Item>
+
+                {!order.isPaid && (
+                  <ListGroup.Item>
+                    {order.paymentMethod === 'MercadoPago' ? (
+                      <Button onClick={pagoMercadoPagoHandler}>
+                        Pagar con Mercado Pago
+                      </Button>
+                    ) : (
+                      <div></div>
+                    )}
+                  </ListGroup.Item>
+                )}
               </ListGroup>
             </Card.Body>
           </Card>

@@ -1,6 +1,6 @@
 {
   "name": "front",
-  "proxy": "http://localhost:5000",
+  "proxy": "http://localhost:5000/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -10,6 +10,7 @@
     "axios": "^0.27.2",
     "bootstrap": "^5.2.1",
     "bootstrap-icons": "^1.9.1",
+    "mercadopago": "^1.5.14",
     "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",
     "react-dom": "^18.2.0",

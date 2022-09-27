@@ -159,7 +159,7 @@ export default function PlaceOrderScreen() {
               <ListGroup variant="flush">
                 <ListGroup.Item>
                   <Row>
-                    <Col>Productos</Col>
+                    <Col>Subtotal</Col>
                     <Col>$ {cart.itemsPrice.toFixed(2)}</Col>
                   </Row>
                 </ListGroup.Item>

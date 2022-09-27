@@ -19,7 +19,10 @@ import PaymentMethodScreen from './screens/PaymentMethodScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
 
+
+
 function App() {
+
   //Traemos el estado de la app desde el store
   const { state, dispatch: ctxDispatch } = useContext(Store);
   //De la info traída del store, traemos el estado de cart y de userInfo

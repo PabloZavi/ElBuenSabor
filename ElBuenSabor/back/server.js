@@ -6,6 +6,7 @@ import seedRouter from './routes/seedRoutes.js';
 import productoRouter from './routes/productoRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import orderRouter from './routes/orderRoutes.js';
+import pagoMercadoPagoRouter from './routes/pagoMercadoPagoRoutes.js';
 
 //fetch con las variables
 dotenv.config();
@@ -25,10 +26,20 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+//Mercado Pago cuando el front pide el access token
+app.get('/api/keys/mercadopago', (req, res) => {
+  
+  res.send(
+    process.env.MP_ACCESS_TOKEN || 'todavía no se configura el token en .env'
+    
+  );
+});
+
 app.use('/api/seed', seedRouter);
 app.use('/api/productos', productoRouter);
 app.use('/api/users', userRouter);
 app.use('/api/orders', orderRouter);
+app.use('/pago', pagoMercadoPagoRouter);
 /* app.get('/api/productos', (req, res) => {
   res.send(data.productos);
 }); */
