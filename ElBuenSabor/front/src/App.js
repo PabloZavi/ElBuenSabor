@@ -11,7 +11,7 @@ import { useContext } from 'react';
 import { Store } from './Store';
 import CartScreen from './screens/CartScreen';
 import SigninScreen from './screens/SigninScreen';
-import {ToastContainer} from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ShippingAddressScreen from './screens/ShippingAddressScreen';
 import SignupScreen from './screens/SignupScreen';
@@ -19,68 +19,71 @@ import PaymentMethodScreen from './screens/PaymentMethodScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
 import PaidOkScreen from './screens/PaidOkScreen';
-
-
+import OrderHistoryScreen from './screens/OrderHistoryScreen';
 
 function App() {
-
   //Traemos el estado de la app desde el store
   const { state, dispatch: ctxDispatch } = useContext(Store);
   //De la info traída del store, traemos el estado de cart y de userInfo
   const { cart, userInfo } = state;
 
   //Signout de un usuario. Limpiamos el Store y también el de navegador
-  const signoutHandler =()=>{
-    ctxDispatch({type:'USER_SIGNOUT'});
+  const signoutHandler = () => {
+    ctxDispatch({ type: 'USER_SIGNOUT' });
     localStorage.removeItem('userInfo');
     localStorage.removeItem('shippingAddress');
     localStorage.removeItem('paymentMethod');
-  }
+  };
   return (
     <BrowserRouter>
       <div className="d-flex flex-column site-container">
         <ToastContainer position="top-center" limit={1}></ToastContainer>
         <header>
-          <NavBar bg="dark" variant="dark">
+          <NavBar bg="dark" variant="dark" expand="lg">
             <Container>
               <LinkContainer to="/">
                 <NavBar.Brand>El Buen Sabor</NavBar.Brand>
               </LinkContainer>
-              <Nav className="me-auto">
-                <Link to="/cart" className="nav-link">
-                  Carrito
-                  {cart.cartItems.length > 0 && (
-                    <Badge pill bg="danger">
-                      {cart.cartItems.reduce((a, c) => a + c.cantidad, 0)}
-                    </Badge>
-                  )}
-                </Link>
-                {userInfo ? (
-                  <NavDropdown
-                    title={userInfo.nombreUsuario}
-                    id="basic-nav-dropdown"
-                  >
-                    <LinkContainer to="/profile">
-                      <NavDropdown.Item>Perfil</NavDropdown.Item>
-                    </LinkContainer>
-                    <LinkContainer to="/orderhistory">
-                      <NavDropdown.Item>Historial de pedidos</NavDropdown.Item>
-                    </LinkContainer>
-                    <NavDropdown.Divider></NavDropdown.Divider>
-                    <Link
-                    className="dropdown-item"
-                    to="#signout"
-                    onClick={signoutHandler}
-                    >
-                      Desconectarse
-                    </Link>
-                  </NavDropdown>
-                ) : (
-                  <Link className="nav-link" to="/signin">
-                    Sign In{' '}
+              <NavBar.Toggle aria-controls="basic-navbar-nav"></NavBar.Toggle>
+              <NavBar.Collapse id="basic-navbar-nav">
+                <Nav className="me-auto w-100 justify-content-end">
+                  <Link to="/cart" className="nav-link">
+                    Carrito
+                    {cart.cartItems.length > 0 && (
+                      <Badge pill bg="danger">
+                        {cart.cartItems.reduce((a, c) => a + c.cantidad, 0)}
+                      </Badge>
+                    )}
                   </Link>
-                )}
-              </Nav>
+                  {userInfo ? (
+                    <NavDropdown
+                      title={userInfo.nombreUsuario}
+                      id="basic-nav-dropdown"
+                    >
+                      <LinkContainer to="/profile">
+                        <NavDropdown.Item>Perfil</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/orderhistory">
+                        <NavDropdown.Item>
+                          Historial de pedidos
+                        </NavDropdown.Item>
+                      </LinkContainer>
+                      <NavDropdown.Divider></NavDropdown.Divider>
+                      <Link
+                        className="dropdown-item"
+                        to="#signout"
+                        onClick={signoutHandler}
+                      >
+                        Desconectarse
+                      </Link>
+                    </NavDropdown>
+                  ) : (
+                    <Link className="nav-link" to="/signin">
+                      Sign In{' '}
+                    </Link>
+                  )}
+                </Nav>
+              </NavBar.Collapse>
             </Container>
           </NavBar>
           {/* <Link to="/">El Buen Sabor</Link> */}
@@ -98,6 +101,7 @@ function App() {
               <Route path="/placeorder" element={<PlaceOrderScreen />} />
               <Route path="/order/:id" element={<OrderScreen />} />
               <Route path="/paidok" element={<PaidOkScreen />} />
+              <Route path="/orderhistory" element={<OrderHistoryScreen />} />
             </Routes>
           </Container>
         </main>

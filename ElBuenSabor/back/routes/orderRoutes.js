@@ -30,6 +30,18 @@ orderRouter.post(
 );
 
 orderRouter.get(
+  '/mine',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    //Busca todas las órdenes que tengan como usuario al que le pasamos
+    //OJO el user viene desde el middleware 'isAuth'!!!
+    const orders = await Order.find({user: req.user._id});
+    res.send(orders);
+  
+  })
+);
+
+orderRouter.get(
   //Uso el middleware 'isAuth' que filtrará el user request _id de abajo
   '/:id',
   isAuth,
@@ -43,6 +55,8 @@ orderRouter.get(
     }
   })
 );
+
+
 
 orderRouter.put(
   '/:id/pay',

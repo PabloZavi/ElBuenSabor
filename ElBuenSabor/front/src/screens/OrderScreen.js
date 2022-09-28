@@ -34,7 +34,7 @@ function reducer(state, action) {
     default:
       return state;
   }
-}
+};
 
 export default function OrderScreen() {
   const { state } = useContext(Store);
@@ -247,7 +247,8 @@ export default function OrderScreen() {
     order,
     userInfo,
     orderId,
-    navigate /* , collection_status, successPay */,
+    navigate,
+    paid, /* , collection_status, successPay */,
   ]);
 
   return loading ? (
