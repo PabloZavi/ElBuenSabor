@@ -248,7 +248,7 @@ export default function OrderScreen() {
     userInfo,
     orderId,
     navigate,
-    paid, /* , collection_status, successPay */,
+    paid, urlParams /* , collection_status, successPay */,
   ]);
 
   return loading ? (
