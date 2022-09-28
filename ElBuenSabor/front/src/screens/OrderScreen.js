@@ -18,11 +18,19 @@ import { toast } from 'react-toastify';
 function reducer(state, action) {
   switch (action.type) {
     case 'FETCH_REQUEST':
-      return { ...state, loaading: true, error: '' };
+      return { ...state, loading: true, error: '' };
     case 'FETCH_SUCCESS':
       return { ...state, loading: false, order: action.payload, error: '' };
     case 'FETCH_FAIL':
       return { ...state, loading: false, error: action.payload };
+    /* case 'PAY_REQUEST':
+      return { ...state, loadingPay: true };
+    case 'PAY_SUCCESS':
+      return { ...state, loadingPay: false, successPay: true };
+    case 'PAY_FAIL':
+      return { ...state, loadingPay: false };
+    case 'PAY_RESET':
+      return { ...state, loadingPay: false, successPay: false }; */
     default:
       return state;
   }
@@ -39,35 +47,85 @@ export default function OrderScreen() {
   //el id lo sacamos de los parámetros y lo renombramos como 'orderId'
   const { id: orderId } = params;
 
-  const [totalPrice, setTotalPrice] = useState(55);
+  
+
+  //const valores = window.location.search;
+  //const urlParams = new URLSearchParams(valores);
+  
+  //const payment_id = urlParams.get('payment_id');
+
+  //const { collection_status, payment_id } = params;
+  //console.log(collection_status);
+  //console.log(payment_id);
+
+  const [totalPrice, setTotalPrice] = useState(0);
+  //const [collection_status, setCollection_status] = useState(undefined);
+  //setCollection_status(urlParams.get('collection_status'));
+  //const [pagada, setPagada] = useState(false);
+
+
+
+  /* if (collection_status !== undefined) {
+    if (collection_status === 'approved') {
+      onApprove();
+      setCollection_status(undefined);
+    }
+  }
+
+  async function onApprove(data, actions) {
+    try {
+      dispatch({ type: 'PAY_REQUEST' });
+      //console.log(userInfo.token);
+      const { data } = await axios.put(
+        `/api/orders/${orderId}/pay`,{
+          headers: { authorization: `Bearer ${userInfo.token}` },
+        });
+      dispatch({ type: 'PAY_SUCCESS', payload: data });
+      toast.success('Order is paid');
+    } catch (err) {
+      dispatch({ type: 'PAY_FAIL', payload: getError(err) });
+      toast.error(getError(err));
+    }
+  } */
 
   const navigate = useNavigate();
 
-  const [{ loading, error, order }, dispatch] = useReducer(reducer, {
-    loading: true,
-    order: {},
-    error: '',
-  });
+  const [{ loading, error, order/* , successPay  */}, dispatch] = useReducer(
+    reducer,
+    {
+      loading: true,
+      order: {},
+      error: '',
+      //successPay: false,
+    }
+  );
 
   const pagoMercadoPagoHandler = async (e) => {
     e.preventDefault();
+    //dispatch({ type: 'PAY_REQUEST' });
     try {
+      //Mando a pagoMercadoPagoRoutes el número de pedido y el total
       console.log(order.totalPrice);
       console.log(orderId);
+      //guardo en 'data' la respuesta de MP
       const { data } = await axios.post('/pago', {
         orderId,
         totalPrice,
       });
       //data.message contiene la dirección!
-      
-      order.isPaid = true;
+      console.log(data.message);
+      //order.isPaid = true;
+      //Extraigo la dirección de MP para pagar y redirecciono
       //Abre en la misma ventana
       window.location.href = data.message;
       //Abre en otra
-      window.open (data.message);
+      //window.open (data.message);
 
-      //console.log(data);
+      //console.log(dataMP);
+      //dispatch({ type: 'PAY_SUCCESS', payload: data });
+      //toast.success('Order is paid');
     } catch (error) {
+      //dispatch({ type: 'PAY_FAIL', payload: getError(error) });
       toast.error(getError(error));
     }
   };
@@ -152,10 +210,15 @@ export default function OrderScreen() {
       return navigate('/login');
     }
 
+    
+
     setTotalPrice(order.totalPrice);
 
-    if (!order._id || (order._id && order._id !== orderId)) {
+    if (!order._id || /* successPay || */ (order._id && order._id !== orderId)) {
       fetchOrder();
+      /* if (successPay) {
+        dispatch({ type: 'PAY_RESET' });
+      } */
     }
     //Si tenemos la orden ... obtenemos el token de MP y lo configuramos
     /* else {
@@ -167,7 +230,7 @@ export default function OrderScreen() {
       };
       loadMercadoPagoScript();
     } */
-  }, [order, userInfo, orderId, navigate]);
+  }, [order, userInfo, orderId, navigate/* , collection_status, successPay */]);
 
   return loading ? (
     <LoadingBox></LoadingBox>

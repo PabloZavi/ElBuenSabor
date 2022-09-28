@@ -16,9 +16,9 @@ pagoMercadoPagoRouter.post(
     });
     let preference = {
       back_urls: {
-        success: `localhost:3000/order/${req.body.orderId}`,
-        failure: `localhost:3000/order/${req.body.orderId}`,
-        pending: `localhost:3000/order/${req.body.orderId}`,
+        success: `localhost:3000/paidok`,
+        failure: `localhost:3000/order/${req.body.orderId}?paid=false`,
+        pending: `localhost:3000/order/${req.body.orderId}?paid=pending`,
       },
       auto_return: "approved",
       "payment_methods": {

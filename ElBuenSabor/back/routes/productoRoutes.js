@@ -16,8 +16,8 @@ productoRouter.get('/:id', async (req, res) => {
     } else {
       res.status(404).send({ message: 'Producto no encontrado' });
     }
-  });
-
+  }); 
+ 
 
   //Busco productos por nombre
   productoRouter.get('/nombre/:nombre', async (req, res) => {
