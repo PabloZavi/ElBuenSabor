@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines":{
+    "node":"16.14.2"
+  },
   "scripts": {
     "build": "cd ElBuenSabor/back && npm install && cd ../front && npm install && npm run build",
     "start": "node ElBuenSabor/back/server.js",
