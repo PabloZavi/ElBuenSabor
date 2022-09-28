@@ -31,7 +31,7 @@ export default function PaidOkScreen() {
   }
 
   actPedido();
-  window.location.href = 'http://localhost:3000/order/' + external_reference;
+  window.location.href = process.env.HOST + '/order/' + external_reference;
 
   
 }
