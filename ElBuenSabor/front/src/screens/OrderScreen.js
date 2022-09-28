@@ -47,11 +47,14 @@ export default function OrderScreen() {
   //el id lo sacamos de los parámetros y lo renombramos como 'orderId'
   const { id: orderId } = params;
 
+  const valores = window.location.search;
+  const urlParams = new URLSearchParams(valores);
+  //let paid = urlParams.get('paid');
   
 
-  //const valores = window.location.search;
-  //const urlParams = new URLSearchParams(valores);
+  const [paid, setPaid] = useState('')
   
+
   //const payment_id = urlParams.get('payment_id');
 
   //const { collection_status, payment_id } = params;
@@ -62,8 +65,6 @@ export default function OrderScreen() {
   //const [collection_status, setCollection_status] = useState(undefined);
   //setCollection_status(urlParams.get('collection_status'));
   //const [pagada, setPagada] = useState(false);
-
-
 
   /* if (collection_status !== undefined) {
     if (collection_status === 'approved') {
@@ -90,7 +91,7 @@ export default function OrderScreen() {
 
   const navigate = useNavigate();
 
-  const [{ loading, error, order/* , successPay  */}, dispatch] = useReducer(
+  const [{ loading, error, order /* , successPay  */ }, dispatch] = useReducer(
     reducer,
     {
       loading: true,
@@ -194,6 +195,17 @@ export default function OrderScreen() {
   }; */
 
   useEffect(() => {
+
+    setPaid(urlParams.get('paid'))
+
+    if (paid !== undefined) {
+      if (paid === 'false' || paid === 'pending') {
+        toast.error('Error en el pago');
+        setPaid('')
+      }
+    }
+
+
     const fetchOrder = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
@@ -210,11 +222,12 @@ export default function OrderScreen() {
       return navigate('/login');
     }
 
-    
-
     setTotalPrice(order.totalPrice);
 
-    if (!order._id || /* successPay || */ (order._id && order._id !== orderId)) {
+    if (
+      !order._id ||
+      /* successPay || */ (order._id && order._id !== orderId)
+    ) {
       fetchOrder();
       /* if (successPay) {
         dispatch({ type: 'PAY_RESET' });
@@ -230,7 +243,12 @@ export default function OrderScreen() {
       };
       loadMercadoPagoScript();
     } */
-  }, [order, userInfo, orderId, navigate/* , collection_status, successPay */]);
+  }, [
+    order,
+    userInfo,
+    orderId,
+    navigate /* , collection_status, successPay */,
+  ]);
 
   return loading ? (
     <LoadingBox></LoadingBox>
