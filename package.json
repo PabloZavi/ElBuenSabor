@@ -1,0 +1,21 @@
+{
+  "name": "elbuensabor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "cd ElBuenSabor/back && npm install && cd ../front && npm install && npm run build",
+    "start": "node ElBuenSabor/back/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PabloZavi/ElBuenSabor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PabloZavi/ElBuenSabor/issues"
+  },
+  "homepage": "https://github.com/PabloZavi/ElBuenSabor#readme"
+}

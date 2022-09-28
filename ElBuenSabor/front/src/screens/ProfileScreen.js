@@ -40,6 +40,7 @@ export default function ProfileScreen() {
         return;
       }
     try {
+        
       const { data } = await axios.put(
         '/api/users/profile',
         {

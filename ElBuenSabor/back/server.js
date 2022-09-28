@@ -1,5 +1,4 @@
 import express from 'express';
-import data from './data.js';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import seedRouter from './routes/seedRoutes.js';
@@ -8,6 +7,7 @@ import userRouter from './routes/userRoutes.js';
 import orderRouter from './routes/orderRoutes.js';
 import pagoMercadoPagoRouter from './routes/pagoMercadoPagoRoutes.js';
 import morgan from 'morgan';
+import path from 'path';
 
 //fetch con las variables
 dotenv.config();
@@ -26,7 +26,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(morgan("tiny"));
+app.use(morgan('tiny'));
 
 //POR AHORA SE SEGUIRÁ OTRA LÓGICA
 /* //Mercado Pago cuando el front pide el access token
@@ -46,6 +46,12 @@ app.use('/pago', pagoMercadoPagoRouter);
 /* app.get('/api/productos', (req, res) => {
   res.send(data.productos);
 }); */
+
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, '/ElBuenSabor/front/build')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '/ElBuenSabor/front/build/index.html'));
+});
 
 //Maneja las excepciones dentro de las async express routes (express-async-handler)
 app.use((err, req, res, next) => {
