@@ -37,4 +37,6 @@ export default function PaidOkScreen() {
   //Usar navigate, NO window.location.href, si no se pierde el localStorage 
   //window.location.href = `/order/${external_reference}`;
   navigate(`/order/${external_reference}`);
+
+  
 }

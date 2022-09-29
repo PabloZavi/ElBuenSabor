@@ -11,11 +11,11 @@ seedRouter.get('/', async (req, res) => {
   await Producto.deleteMany({});
   //creamos nuevos productos
   const createdProductos = await Producto.insertMany(data.productos);
-  await User.deleteMany({});
-  //creamos nuevos productos
-  const createdUsers = await User.insertMany(data.users);
+  //await User.deleteMany({});
+  //creamos nuevos usuarios
+  //const createdUsers = await User.insertMany(data.users);
 
-  res.send({ createdProductos, createdUsers });
+  res.send({ createdProductos/* , createdUsers */ });
 });
 
 export default seedRouter;

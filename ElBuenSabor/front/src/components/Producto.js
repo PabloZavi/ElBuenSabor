@@ -30,11 +30,11 @@ function Producto(props) {
     });
   };
   return (
-    <Card>
+    <Card style={{ width: '18rem' }}>
       <Link to={`/producto/${producto._id}`}>
         <img
           src={producto.imagenProducto}
-          className="card-img-top"
+          className="card-img-top producto-img3"
           alt={producto.nombreProducto}
         />
       </Link>
