@@ -72,6 +72,7 @@ export default function PlaceOrderScreen() {
       ctxDispatch({ type: 'CART_CLEAR' });
       //Y este otro va al reducer del principio
       dispatch({ type: 'CREATE_SUCCESS' });
+      //Dejo el carrito libre para otra compra
       localStorage.removeItem('cartItems');
       navigate(`/order/${data.order._id}`);
     } catch (error) {

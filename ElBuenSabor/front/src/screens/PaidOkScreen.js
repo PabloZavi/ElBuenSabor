@@ -1,10 +1,13 @@
 import axios from 'axios';
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Store } from '../Store';
 import { getError } from '../utils';
 
 export default function PaidOkScreen() {
+    const navigate = useNavigate();
+
   const { state } = useContext(Store);
   const { userInfo } = state;
 
@@ -31,5 +34,7 @@ export default function PaidOkScreen() {
   }
 
   actPedido();
-  window.location.href = `/order/${external_reference}`;
+  //Usar navigate, NO window.location.href, si no se pierde el localStorage 
+  //window.location.href = `/order/${external_reference}`;
+  navigate(`/order/${external_reference}`);
 }
