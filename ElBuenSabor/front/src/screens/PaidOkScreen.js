@@ -31,7 +31,5 @@ export default function PaidOkScreen() {
   }
 
   actPedido();
-  window.location.href = process.env.HOST + '/order/' + external_reference;
-
-  
+  window.location.href = `${process.env.HOST}/order/${external_reference}`;
 }
