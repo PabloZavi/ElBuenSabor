@@ -9,13 +9,57 @@ productoRouter.get('/', async (req, res) => {
   res.send(productos);
 });
 
+//Ojo usamos expressAsyncHandler
+const PAGE_SIZE = 6; 
+productoRouter.get(
+  '/search',
+  expressAsyncHandler(async (req, res) => {
+    const { query } = req;
+    const pageSize = query.pageSize || PAGE_SIZE;
+    const page = query.page || 1;
+    const rubroProducto = query.category || '';
+    const searchQuery = query.query || '';
+
+    //Si el nombre existe y es diferente a 'all'...
+    const queryFilter =
+      searchQuery && searchQuery !== 'all'
+        ? {
+            nombreProducto: {
+              $regex: searchQuery,
+              $options: 'i',
+            },
+          }
+        : {};
+
+    const categoryFilter = rubroProducto && rubroProducto !== 'all' ? { rubroProducto } : {};
+
+    const productos = await Producto.find({
+      ...queryFilter,
+      ...categoryFilter,
+    })
+      .skip(pageSize * (page - 1))
+      .limit(pageSize);
+    const countProductos = await Producto.countDocuments({
+      ...queryFilter,
+      ...categoryFilter,
+    });
+
+    res.send({
+      productos,
+      countProductos,
+      page,
+      pages: Math.ceil(countProductos / pageSize),
+    });
+  })
+);
+
 productoRouter.get(
   '/categories',
-  expressAsyncHandler(async(req,res)=>{
+  expressAsyncHandler(async (req, res) => {
     const categories = await Producto.find().distinct('rubroProducto');
     res.send(categories);
   })
-)
+);
 
 //Busco un producto por su id
 productoRouter.get('/:id', async (req, res) => {
