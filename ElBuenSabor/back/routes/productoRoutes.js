@@ -10,6 +10,28 @@ productoRouter.get('/', async (req, res) => {
   res.send(productos);
 });
 
+productoRouter.post(
+  '/',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const newProducto = new Producto({
+      nombreProducto: 'prueba1 ' + Date.now(),
+      tiempoCocinaProducto: 15,
+      recetaProducto: 'receta ejemplo prueba 1',
+      descripcionProducto: 'descripción prueba 1',
+      imagenProducto: '/imagenprueba1.jpg',
+      precioVentaProducto: 555,
+      altaProducto: false,
+      rubroProducto: 'rubro prueba 1',
+      //Atributo a eliminar:
+      stockProducto: 2,
+    });
+    const producto = await newProducto.save();
+    res.send({ message: 'Producto creado', producto });
+  })
+);
+
 //Ojo usamos expressAsyncHandler
 //const PAGE_SIZE = 6;
 
