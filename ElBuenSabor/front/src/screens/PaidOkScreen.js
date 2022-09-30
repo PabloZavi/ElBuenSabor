@@ -28,8 +28,8 @@ export default function PaidOkScreen() {
           headers: { authorization: `Bearer ${userInfo.token}` },
         }
       );
-    } catch (error) {
-      toast.error(getError(error));
+    } catch (err) {
+      toast.error(getError(err));
     }
   }
 

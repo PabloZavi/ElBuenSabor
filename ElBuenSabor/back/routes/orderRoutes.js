@@ -1,7 +1,9 @@
 import express from 'express';
-import { isAuth } from '../utils.js';
+import { isAuth, isAdmin } from '../utils.js';
 import expressAsyncHandler from 'express-async-handler';
 import Order from '../models/orderModel.js';
+import User from '../models/userModel.js';
+import Producto from '../models/productoModel.js';
 
 const orderRouter = express.Router();
 
@@ -29,15 +31,60 @@ orderRouter.post(
   })
 );
 
+//Ojo, en esta ruta verificamos que además de estar autenticado, sea admin
+orderRouter.get(
+  '/summary',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const orders = await Order.aggregate([
+      //pipeline
+      {
+        $group: {
+          _id: null, //null=todos
+          numOrders: { $sum: 1 }, //suma todos los ítems
+          totalSales: { $sum: '$totalPrice' },
+        },
+      },
+    ]);
+    const users = await User.aggregate([
+      {
+        $group: {
+          _id: null,
+          numUsers: { $sum: 1 },
+        },
+      },
+    ]);
+    const dailyOrders = await Order.aggregate([
+      {
+        $group: {
+          _id: { $dateToString: { format: '%d-%m-%Y', date: '$createdAt' } },
+          orders: { $sum: 1 },
+          sales: { $sum: '$totalPrice' },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+    const productCategories = await Producto.aggregate([
+      {
+        $group: {
+          _id: '$rubroProducto',
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+    res.send({ users, orders, dailyOrders, productCategories });
+  })
+);
+
 orderRouter.get(
   '/mine',
   isAuth,
   expressAsyncHandler(async (req, res) => {
     //Busca todas las órdenes que tengan como usuario al que le pasamos
     //OJO el user viene desde el middleware 'isAuth'!!!
-    const orders = await Order.find({user: req.user._id});
+    const orders = await Order.find({ user: req.user._id });
     res.send(orders);
-  
   })
 );
 
@@ -56,8 +103,6 @@ orderRouter.get(
   })
 );
 
-
-
 orderRouter.put(
   '/:id/pay',
   isAuth,
@@ -67,13 +112,13 @@ orderRouter.put(
       order.isPaid = true;
       order.paidAt = Date.now();
       order.payment_id = req.body.payment_id;
-      
+
       const updatedOrder = await order.save();
       res.send({ message: 'Pedido pagado', order: updatedOrder });
     } else {
       res.status(404).send({ message: 'Pedido no encontrado' });
     }
   })
-); 
+);
 
 export default orderRouter;

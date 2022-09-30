@@ -42,10 +42,10 @@ export default function SigninScreen() {
       //Ojo, 'userInfo' es lo que vuelve desde el store
       localStorage.setItem('userInfo', JSON.stringify(data));
       navigate(redirect || '/');
-    } catch (error) {
+    } catch (err) {
       //Ver en App.js lo relacionado con toastify
       //Traemos desde el back el error
-      toast.error(getError(error));
+      toast.error(getError(err));
     }
   };
 

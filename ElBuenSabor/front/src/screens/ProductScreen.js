@@ -44,8 +44,8 @@ function ProductScreen() {
       try {
         const result = await axios.get(`/api/productos/${_id}`);
         dispatch({ type: 'FETCH_SUCCESS', payload: result.data });
-      } catch (error) {
-        dispatch({ type: 'FETCH_FAIL', payload: getError(error) });
+      } catch (err) {
+        dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
       }
     };
     fetchData();

@@ -53,8 +53,8 @@ function App() {
       try {
         const { data } = await axios.get(`/api/productos/categories`);
         setCategories(data);
-      } catch (error) {
-        toast.error(getError(error));
+      } catch (err) {
+        toast.error(getError(err));
       }
     };
     fetchCategories();

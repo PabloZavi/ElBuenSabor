@@ -75,9 +75,9 @@ export default function PlaceOrderScreen() {
       //Dejo el carrito libre para otra compra
       localStorage.removeItem('cartItems');
       navigate(`/order/${data.order._id}`);
-    } catch (error) {
+    } catch (err) {
       dispatch({ type: 'CREATE_FAIL' });
-      toast.error(getError(error));
+      toast.error(getError(err));
     }
   };
 

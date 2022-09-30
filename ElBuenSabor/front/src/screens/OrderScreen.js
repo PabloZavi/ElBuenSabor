@@ -125,9 +125,9 @@ export default function OrderScreen() {
       //console.log(dataMP);
       //dispatch({ type: 'PAY_SUCCESS', payload: data });
       //toast.success('Order is paid');
-    } catch (error) {
+    } catch (err) {
       //dispatch({ type: 'PAY_FAIL', payload: getError(error) });
-      toast.error(getError(error));
+      toast.error(getError(err));
     }
   };
 
@@ -213,8 +213,8 @@ export default function OrderScreen() {
           headers: { authorization: `Bearer ${userInfo.token}` },
         });
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
-      } catch (error) {
-        dispatch({ type: 'FETCH_FAIL', payload: getError(error) });
+      } catch (err) {
+        dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
       }
     };
 
