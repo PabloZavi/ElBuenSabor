@@ -1,6 +1,7 @@
 import express from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import Producto from '../models/productoModel.js';
+import { isAdmin, isAuth } from '../utils.js';
 
 const productoRouter = express.Router();
 
@@ -10,12 +11,34 @@ productoRouter.get('/', async (req, res) => {
 });
 
 //Ojo usamos expressAsyncHandler
-const PAGE_SIZE = 6; 
+//const PAGE_SIZE = 6;
+
+productoRouter.get(
+  '/admin',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const { query } = req;
+    const page = query.page || 1;
+    const pageSize = query.pageSize || 10; //Elegir cuántos productos mostrar por pantalla
+    const productos = await Producto.find()
+      .skip(pageSize * (page - 1))
+      .limit(pageSize);
+    const countProductos = await Producto.countDocuments();
+    res.send({
+      productos,
+      countProductos,
+      page,
+      pages: Math.ceil(countProductos / pageSize),
+    });
+  })
+);
+
 productoRouter.get(
   '/search',
   expressAsyncHandler(async (req, res) => {
     const { query } = req;
-    const pageSize = query.pageSize || PAGE_SIZE;
+    const pageSize = query.pageSize || 6; //Elegir cuántos productos se muestran por pantalla
     const page = query.page || 1;
     const rubroProducto = query.category || '';
     const searchQuery = query.query || '';
@@ -31,7 +54,8 @@ productoRouter.get(
           }
         : {};
 
-    const categoryFilter = rubroProducto && rubroProducto !== 'all' ? { rubroProducto } : {};
+    const categoryFilter =
+      rubroProducto && rubroProducto !== 'all' ? { rubroProducto } : {};
 
     const productos = await Producto.find({
       ...queryFilter,
