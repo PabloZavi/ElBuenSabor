@@ -26,6 +26,9 @@ import { getError } from './utils';
 import axios from 'axios';
 import SearchBox from './components/SearchBox';
 import SearchScreen from './screens/SearchScreen';
+import ProtectedRoute from './components/ProtectedRoute';
+import DashboardScreen from './screens/DashboardScreen';
+import AdminRoute from './components/AdminRoute';
 
 function App() {
   //Traemos el estado de la app desde el store
@@ -119,6 +122,23 @@ function App() {
                       Sign In{' '}
                     </Link>
                   )}
+                  {/* Ojo acá el condicional que verifica si isAdmin para mostrar la sección Admin */}
+                  {userInfo && userInfo.isAdmin && (
+                    <NavDropdown title="Administrador" id="admin-nav-dropdown">
+                      <LinkContainer to="/admin/dashboard">
+                        <NavDropdown.Item>Tablero</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/admin/productlist">
+                        <NavDropdown.Item>Productos</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/admin/orderlist">
+                        <NavDropdown.Item>Pedidos</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/admin/userlist">
+                        <NavDropdown.Item>Usuarios</NavDropdown.Item>
+                      </LinkContainer>
+                    </NavDropdown>
+                  )}
                 </Nav>
               </NavBar.Collapse>
             </Container>
@@ -155,15 +175,52 @@ function App() {
               <Route path="/cart" element={<CartScreen />} />
               <Route path="/signin" element={<SigninScreen />} />
               <Route path="/signup" element={<SignupScreen />} />
-              <Route path="/profile" element={<ProfileScreen />} />
+              {/* Usamos el componente ProtectedRoute para las rutas protegidas */}
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <ProfileScreen />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/" element={<HomeScreen />} />
               <Route path="/shipping" element={<ShippingAddressScreen />} />
               <Route path="/payment" element={<PaymentMethodScreen />} />
               <Route path="/placeorder" element={<PlaceOrderScreen />} />
-              <Route path="/order/:id" element={<OrderScreen />} />
+              <Route
+                path="/order/:id"
+                element={
+                  <ProtectedRoute>
+                    <OrderScreen />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/paidok" element={<PaidOkScreen />} />
-              <Route path="/orderhistory" element={<OrderHistoryScreen />} />
+              <Route
+                path="/orderhistory"
+                element={
+                  <ProtectedRoute>
+                    <OrderHistoryScreen />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/search" element={<SearchScreen />} />
+
+              {/* Admin routes */}
+              <Route
+                path="/admin/dashboard"
+                element={
+                  <AdminRoute>
+                    <DashboardScreen></DashboardScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+
+
+
+
             </Routes>
           </Container>
         </main>
