@@ -9,6 +9,7 @@ import Button from 'react-bootstrap/Button';
 import { Helmet } from 'react-helmet-async';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
+import { toast } from 'react-toastify';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -18,6 +19,12 @@ const reducer = (state, action) => {
       return { ...state, loading: false };
     case 'FETCH_FAIL':
       return { ...state, loading: false, error: action.payload };
+      case 'UPDATE_REQUEST':
+      return { ...state, loadingUpdate: true };
+    case 'UPDATE_SUCCESS':
+      return { ...state, loadingUpdate: false };
+    case 'UPDATE_FAIL':
+      return { ...state, loadingUpdate: false };
 
     default:
       return state;
@@ -25,12 +32,14 @@ const reducer = (state, action) => {
 };
 
 export default function ProductEditScreen() {
+    const navigate = useNavigate();
   const params = useParams();
   const { id: productId } = params;
   const { state } = useContext(Store);
   const { userInfo } = state;
 
-  const [{ loading, error }, dispatch] = useReducer(reducer, {
+  //Si no está en el reducer no se puede usar abajo
+  const [{ loading, error, loadingUpdate }, dispatch] = useReducer(reducer, {
     loading: true,
     error: '',
   });
@@ -44,7 +53,6 @@ export default function ProductEditScreen() {
   const [altaProducto, setAltaProducto] = useState(false);
   const [rubroProducto, setRubroProducto] = useState('');
   const [stockProducto, setStockProducto] = useState(0);
-  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,6 +79,35 @@ export default function ProductEditScreen() {
     fetchData();
   }, [productId]);
 
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch({ type: 'UPDATE_REQUEST' });
+      await axios.put(
+        `/api/productos/${productId}`,
+        {
+          _id: productId,
+          nombreProducto,
+          tiempoCocinaProducto,
+          recetaProducto,
+          descripcionProducto,
+          imagenProducto,
+          precioVentaProducto,
+          altaProducto,
+          rubroProducto,
+          stockProducto,
+        },
+        { headers: { Authorization: `Bearer ${userInfo.token}` } }
+      );
+      dispatch({ type: 'UPDATE_SUCCESS' });
+      toast.success('Producto actualizado!');
+      navigate('/admin/products')
+    } catch (err) {
+      toast.error(getError(err));
+      dispatch({ type: 'UPDATE_FAIL' });
+    }
+  };
+
   return (
     <Container className="small-container">
       <Helmet>
@@ -83,7 +120,7 @@ export default function ProductEditScreen() {
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
-        <Form>
+        <Form onSubmit={submitHandler}>
           <Form.Group className="mb-3" controlId="nombreProducto">
             <Form.Label>Nombre</Form.Label>
             <Form.Control
@@ -160,7 +197,8 @@ export default function ProductEditScreen() {
             ></Form.Control>
           </Form.Group>
           <div className="mb-3">
-            <Button type="submit">Actualizar</Button>
+            <Button disabled={loadingUpdate} type="submit">Actualizar</Button>
+            {loadingUpdate && <LoadingBox></LoadingBox>}
           </div>
         </Form>
       )}

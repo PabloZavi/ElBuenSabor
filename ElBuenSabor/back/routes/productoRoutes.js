@@ -32,6 +32,31 @@ productoRouter.post(
   })
 );
 
+productoRouter.put(
+  '/:id',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const productId = req.params.id;
+    const product = await Producto.findById(productId);
+    if (product) {
+      product.nombreProducto = req.body.nombreProducto;
+      product.tiempoCocinaProducto = req.body.tiempoCocinaProducto;
+      product.recetaProducto = req.body.recetaProducto;
+      product.descripcionProducto = req.body.descripcionProducto;
+      product.imagenProducto = req.body.imagenProducto;
+      product.precioVentaProducto = req.body.precioVentaProducto;
+      product.altaProducto = req.body.altaProducto;
+      product.rubroProducto = req.body.rubroProducto;
+      product.stockProducto = req.body.stockProducto;
+      await product.save();
+      res.send({ message: 'Producto actualizado' });
+    } else {
+      res.status(404).send({ message: 'Producto no encontrado' });
+    }
+  })
+);
+
 //Ojo usamos expressAsyncHandler
 //const PAGE_SIZE = 6;
 
