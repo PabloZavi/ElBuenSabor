@@ -2,7 +2,7 @@ import express, { response } from 'express';
 import mercadopago from 'mercadopago';
 import expressAsyncHandler from 'express-async-handler';
 //import { isAuth } from '../utils.js';
-import cors from 'cors';
+//import cors from 'cors';
 
 const pagoMercadoPagoRouter = express.Router();
 //pagoMercadoPagoRouter.use(cors); 

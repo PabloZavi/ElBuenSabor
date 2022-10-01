@@ -8,6 +8,7 @@ import MessageBox from '../components/MessageBox';
 import { Store } from '../Store';
 import { getError } from '../utils';
 import Chart from 'react-google-charts';
+import { Helmet } from 'react-helmet-async';
 
 //Usaremos un reducer para traer la dashboard data desde el backend
 const reducer = (state, action) => {
@@ -59,6 +60,9 @@ export default function DashboardScreen() {
 
   return (
     <div>
+      <Helmet>
+        <title>Tablero</title>
+      </Helmet>
       <h1>Tablero</h1>
       {loading ? (
         <LoadingBox></LoadingBox>

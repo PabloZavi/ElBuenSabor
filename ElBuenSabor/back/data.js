@@ -15,7 +15,7 @@ const data = {
       isAdmin: false,
     },
   ], */
-  productos: [
+  /* productos: [
     {
       //_id: '1',
       nombreProducto: 'Hamburguesa doble con cheddar',
@@ -77,7 +77,7 @@ const data = {
       altaProducto: true,
       stockProducto: 5,
     },
-  ],
+  ], */
 };
 
 export default data;
