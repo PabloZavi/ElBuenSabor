@@ -39,7 +39,7 @@ function Producto(props) {
         />
       </Link>
       <Card.Body>
-        <Link to={`/producto/${producto.id}`}>
+        <Link to={`/producto/${producto._id}`}>
           <Card.Title>{producto.nombreProducto}</Card.Title>
         </Link>
         <Card.Text>${producto.precioVentaProducto}</Card.Text>
