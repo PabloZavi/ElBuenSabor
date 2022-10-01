@@ -4,9 +4,9 @@ const productoSchema = new mongoose.Schema(
   {
     nombreProducto: { type: String, required: true, unique: true },
     tiempoCocinaProducto: { type: Number, required: true },
-    recetaProducto: { type: String, required: true },
-    descripcionProducto: { type: String, required: true },
-    imagenProducto: { type: String, required: true },
+    recetaProducto: { type: String },
+    descripcionProducto: { type: String },
+    imagenProducto: { type: String },
     precioVentaProducto: { type: Number, required: true },
     altaProducto: { type: Boolean, required: true },
     rubroProducto: { type: String, required: true },

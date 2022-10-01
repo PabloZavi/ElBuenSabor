@@ -38,10 +38,11 @@ const reducer = (state, action) => {
 
 export default function ProductListScreen() {
   const navigate = useNavigate();
-  const [{ loading, error, productos, pages, loadingCreate }, dispatch] = useReducer(reducer, {
-    loading: true,
-    error: '',
-  });
+  const [{ loading, error, productos, pages, loadingCreate }, dispatch] =
+    useReducer(reducer, {
+      loading: true,
+      error: '',
+    });
 
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
@@ -116,6 +117,7 @@ export default function ProductListScreen() {
                 <th>Precio</th>
                 <th>Rubro</th>
                 <th>Alta</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -126,6 +128,15 @@ export default function ProductListScreen() {
                   <td>$ {producto.precioVentaProducto}</td>
                   <td>{producto.rubroProducto}</td>
                   <td>{producto.altaProducto.toString()}</td>
+                  <td>
+                    <Button
+                      type="button"
+                      variant="light"
+                      onClick={() => navigate(`/admin/product/${producto._id}`)}
+                    >
+                      Editar
+                    </Button>
+                  </td>
                 </tr>
               ))}
             </tbody>

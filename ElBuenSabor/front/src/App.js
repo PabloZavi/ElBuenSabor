@@ -30,6 +30,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import DashboardScreen from './screens/DashboardScreen';
 import AdminRoute from './components/AdminRoute';
 import ProductListScreen from './screens/ProductListScreen';
+import ProductEditScreen from './screens/ProductEditScreen';
 
 function App() {
   //Traemos el estado de la app desde el store
@@ -223,6 +224,15 @@ function App() {
                 element={
                   <AdminRoute>
                     <ProductListScreen></ProductListScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
+                path="/admin/product/:id"
+                element={
+                  <AdminRoute>
+                    <ProductEditScreen></ProductEditScreen>
                   </AdminRoute>
                 }
               ></Route>
