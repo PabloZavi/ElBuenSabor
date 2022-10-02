@@ -1,10 +1,20 @@
 import express from 'express';
 import User from '../models/userModel.js';
 import bcrypt from 'bcryptjs';
-import { generateToken, isAuth } from '../utils.js';
+import { generateToken, isAdmin, isAuth } from '../utils.js';
 import expressAsyncHandler from 'express-async-handler';
 
 const userRouter = express.Router();
+
+userRouter.get(
+  '/',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const users = await User.find({});
+    res.send(users);
+  })
+);
 
 //Con asyncHandler podemos manejar excepciones dentro de las rutas async de express
 //sin tener que usar .then y catch. Las manejaremos en server.js
