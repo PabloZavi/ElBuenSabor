@@ -27,7 +27,6 @@ userRouter.get(
     } else {
       res.status(404).send({ message: 'Usuario no encontrado' });
     }
-    ;
   })
 );
 
@@ -44,7 +43,26 @@ userRouter.put(
       const updatedUser = await user.save();
       res.send({ message: 'Usuario actualizado!' });
     } else {
-      res.status(404).send({ message: 'Usuario no encontrado' }); 
+      res.status(404).send({ message: 'Usuario no encontrado' });
+    }
+  })
+);
+
+userRouter.delete(
+  '/:id',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (user) {
+      if (user.emailUsuario === 'admin@elbuensabor.com' || user.isAdmin) {
+        res
+          .status(400)
+          .send({ message: 'No se puede eliminar a un administrador' });
+        return;
+      }
+      await user.remove();
+      res.send({ message: 'Usuario eliminado' });
     }
   })
 );
