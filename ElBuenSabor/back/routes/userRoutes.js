@@ -16,6 +16,39 @@ userRouter.get(
   })
 );
 
+userRouter.get(
+  '/:id',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (user) {
+      res.send(user);
+    } else {
+      res.status(404).send({ message: 'Usuario no encontrado' });
+    }
+    ;
+  })
+);
+
+userRouter.put(
+  '/:id',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (user) {
+      user.nombreUsuario = req.body.nombreUsuario || user.nombreUsuario;
+      user.emailUsuario = req.body.emailUsuario || user.emailUsuario;
+      user.isAdmin = Boolean(req.body.isAdmin);
+      const updatedUser = await user.save();
+      res.send({ message: 'Usuario actualizado!' });
+    } else {
+      res.status(404).send({ message: 'Usuario no encontrado' }); 
+    }
+  })
+);
+
 //Con asyncHandler podemos manejar excepciones dentro de las rutas async de express
 //sin tener que usar .then y catch. Las manejaremos en server.js
 userRouter.post(

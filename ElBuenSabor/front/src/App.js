@@ -33,6 +33,7 @@ import ProductListScreen from './screens/ProductListScreen';
 import ProductEditScreen from './screens/ProductEditScreen';
 import OrderListScreen from './screens/OrderListScreen';
 import UserListScreen from './screens/UserListScreen';
+import UserEditScreen from './screens/UserEditScreen';
 
 function App() {
   //Traemos el estado de la app desde el store
@@ -253,6 +254,15 @@ function App() {
                 element={
                   <AdminRoute>
                     <ProductEditScreen></ProductEditScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
+                path="/admin/user/:id"
+                element={
+                  <AdminRoute>
+                    <UserEditScreen></UserEditScreen>
                   </AdminRoute>
                 }
               ></Route>
