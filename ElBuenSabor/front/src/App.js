@@ -31,6 +31,7 @@ import DashboardScreen from './screens/DashboardScreen';
 import AdminRoute from './components/AdminRoute';
 import ProductListScreen from './screens/ProductListScreen';
 import ProductEditScreen from './screens/ProductEditScreen';
+import OrderListScreen from './screens/OrderListScreen';
 
 function App() {
   //Traemos el estado de la app desde el store
@@ -224,6 +225,15 @@ function App() {
                 element={
                   <AdminRoute>
                     <ProductListScreen></ProductListScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
+                path="/admin/orders"
+                element={
+                  <AdminRoute>
+                    <OrderListScreen></OrderListScreen>
                   </AdminRoute>
                 }
               ></Route>

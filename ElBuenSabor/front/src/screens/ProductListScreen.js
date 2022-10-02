@@ -39,7 +39,7 @@ const reducer = (state, action) => {
       return { ...state, loadingDelete: false, successDelete: true };
     case 'DELETE_FAIL':
       return { ...state, loadingDelete: false, successDelete: false };
-      case 'DELETE_RESET':
+    case 'DELETE_RESET':
       return { ...state, loadingDelete: false, successDelete: false };
     default:
       return state;
@@ -65,11 +65,18 @@ const reducer = (state, action) => {
 //3. Y después de hacer eso, comprueba el valor de successDelete (está en true todavía) y llamando a
 //   'DELETE_RESET' lo pasa a false y listo.
 
-
 export default function ProductListScreen() {
   const navigate = useNavigate();
   const [
-    { loading, error, productos, pages, loadingCreate, loadingDelete, successDelete },
+    {
+      loading,
+      error,
+      productos,
+      pages,
+      loadingCreate,
+      loadingDelete,
+      successDelete,
+    },
     dispatch,
   ] = useReducer(reducer, {
     loading: true,
@@ -93,9 +100,9 @@ export default function ProductListScreen() {
       } catch (err) {}
     };
     fetchData();
-    if(successDelete){
-      dispatch({type: 'DELETE_RESET'})
-    } else{
+    if (successDelete) {
+      dispatch({ type: 'DELETE_RESET' });
+    } else {
       fetchData();
     }
   }, [page, userInfo.token, successDelete]);

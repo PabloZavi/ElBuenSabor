@@ -7,6 +7,16 @@ import Producto from '../models/productoModel.js';
 
 const orderRouter = express.Router();
 
+orderRouter.get(
+  '/',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const orders = await Order.find().populate('user', 'nombreUsuario');
+    res.send(orders);
+  })
+);
+
 orderRouter.post(
   //Uso el middleware 'isAuth' que filtrará el user request _id de abajo
   '/',
