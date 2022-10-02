@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer } from 'react';
 import axios from 'axios';
 import logger from 'use-reducer-logger';
 import Row from 'react-bootstrap/Row';
@@ -40,8 +40,8 @@ function HomeScreen() {
       try {
         const result = await axios.get('/api/productos');
         dispatch({ type: 'FETCH_SUCCESS', payload: result.data });
-      } catch (error) {
-        dispatch({ type: 'FETCH_FAIL', payload: error.message });
+      } catch (err) {
+        dispatch({ type: 'FETCH_FAIL', payload: err.message });
       }
 
       //setProductos(result.data);

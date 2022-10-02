@@ -30,16 +30,16 @@ function Producto(props) {
     });
   };
   return (
-    <Card>
+    <Card style={{ width: '18rem' }}>
       <Link to={`/producto/${producto._id}`}>
         <img
           src={producto.imagenProducto}
-          className="card-img-top"
+          className="card-img-top producto-img3"
           alt={producto.nombreProducto}
         />
       </Link>
       <Card.Body>
-        <Link to={`/producto/${producto.id}`}>
+        <Link to={`/producto/${producto._id}`}>
           <Card.Title>{producto.nombreProducto}</Card.Title>
         </Link>
         <Card.Text>${producto.precioVentaProducto}</Card.Text>

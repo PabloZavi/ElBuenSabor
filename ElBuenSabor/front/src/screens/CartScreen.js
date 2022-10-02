@@ -11,7 +11,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export default function CartScreen() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const {
     cart: { cartItems },
@@ -53,20 +53,30 @@ export default function CartScreen() {
             </MessageBox>
           ) : (
             <ListGroup>
+              {/* <Row>
+                <Col md={2}></Col>
+                <Col md={2}></Col>
+                <Col md={2}><p className='text-center'>Cantidad</p></Col>
+                <Col md={2}><p className='text-center'>Precio</p></Col>
+                <Col md={2}><p className='text-center'>Subtotal</p></Col>
+                <Col md={2}><p className='text-center'>Eliminar</p></Col>
+              </Row> */}
               {cartItems.map((item) => (
                 <ListGroup.Item key={item._id}>
                   <Row className="align-items-center">
-                    <Col md={4}>
+                    <Col md={2}>
                       <img
                         src={item.imagenProducto}
                         alt={item.nombreProducto}
                         className="img-fluid rounded img-thumbnail"
                       ></img>{' '}
+                    </Col>
+                    <Col md={2}>
                       <Link to={`/producto/${item._id}`}>
                         {item.nombreProducto}
                       </Link>
                     </Col>
-                    <Col md={3}>
+                    <Col md={2}>
                       <Button
                         onClick={() =>
                           updateCartHandler(item, item.cantidad - 1)
@@ -87,7 +97,10 @@ export default function CartScreen() {
                         <i className="bi bi-file-plus-fill"></i>
                       </Button>
                     </Col>
-                    <Col md={3}>$ {item.precioVentaProducto}</Col>
+                    <Col md={2}>$ {item.precioVentaProducto}</Col>
+                    <Col md={2}>
+                      $ {item.precioVentaProducto * item.cantidad}
+                    </Col>
                     <Col md={2}>
                       <Button
                         onClick={() => removeItemHandler(item)}

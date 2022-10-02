@@ -11,8 +11,15 @@ const initialState = {
     : null,
 
   cart: {
-    //cartItems tiene que venir del localStorage
+    shippingAddress: localStorage.getItem('shippingAddress')
+      ? JSON.parse(localStorage.getItem('shippingAddress'))
+      : {},
 
+    paymentMethod: localStorage.getItem('paymentMethod')
+      ? localStorage.getItem('paymentMethod')
+      : '',
+
+    //cartItems tiene que venir del localStorage
     cartItems: localStorage.getItem('cartItems') //Si cartItems existe en el localStorage...
       ? JSON.parse(localStorage.getItem('cartItems')) //usamos parse para convertir el string en un jsObject
       : [], //si no lo seteamos como un array vacío
@@ -58,6 +65,9 @@ function reducer(state, action) {
       localStorage.setItem('cartItems', JSON.stringify(cartItems));
       return { ...state, cart: { ...state.cart, cartItems } };
     }
+    case 'CART_CLEAR':
+      //Mantenemos el estado del context, también del cart, pero cambiamos el estado de los cartItems a un array vacío
+      return { ...state, cart: { ...state.cart, cartItems: [] } };
     case 'USER_SIGNIN': {
       //Mantenemos el estado anterior y actualizamos la info del usuario con la info
       //que vino desde el back
@@ -65,8 +75,28 @@ function reducer(state, action) {
     }
 
     case 'USER_SIGNOUT': {
-      return { ...state, userInfo: null };
+      return {
+        ...state,
+        userInfo: null,
+        cart: { cartItems: [], shippingAddress: {}, paymentMethod: '' },
+      };
     }
+    //Lo único que se cambiará en el estado es el cart, y lo único del cart es la shippingAddress
+    //entonces...
+    case 'SAVE_SHIPPING_ADDRESS':
+      return {
+        ...state, //no tocamos otros campos en el state más que el cart
+        cart: {
+          ...state.cart, //y del cart lo único es la shippingAddress
+          shippingAddress: action.payload,
+        },
+      };
+
+    case 'SAVE_PAYMENT_METHOD':
+      return {
+        ...state,
+        cart: { ...state.cart, paymentMethod: action.payload },
+      };
     default:
       return state;
   }
