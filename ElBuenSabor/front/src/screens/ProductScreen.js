@@ -110,6 +110,22 @@ function ProductScreen() {
             <ListGroup.Item>
               <p>{producto.descripcionProducto}</p>
             </ListGroup.Item>
+            <ListGroup.Item>
+                  <Row>
+                    
+                    <Col>
+                      {producto.isCeliaco && (
+                        <h5><Badge bg="primary"> Apto celíacos </Badge></h5>
+                      ) }
+                    </Col>
+                    <Col>
+                      {producto.isVegetariano && (
+                        <h5><Badge bg="primary"> Apto vegetarianos </Badge></h5>
+                      ) }
+                    </Col>
+                  </Row>
+                </ListGroup.Item>
+
           </ListGroup>
         </Col>
         <Col md={3}>

@@ -26,6 +26,8 @@ productoRouter.post(
       rubroProducto: 'rubro prueba 1',
       //Atributo a eliminar:
       stockProducto: 2,
+      isCeliaco: false,
+      isVegetariano: false,
     });
     const producto = await newProducto.save();
     res.send({ message: 'Producto creado', producto });
@@ -49,6 +51,8 @@ productoRouter.put(
       product.altaProducto = req.body.altaProducto;
       product.rubroProducto = req.body.rubroProducto;
       product.stockProducto = req.body.stockProducto;
+      product.isCeliaco = req.body.isCeliaco;
+      product.isVegetariano = req.body.isVegetariano;
       await product.save();
       res.send({ message: 'Producto actualizado' });
     } else {

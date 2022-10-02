@@ -105,7 +105,7 @@ export default function ProductListScreen() {
     } else {
       fetchData();
     }
-  }, [page, userInfo.token, successDelete]);
+  }, [page, userInfo, successDelete]);
 
   const createHandler = async () => {
     if (window.confirm('Está seguro de crear un nuevo producto?')) {
