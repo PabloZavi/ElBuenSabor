@@ -33,7 +33,8 @@ function Producto(props) {
     });
   };
   return (
-    <Card style={{ width: '18rem' }}>
+    <div class="text-center">
+    <Card style={{ width: '18rem', height: '24rem' }}>
       <Link to={`/producto/${producto._id}`}>
         <img
           src={producto.imagenProducto}
@@ -65,13 +66,17 @@ function Producto(props) {
           </Row>
         </Card.Text>
         {producto.stockProducto === 0 ? (
-          <Button variant="light" disabled>
-            Sin stock
-          </Button>
+          
+            <Button variant="light" disabled>
+              Sin stock
+            </Button>
+          
         ) : (
-          <Button onClick={() => addToCartHandler(producto)}>
-            Agregar al carrito
-          </Button>
+          
+            <Button onClick={() => addToCartHandler(producto)}>
+              Agregar al carrito
+            </Button>
+          
         )}
       </Card.Body>
       {/* <div className="producto-info">
@@ -82,6 +87,7 @@ function Producto(props) {
         <button>Agregar al carrito</button>
       </div> */}
     </Card>
+    </div>
   );
 }
 
