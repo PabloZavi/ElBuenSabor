@@ -5,6 +5,9 @@ import axios from 'axios';
 import { useContext } from 'react';
 import { Store } from '../Store';
 import { toast } from 'react-toastify';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Badge from 'react-bootstrap/Badge';
 
 function Producto(props) {
   const { producto } = props;
@@ -30,7 +33,8 @@ function Producto(props) {
     });
   };
   return (
-    <Card style={{ width: '18rem' }}>
+    <div class="text-center">
+    <Card style={{ width: '18rem', height: '24rem' }}>
       <Link to={`/producto/${producto._id}`}>
         <img
           src={producto.imagenProducto}
@@ -43,14 +47,36 @@ function Producto(props) {
           <Card.Title>{producto.nombreProducto}</Card.Title>
         </Link>
         <Card.Text>${producto.precioVentaProducto}</Card.Text>
+        <Card.Text>
+          <Row>
+            <Col>
+              {producto.isCeliaco && (
+                <h6>
+                  <Badge bg="success"> Apto celíacos </Badge>
+                </h6>
+              )}
+            </Col>
+            <Col>
+              {producto.isVegetariano && (
+                <h6>
+                  <Badge bg="success"> Apto vegetarianos </Badge>
+                </h6>
+              )}
+            </Col>
+          </Row>
+        </Card.Text>
         {producto.stockProducto === 0 ? (
-          <Button variant="light" disabled>
-            Sin stock
-          </Button>
+          
+            <Button variant="light" disabled>
+              Sin stock
+            </Button>
+          
         ) : (
-          <Button onClick={() => addToCartHandler(producto)}>
-            Agregar al carrito
-          </Button>
+          
+            <Button onClick={() => addToCartHandler(producto)}>
+              Agregar al carrito
+            </Button>
+          
         )}
       </Card.Body>
       {/* <div className="producto-info">
@@ -61,6 +87,7 @@ function Producto(props) {
         <button>Agregar al carrito</button>
       </div> */}
     </Card>
+    </div>
   );
 }
 

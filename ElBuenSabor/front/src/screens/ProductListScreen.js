@@ -26,12 +26,12 @@ const reducer = (state, action) => {
     case 'FETCH_FAIL':
       return { ...state, loading: false, error: action.payload };
 
-    case 'CREATE_REQUEST':
+    /* case 'CREATE_REQUEST':
       return { ...state, loadingCreate: true };
     case 'CREATE_SUCCESS':
       return { ...state, loadingCreate: false };
     case 'CREATE_FAIL':
-      return { ...state, loadingCreate: false };
+      return { ...state, loadingCreate: false }; */
 
     case 'DELETE_REQUEST':
       return { ...state, loadingDelete: true, successDelete: false };
@@ -105,9 +105,9 @@ export default function ProductListScreen() {
     } else {
       fetchData();
     }
-  }, [page, userInfo.token, successDelete]);
+  }, [page, userInfo, successDelete]);
 
-  const createHandler = async () => {
+  /* const createHandler = async () => {
     if (window.confirm('Está seguro de crear un nuevo producto?')) {
       try {
         dispatch({ type: 'CREATE_REQUEST' });
@@ -128,7 +128,7 @@ export default function ProductListScreen() {
         });
       }
     }
-  };
+  }; */
 
   const deleteHandler = async (producto) => {
     if (window.confirm('Está seguro de elmininar?')) {
@@ -160,7 +160,8 @@ export default function ProductListScreen() {
         </Col>
         <Col className="col text-end">
           <div>
-            <Button type="button" onClick={createHandler}>
+            {/* <Button type="button" onClick={createHandler}> */}
+            <Button type="button" onClick={() => navigate(`/admin/product/new`)}>
               Crear producto
             </Button>
           </div>

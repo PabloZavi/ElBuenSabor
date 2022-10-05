@@ -7,6 +7,9 @@ import Producto from '../components/Producto';
 import { Helmet } from 'react-helmet-async';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
+import Carousel from 'react-elastic-carousel';
+import styled from 'styled-components';
+
 //import data from '../data';
 
 //reducer acepta dos parámetros, el primero es el estado actual y el segundo es la acción que cambia
@@ -49,12 +52,61 @@ function HomeScreen() {
     fetchData();
   }, []);
 
+  const breakPoints = [
+    { width: 1, itemsToShow: 1, pagination: false },
+    { width: 550, itemsToShow: 2, pagination: false },
+    { width: 768, itemsToShow: 4, pagination: false },
+    { width: 1200, itemsToShow: 4, pagination: false },
+  ];
+
+  const Item = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    margin: 15px;
+    padding: 0px;
+    flex-wrap: wrap;
+  `;
+
   //Se le agrega un mensaje mientras carga y si hay un error lo muestra, si no muestra los productos.
   return (
     <div>
       <Helmet>
         <title>El Buen Sabor</title>
       </Helmet>
+
+      <div className="productos">
+        <h1>Nuestras Hamburguesas</h1>
+        <Carousel breakPoints={breakPoints} itemPadding={[0, 0]}>
+          {productos
+            .filter((prod) => prod.rubroProducto === 'Hamburguesas')
+            .map((producto) => (
+              <Item key={producto._id} sm={6} md={4} lg={3} className="mb-3">
+                <Producto producto={producto}></Producto>
+              </Item>
+            ))}
+        </Carousel>
+      </div>
+
+      <div className="productos">
+        <h1>Nuestras Pizzas</h1>
+        <Carousel breakPoints={breakPoints} itemPadding={[0, 0]}>
+          {productos
+            .filter((prod) => prod.rubroProducto === 'Pizzas')
+            .map((producto) => (
+              <Item key={producto._id} sm={6} md={4} lg={3} className="mb-3">
+                <Producto producto={producto}></Producto>
+              </Item>
+            ))}
+        </Carousel>
+      </div>
+
+
+
+
+      
       <h1> ¡Nuestros Productos! </h1>
       <div className="productos">
         {loading ? (

@@ -10,7 +10,7 @@ productoRouter.get('/', async (req, res) => {
   res.send(productos);
 });
 
-productoRouter.post(
+/* productoRouter.post(
   '/',
   isAuth,
   isAdmin,
@@ -26,9 +26,35 @@ productoRouter.post(
       rubroProducto: 'rubro prueba 1',
       //Atributo a eliminar:
       stockProducto: 2,
+      isCeliaco: false,
+      isVegetariano: false,
     });
     const producto = await newProducto.save();
     res.send({ message: 'Producto creado', producto });
+  })
+); */
+
+productoRouter.post(
+  '/',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const newProducto = new Producto({
+      nombreProducto: req.body.nombreProducto,
+      tiempoCocinaProducto: req.body.tiempoCocinaProducto,
+      recetaProducto: req.body.recetaProducto,
+      descripcionProducto: req.body.descripcionProducto,
+      imagenProducto: req.body.imagenProducto,
+      precioVentaProducto: req.body.precioVentaProducto,
+      altaProducto: req.body.altaProducto,
+      rubroProducto: req.body.rubroProducto,
+      //Atributo a eliminar:
+      stockProducto: req.body.stockProducto,
+      isCeliaco: req.body.isCeliaco,
+      isVegetariano: req.body.isVegetariano,
+    });
+    const producto = await newProducto.save();
+    res.send({ message: 'Producto creado'});
   })
 );
 
@@ -49,6 +75,8 @@ productoRouter.put(
       product.altaProducto = req.body.altaProducto;
       product.rubroProducto = req.body.rubroProducto;
       product.stockProducto = req.body.stockProducto;
+      product.isCeliaco = req.body.isCeliaco;
+      product.isVegetariano = req.body.isVegetariano;
       await product.save();
       res.send({ message: 'Producto actualizado' });
     } else {

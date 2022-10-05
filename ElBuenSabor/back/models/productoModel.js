@@ -9,6 +9,8 @@ const productoSchema = new mongoose.Schema(
     imagenProducto: { type: String },
     precioVentaProducto: { type: Number, required: true },
     altaProducto: { type: Boolean, required: true },
+    isCeliaco: { type: Boolean, required: true },
+    isVegetariano: { type: Boolean, required: true },
     rubroProducto: { type: String, required: true },
     //Atributo a eliminar:
     stockProducto: { type: Number, required: true },

@@ -71,6 +71,8 @@ export default function ProductEditScreen() {
   const [altaProducto, setAltaProducto] = useState(false);
   const [rubroProducto, setRubroProducto] = useState('');
   const [stockProducto, setStockProducto] = useState(0);
+  const [isCeliaco, setIsCeliaco] = useState(false);
+  const [isVegetariano, setIsVegetariano] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -86,6 +88,8 @@ export default function ProductEditScreen() {
         setAltaProducto(data.altaProducto);
         setRubroProducto(data.rubroProducto);
         setStockProducto(data.stockProducto);
+        setIsCeliaco(data.isCeliaco);
+        setIsVegetariano(data.isVegetariano);
         dispatch({ type: 'FETCH_SUCCESS' });
       } catch (err) {
         dispatch({
@@ -114,6 +118,8 @@ export default function ProductEditScreen() {
           altaProducto,
           rubroProducto,
           stockProducto,
+          isCeliaco,
+          isVegetariano,
         },
         { headers: { Authorization: `Bearer ${userInfo.token}` } }
       );
@@ -218,14 +224,32 @@ export default function ProductEditScreen() {
             ></Form.Control>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="altaProducto">
-            <Form.Label>Alta?</Form.Label>
-            <Form.Control
-              value={altaProducto}
-              onChange={(e) => setAltaProducto(e.target.value)}
-              required
-            ></Form.Control>
-          </Form.Group>
+          <Form.Check
+            className="mb-3"
+            type="checkbox"
+            id="altaProducto"
+            label="Está dado de alta?"
+            checked={altaProducto}
+            onChange={(e) => setAltaProducto(e.target.checked)}
+          ></Form.Check>
+
+          <Form.Check
+            className="mb-3"
+            type="checkbox"
+            id="isVegetariano"
+            label="Vegetariano?"
+            checked={isVegetariano}
+            onChange={(e) => setIsVegetariano(e.target.checked)}
+          ></Form.Check>
+
+          <Form.Check
+            className="mb-3"
+            type="checkbox"
+            id="isCeliaco"
+            label="Apto celíacos?"
+            checked={isCeliaco}
+            onChange={(e) => setIsCeliaco(e.target.checked)}
+          ></Form.Check>
 
           <Form.Group className="mb-3" controlId="rubroProducto">
             <Form.Label>Rubro</Form.Label>
@@ -248,7 +272,10 @@ export default function ProductEditScreen() {
             <Button disabled={loadingUpdate} type="submit">
               Actualizar
             </Button>
-            {loadingUpdate && <LoadingBox></LoadingBox>}
+            {loadingUpdate && <LoadingBox></LoadingBox>}{' '}
+            <Button type="button" onClick={() => navigate(`/admin/products`)}>
+              Cancelar
+            </Button>
           </div>
         </Form>
       )}
