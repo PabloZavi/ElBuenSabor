@@ -272,7 +272,10 @@ export default function ProductEditScreen() {
             <Button disabled={loadingUpdate} type="submit">
               Actualizar
             </Button>
-            {loadingUpdate && <LoadingBox></LoadingBox>}
+            {loadingUpdate && <LoadingBox></LoadingBox>}{' '}
+            <Button type="button" onClick={() => navigate(`/admin/products`)}>
+              Cancelar
+            </Button>
           </div>
         </Form>
       )}

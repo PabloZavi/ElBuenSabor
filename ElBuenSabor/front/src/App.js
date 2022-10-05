@@ -34,6 +34,7 @@ import ProductEditScreen from './screens/ProductEditScreen';
 import OrderListScreen from './screens/OrderListScreen';
 import UserListScreen from './screens/UserListScreen';
 import UserEditScreen from './screens/UserEditScreen';
+import ProductNewScreen from './screens/ProductNewScreen';
 
 function App() {
   //Traemos el estado de la app desde el store
@@ -64,7 +65,7 @@ function App() {
       }
     };
     fetchCategories();
-  });
+  }, []);
 
   return (
     <BrowserRouter>
@@ -246,6 +247,15 @@ function App() {
                 element={
                   <AdminRoute>
                     <UserListScreen></UserListScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
+                path="/admin/product/new"
+                element={
+                  <AdminRoute>
+                    <ProductNewScreen></ProductNewScreen>
                   </AdminRoute>
                 }
               ></Route>

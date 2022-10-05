@@ -10,7 +10,7 @@ productoRouter.get('/', async (req, res) => {
   res.send(productos);
 });
 
-productoRouter.post(
+/* productoRouter.post(
   '/',
   isAuth,
   isAdmin,
@@ -31,6 +31,30 @@ productoRouter.post(
     });
     const producto = await newProducto.save();
     res.send({ message: 'Producto creado', producto });
+  })
+); */
+
+productoRouter.post(
+  '/',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const newProducto = new Producto({
+      nombreProducto: req.body.nombreProducto,
+      tiempoCocinaProducto: req.body.tiempoCocinaProducto,
+      recetaProducto: req.body.recetaProducto,
+      descripcionProducto: req.body.descripcionProducto,
+      imagenProducto: req.body.imagenProducto,
+      precioVentaProducto: req.body.precioVentaProducto,
+      altaProducto: req.body.altaProducto,
+      rubroProducto: req.body.rubroProducto,
+      //Atributo a eliminar:
+      stockProducto: req.body.stockProducto,
+      isCeliaco: req.body.isCeliaco,
+      isVegetariano: req.body.isVegetariano,
+    });
+    const producto = await newProducto.save();
+    res.send({ message: 'Producto creado'});
   })
 );
 
