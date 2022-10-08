@@ -37,10 +37,10 @@ userRouter.put(
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
     if (user) {
-      user.nombreUsuario = req.body.nombreUsuario || user.nombreUsuario;
-      user.emailUsuario = req.body.emailUsuario || user.emailUsuario;
+      user.nombreUsuario = req.body.nombreUsuario/*  || user.nombreUsuario */;
+      user.emailUsuario = req.body.emailUsuario/*  || user.emailUsuario */;
       user.isAdmin = Boolean(req.body.isAdmin);
-      const updatedUser = await user.save();
+      /* const updatedUser =  */await user.save();
       res.send({ message: 'Usuario actualizado!' });
     } else {
       res.status(404).send({ message: 'Usuario no encontrado' });
@@ -116,8 +116,8 @@ userRouter.put(
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     if (user) {
-      user.nombreUsuario = req.body.nombreUsuario || user.nombreUsuario;
-      user.emailUsuario = req.body.emailUsuario || user.emailUsuario;
+      user.nombreUsuario = req.body.nombreUsuario/*  || user.nombreUsuario */;
+      user.emailUsuario = req.body.emailUsuario/*  || user.emailUsuario */;
       if (req.body.passwordUsuario) {
         user.passwordUsuario = bcrypt.hashSync(req.body.passwordUsuario, 8);
       }

@@ -35,6 +35,9 @@ import OrderListScreen from './screens/OrderListScreen';
 import UserListScreen from './screens/UserListScreen';
 import UserEditScreen from './screens/UserEditScreen';
 import ProductNewScreen from './screens/ProductNewScreen';
+import RubroListScreen from './screens/RubroListScreen';
+import RubroNewScreen from './screens/RubroNewScreen';
+import RubroEditScreen from './screens/RubroEditScreen';
 
 function App() {
   //Traemos el estado de la app desde el store
@@ -137,6 +140,9 @@ function App() {
                       </LinkContainer>
                       <LinkContainer to="/admin/products">
                         <NavDropdown.Item>Productos</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/admin/rubros">
+                        <NavDropdown.Item>Rubros</NavDropdown.Item>
                       </LinkContainer>
                       <LinkContainer to="/admin/orders">
                         <NavDropdown.Item>Pedidos</NavDropdown.Item>
@@ -274,6 +280,33 @@ function App() {
                 element={
                   <AdminRoute>
                     <UserEditScreen></UserEditScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
+                path="/admin/rubros"
+                element={
+                  <AdminRoute>
+                    <RubroListScreen></RubroListScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
+                path="/admin/rubro/new"
+                element={
+                  <AdminRoute>
+                    <RubroNewScreen></RubroNewScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+              
+              <Route
+                path="/admin/rubro/:id"
+                element={
+                  <AdminRoute>
+                    <RubroEditScreen></RubroEditScreen>
                   </AdminRoute>
                 }
               ></Route>
