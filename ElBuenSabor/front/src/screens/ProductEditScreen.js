@@ -10,6 +10,9 @@ import { Helmet } from 'react-helmet-async';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { toast } from 'react-toastify';
+import Select from 'react-select';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -73,6 +76,7 @@ export default function ProductEditScreen() {
   const [stockProducto, setStockProducto] = useState(0);
   const [isCeliaco, setIsCeliaco] = useState(false);
   const [isVegetariano, setIsVegetariano] = useState(false);
+  const [rubros, setRubros] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,6 +104,21 @@ export default function ProductEditScreen() {
     };
     fetchData();
   }, [productId]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let { data } = await axios.get(`/api/rubros`);
+        //datos = JSON.parse(datos);
+        //console.log(data);
+        setRubros(data);
+      } catch (err) {
+        toast.error(getError(err));
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -252,12 +271,38 @@ export default function ProductEditScreen() {
           ></Form.Check>
 
           <Form.Group className="mb-3" controlId="rubroProducto">
-            <Form.Label>Rubro</Form.Label>
+
+            
+          <Row>
+            <Col>
+              <Select
+                defaultValue={
+                  rubroProducto
+                    ? { label: rubroProducto }
+                    : { label: 'Seleccionar rubro' }
+                }
+                options={rubros.map((rubro) => ({
+                  label: rubro.nombreRubro,
+                  value: rubro.nombreRubro,
+                }))}
+                onChange={(e) => setRubroProducto(e.value)}
+              ></Select>
+            </Col>
+            <Col>
+              <Button
+                type="button"
+                onClick={() => navigate(`/admin/rubro/new`)}
+              >
+                Crear rubro
+              </Button>
+            </Col>
+          </Row>
+            {/* <Form.Label>Rubro</Form.Label>
             <Form.Control
               value={rubroProducto}
               onChange={(e) => setRubroProducto(e.target.value)}
               required
-            ></Form.Control>
+            ></Form.Control> */}
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="stockProducto">

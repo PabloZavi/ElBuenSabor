@@ -14,6 +14,7 @@ const productoSchema = new mongoose.Schema(
     rubroProducto: { type: String, required: true },
     //Atributo a eliminar:
     stockProducto: { type: Number, required: true },
+    //rubroProducto: { type: mongoose.Schema.Types.ObjectId, ref: 'Rubro', required: true },
   },
   {
     timestamps: true,
