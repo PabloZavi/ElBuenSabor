@@ -50,7 +50,8 @@ export default function RubroNewScreen() {
       );
       dispatch({ type: 'CREATE_SUCCESS' });
       toast.success('Rubro creado!');
-      navigate('/admin/rubros');
+      /* navigate('/admin/rubros'); */
+      navigate(-1);
     } catch (err) {
       toast.error(getError(err));
       dispatch({ type: 'CREATE_FAIL' });
@@ -89,7 +90,8 @@ export default function RubroNewScreen() {
             Crear rubro
           </Button>
           {loadingCreate && <LoadingBox></LoadingBox>}{' '}
-          <Button type="button" onClick={() => navigate(`/admin/rubros`)}>
+          {/* <Button type="button" onClick={() => navigate(`/admin/rubros`)}> */}
+          <Button type="button" onClick={() => navigate(-1)}>
             Cancelar
           </Button>
         </div>

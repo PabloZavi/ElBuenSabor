@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useContext, useReducer, useState } from 'react';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -9,9 +9,23 @@ import Button from 'react-bootstrap/Button';
 import LoadingBox from '../components/LoadingBox';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
+import Select from 'react-select';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 const reducer = (state, action) => {
   switch (action.type) {
+    /* case 'FETCH_REQUEST':
+      return { ...state, loading: true };
+    case 'FETCH_SUCCESS':
+      return {
+        ...state,
+        rubros: action.payload.rubros,
+        
+      };
+    case 'FETCH_FAIL':
+      return { ...state, loading: false, error: action.payload }; */
+
     case 'CREATE_REQUEST':
       return { ...state, loadingCreate: true };
     case 'CREATE_SUCCESS':
@@ -44,8 +58,8 @@ const reducer = (state, action) => {
 export default function ProductNewScreen() {
   const navigate = useNavigate();
   const [{ loadingUpload, loadingCreate }, dispatch] = useReducer(reducer, {
-    //loading: true,
-    //error: '',
+    loading: true,
+    error: '',
   });
 
   const { state } = useContext(Store);
@@ -59,9 +73,26 @@ export default function ProductNewScreen() {
   const [precioVentaProducto, setPrecioVentaProducto] = useState('');
   const [altaProducto, setAltaProducto] = useState(false);
   const [rubroProducto, setRubroProducto] = useState('');
+  /* const [rubroProducto, setRubroProducto] = useState(null); */
   const [stockProducto, setStockProducto] = useState(0);
   const [isCeliaco, setIsCeliaco] = useState(false);
   const [isVegetariano, setIsVegetariano] = useState(false);
+  const [rubros, setRubros] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let { data } = await axios.get(`/api/rubros`);
+        //datos = JSON.parse(datos);
+        //console.log(data);
+        setRubros(data);
+      } catch (err) {
+        toast.error(getError(err));
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -205,13 +236,66 @@ export default function ProductNewScreen() {
         ></Form.Check>
 
         <Form.Group className="mb-3" controlId="rubroProducto">
-          <Form.Label>Rubro</Form.Label>
-          <Form.Control
+          {/* <Form.Label>Rubro</Form.Label> */}
+          {/* <Form.Control
             value={rubroProducto}
             onChange={(e) => setRubroProducto(e.target.value)}
             required
-          ></Form.Control>
+          ></Form.Control> */}
+          {/* <Form.Select>
+            {rubros.map((rubro) => (
+              <option key={rubro._id} value={rubro.nombreRubro}>{rubro.nombreRubro}</option>
+            ))}
+
+            
+          </Form.Select> */}
+
+          <Row>
+            <Col>
+              <Select
+                defaultValue={
+                  rubroProducto
+                    ? { label: rubroProducto }
+                    : { label: 'Seleccionar rubro' }
+                }
+                options={rubros.map((rubro) => ({
+                  label: rubro.nombreRubro,
+                  value: rubro.nombreRubro,
+                }))}
+                onChange={(e) => setRubroProducto(e.value)}
+              ></Select>
+            </Col>
+            <Col>
+              <Button
+                type="button"
+                onClick={() => navigate(`/admin/rubro/new`)}
+              >
+                Crear rubro
+              </Button>
+            </Col>
+          </Row>
         </Form.Group>
+
+        {/* <Form.Group className="mb-3" controlId="rubroProducto">
+          <Form.Label>Rubro</Form.Label>
+           
+
+          <Combobox
+            data={rubros}
+            dataKey="_id"
+            textField="nombreRubro"
+            placeholder="Seleccionar rubro"
+          ></Combobox>
+        </Form.Group> */}
+
+        {/* {rubros.map((rubro) => (
+                <tr key={rubro._id}>
+                  <td>{rubro._id}</td>
+                  <td>{rubro.nombreRubro}</td>
+                  <td>{rubro.altaRubro.toString()}</td>
+                  
+                </tr>
+              ))} */}
 
         <Form.Group className="mb-3" controlId="stockProducto">
           <Form.Label>Stock</Form.Label>

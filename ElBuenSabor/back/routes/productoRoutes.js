@@ -112,6 +112,7 @@ productoRouter.get(
     const page = query.page || 1;
     const pageSize = query.pageSize || 10; //Elegir cuántos productos mostrar por pantalla
     const productos = await Producto.find()
+      //.populate('rubroProducto', 'nombreRubro')
       .skip(pageSize * (page - 1))
       .limit(pageSize);
     const countProductos = await Producto.countDocuments();

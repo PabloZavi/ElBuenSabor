@@ -10,7 +10,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Store } from '../Store';
 import { toast } from 'react-toastify';
 import { getError } from '../utils';
-import Axios from 'axios';
+import axios from 'axios';
 import LoadingBox from '../components/LoadingBox';
 
 //reducer es independiente de los componentes, entonces lo definimos afuera
@@ -51,7 +51,7 @@ export default function PlaceOrderScreen() {
     try {
       dispatch({ type: 'CREATE_REQUEST' });
 
-      const { data } = await Axios.post(
+      const { data } = await axios.post(
         '/api/orders',
         {
           orderItems: cart.cartItems,
