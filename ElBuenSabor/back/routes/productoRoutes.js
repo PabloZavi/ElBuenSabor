@@ -54,7 +54,7 @@ productoRouter.post(
       isVegetariano: req.body.isVegetariano,
     });
     const producto = await newProducto.save();
-    res.send({ message: 'Producto creado'});
+    res.send({ message: 'Producto creado' });
   })
 );
 
@@ -175,6 +175,18 @@ productoRouter.get(
   })
 );
 
+//Busco productos por nombre
+productoRouter.get('/nombre/:nombre', async (req, res) => {
+  const productos = await Producto.find({ nombreProducto: req.params.nombre });
+  if (productos) {
+    res.send(productos);
+  } else {
+    res
+      .status(404)
+      .send({ message: 'No existen productos con ese parámetro de búsqueda' });
+  }
+});
+
 //Busco un producto por su id
 productoRouter.get('/:id', async (req, res) => {
   try {
@@ -186,18 +198,6 @@ productoRouter.get('/:id', async (req, res) => {
     }
   } catch (error) {
     res.status(500).send({ message: error });
-  }
-});
-
-//Busco productos por nombre
-productoRouter.get('/nombre/:nombre', async (req, res) => {
-  const productos = await Producto.find({ nombreProducto: req.params.nombre });
-  if (productos) {
-    res.send(productos);
-  } else {
-    res
-      .status(404)
-      .send({ message: 'No existen productos con ese parámetro de búsqueda' });
   }
 });
 

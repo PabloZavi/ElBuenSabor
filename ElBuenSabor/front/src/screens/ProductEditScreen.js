@@ -268,6 +268,7 @@ export default function ProductEditScreen() {
               required
             ></Form.Control>
           </Form.Group>
+          
           <div className="mb-3">
             <Button disabled={loadingUpdate} type="submit">
               Actualizar

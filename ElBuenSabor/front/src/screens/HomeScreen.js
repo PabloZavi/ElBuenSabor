@@ -77,7 +77,7 @@ function HomeScreen() {
         <title>El Buen Sabor</title>
       </Helmet>
 
-      <div className="productos">
+      {/* <div className="productos">
         <h1>Nuestras Hamburguesas</h1>
         <Carousel breakPoints={breakPoints} itemPadding={[0, 0]}>
           {productos
@@ -102,7 +102,7 @@ function HomeScreen() {
             ))}
         </Carousel>
       </div>
-
+ */}
 
 
 

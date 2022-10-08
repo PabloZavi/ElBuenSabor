@@ -33,60 +33,56 @@ function Producto(props) {
     });
   };
   return (
-    <div class="text-center">
-    <Card style={{ width: '18rem', height: '24rem' }}>
-      <Link to={`/producto/${producto._id}`}>
-        <img
-          src={producto.imagenProducto}
-          className="card-img-top producto-img3"
-          alt={producto.nombreProducto}
-        />
-      </Link>
-      <Card.Body>
+    <div className="text-center">
+      <Card style={{ width: '18rem', height: '24rem' }}>
         <Link to={`/producto/${producto._id}`}>
-          <Card.Title>{producto.nombreProducto}</Card.Title>
+          <img
+            src={producto.imagenProducto}
+            className="card-img-top producto-img3"
+            alt={producto.nombreProducto}
+          />
         </Link>
-        <Card.Text>${producto.precioVentaProducto}</Card.Text>
-        <Card.Text>
-          <Row>
-            <Col>
-              {producto.isCeliaco && (
-                <h6>
-                  <Badge bg="success"> Apto celíacos </Badge>
-                </h6>
-              )}
-            </Col>
-            <Col>
-              {producto.isVegetariano && (
-                <h6>
-                  <Badge bg="success"> Apto vegetarianos </Badge>
-                </h6>
-              )}
-            </Col>
-          </Row>
-        </Card.Text>
-        {producto.stockProducto === 0 ? (
-          
+        <Card.Body>
+          <Link to={`/producto/${producto._id}`}>
+            <Card.Title>{producto.nombreProducto}</Card.Title>
+          </Link>
+          <Card.Text>${producto.precioVentaProducto}</Card.Text>
+          <Card.Text>
+            <Row>
+              <Col>
+                {producto.isCeliaco && (
+                  <h6>
+                    <Badge bg="success"> Apto celíacos </Badge>
+                  </h6>
+                )}
+              </Col>
+              <Col>
+                {producto.isVegetariano && (
+                  <h6>
+                    <Badge bg="success"> Apto vegetarianos </Badge>
+                  </h6>
+                )}
+              </Col>
+            </Row>
+          </Card.Text>
+          {producto.stockProducto === 0 ? (
             <Button variant="light" disabled>
               Sin stock
             </Button>
-          
-        ) : (
-          
+          ) : (
             <Button onClick={() => addToCartHandler(producto)}>
               Agregar al carrito
             </Button>
-          
-        )}
-      </Card.Body>
-      {/* <div className="producto-info">
+          )}
+        </Card.Body>
+        {/* <div className="producto-info">
         
         <p>
           <strong>{producto.precioVenta}</strong>
         </p>
         <button>Agregar al carrito</button>
       </div> */}
-    </Card>
+      </Card>
     </div>
   );
 }
