@@ -8,7 +8,7 @@ import { Helmet } from 'react-helmet-async';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import Carousel from 'react-elastic-carousel';
-import styled from 'styled-components';
+import Item from '../components/Item';
 
 //import data from '../data';
 
@@ -59,17 +59,7 @@ function HomeScreen() {
     { width: 1200, itemsToShow: 4, pagination: false },
   ];
 
-  const Item = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    margin: 15px;
-    padding: 0px;
-    flex-wrap: wrap;
-  `;
-
+  
   //Se le agrega un mensaje mientras carga y si hay un error lo muestra, si no muestra los productos.
   return (
     <div>
@@ -77,7 +67,7 @@ function HomeScreen() {
         <title>El Buen Sabor</title>
       </Helmet>
 
-      {/* <div className="productos">
+       <div className="productos">
         <h1>Nuestras Hamburguesas</h1>
         <Carousel breakPoints={breakPoints} itemPadding={[0, 0]}>
           {productos
@@ -89,7 +79,7 @@ function HomeScreen() {
             ))}
         </Carousel>
       </div>
-
+{/*
       <div className="productos">
         <h1>Nuestras Pizzas</h1>
         <Carousel breakPoints={breakPoints} itemPadding={[0, 0]}>
@@ -101,12 +91,10 @@ function HomeScreen() {
               </Item>
             ))}
         </Carousel>
-      </div>
- */}
+      </div> */}
 
 
 
-      
       <h1> ¡Nuestros Productos! </h1>
       <div className="productos">
         {loading ? (

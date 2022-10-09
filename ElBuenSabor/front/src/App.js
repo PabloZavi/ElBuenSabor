@@ -48,10 +48,11 @@ function App() {
   //Signout de un usuario. Limpiamos el Store y también el de navegador
   const signoutHandler = () => {
     ctxDispatch({ type: 'USER_SIGNOUT' });
-    localStorage.removeItem('userInfo');
-    localStorage.removeItem('shippingAddress');
-    localStorage.removeItem('paymentMethod');
-    localStorage.removeItem('cartItems');
+    //localStorage.removeItem('userInfo');
+    //localStorage.removeItem('shippingAddress');
+    //localStorage.removeItem('paymentMethod');
+    //localStorage.removeItem('cartItems');
+    localStorage.clear();
     window.location.href = '/signin';
   };
 

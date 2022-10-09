@@ -105,10 +105,10 @@ function ProductScreen() {
               <h1>{producto.nombreProducto}</h1>
             </ListGroup.Item>
             <ListGroup.Item>
-              <p>$ {producto.precioVentaProducto}</p>
+              $ {producto.precioVentaProducto}
             </ListGroup.Item>
             <ListGroup.Item>
-              <p>{producto.descripcionProducto}</p>
+              {producto.descripcionProducto}
             </ListGroup.Item>
             <ListGroup.Item>
                   <Row>
