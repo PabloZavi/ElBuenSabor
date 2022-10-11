@@ -66,15 +66,15 @@ export default function ProductNewScreen() {
   const { userInfo } = state;
 
   const [nombreProducto, setNombreProducto] = useState('');
-  const [tiempoCocinaProducto, setTiempoCocinaProducto] = useState(0);
+  const [tiempoCocinaProducto, setTiempoCocinaProducto] = useState();
   const [recetaProducto, setRecetaProducto] = useState('');
   const [descripcionProducto, setDescripcionProducto] = useState('');
   const [imagenProducto, setImagenProducto] = useState('');
-  const [precioVentaProducto, setPrecioVentaProducto] = useState('');
-  const [altaProducto, setAltaProducto] = useState(false);
+  const [precioVentaProducto, setPrecioVentaProducto] = useState();
+  const [altaProducto, setAltaProducto] = useState(true);
   const [rubroProducto, setRubroProducto] = useState('');
   /* const [rubroProducto, setRubroProducto] = useState(null); */
-  const [stockProducto, setStockProducto] = useState(0);
+  const [stockProducto, setStockProducto] = useState();
   const [isCeliaco, setIsCeliaco] = useState(false);
   const [isVegetariano, setIsVegetariano] = useState(false);
   const [rubros, setRubros] = useState([]);
@@ -210,28 +210,6 @@ export default function ProductNewScreen() {
             required
           ></Form.Control>
         </Form.Group>
-        <Form.Group className="mb-3" controlId="tiempoCocinaProducto">
-          <Form.Label>Tiempo de cocina</Form.Label>
-          <Form.Control
-            value={tiempoCocinaProducto}
-            onChange={(e) => {
-              setTiempoCocinaProducto(e.target.value);
-              localStorage.setItem('tiempoCocinaProducto', e.target.value);
-            }}
-            required
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="recetaProducto">
-          <Form.Label>Receta</Form.Label>
-          <Form.Control
-            value={recetaProducto}
-            onChange={(e) => {
-              setRecetaProducto(e.target.value);
-              localStorage.setItem('recetaProducto', e.target.value);
-            }}
-          ></Form.Control>
-        </Form.Group>
 
         <Form.Group className="mb-3" controlId="descripcionProducto">
           <Form.Label>Descripción</Form.Label>
@@ -243,6 +221,98 @@ export default function ProductNewScreen() {
             }}
           ></Form.Control>
         </Form.Group>
+
+        <Form.Group className="mb-3" controlId="recetaProducto">
+          <Form.Label>Receta</Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={3}
+            value={recetaProducto}
+            onChange={(e) => {
+              setRecetaProducto(e.target.value);
+              localStorage.setItem('recetaProducto', e.target.value);
+            }}
+          ></Form.Control>
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="tiempoCocinaProducto">
+          <Form.Label>Tiempo de cocina</Form.Label>
+          <Form.Control
+            type="Number"
+            min="0"
+            value={tiempoCocinaProducto}
+            onChange={(e) => {
+              setTiempoCocinaProducto(e.target.value);
+              localStorage.setItem('tiempoCocinaProducto', e.target.value);
+            }}
+            required
+          ></Form.Control>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="rubroProducto">
+          {/* <Form.Label>Rubro</Form.Label> */}
+          {/* <Form.Control
+            value={rubroProducto}
+            onChange={(e) => setRubroProducto(e.target.value)}
+            required
+          ></Form.Control> */}
+          {/* <Form.Select>
+            {rubros.map((rubro) => (
+              <option key={rubro._id} value={rubro.nombreRubro}>{rubro.nombreRubro}</option>
+            ))}
+
+            
+          </Form.Select> */}
+
+          <Row>
+            <Col>
+              <Select
+                defaultValue={
+                  rubroProducto
+                    ? { label: rubroProducto }
+                    : { label: 'Seleccionar rubro' }
+                }
+                options={rubros.map((rubro) => ({
+                  label: rubro.nombreRubro,
+                  value: rubro.nombreRubro,
+                }))}
+                onChange={(e) => {
+                  setRubroProducto(e.value);
+                  localStorage.setItem('rubroProducto', e.value);
+                }}
+              ></Select>
+            </Col>
+            <Col>
+            ¿No está el rubro? --- &nbsp;
+              <Button
+                type="button"
+                onClick={() => navigate(`/admin/rubro/new`)}
+              >
+                Crear rubro
+              </Button>
+            </Col>
+          </Row>
+        </Form.Group>
+
+        {/* <Form.Group className="mb-3" controlId="rubroProducto">
+          <Form.Label>Rubro</Form.Label>
+           
+
+          <Combobox
+            data={rubros}
+            dataKey="_id"
+            textField="nombreRubro"
+            placeholder="Seleccionar rubro"
+          ></Combobox>
+        </Form.Group> */}
+
+        {/* {rubros.map((rubro) => (
+                <tr key={rubro._id}>
+                  <td>{rubro._id}</td>
+                  <td>{rubro.nombreRubro}</td>
+                  <td>{rubro.altaRubro.toString()}</td>
+                  
+                </tr>
+              ))} */}
 
         <Form.Group className="mb-3" controlId="imagenProducto">
           <Form.Label>Imagen</Form.Label>
@@ -264,11 +334,14 @@ export default function ProductNewScreen() {
         <Form.Group className="mb-3" controlId="precioVentaProducto">
           <Form.Label>Precio de venta</Form.Label>
           <Form.Control
+            type="Number"
+            min="0"
             value={precioVentaProducto}
             onChange={(e) => {
               setPrecioVentaProducto(e.target.value);
               localStorage.setItem('precioVentaProducto', e.target.value);
             }}
+            required
           ></Form.Control>
         </Form.Group>
 
@@ -308,75 +381,12 @@ export default function ProductNewScreen() {
           }}
         ></Form.Check>
 
-        <Form.Group className="mb-3" controlId="rubroProducto">
-          {/* <Form.Label>Rubro</Form.Label> */}
-          {/* <Form.Control
-            value={rubroProducto}
-            onChange={(e) => setRubroProducto(e.target.value)}
-            required
-          ></Form.Control> */}
-          {/* <Form.Select>
-            {rubros.map((rubro) => (
-              <option key={rubro._id} value={rubro.nombreRubro}>{rubro.nombreRubro}</option>
-            ))}
-
-            
-          </Form.Select> */}
-
-          <Row>
-            <Col>
-              <Select
-                defaultValue={
-                  rubroProducto
-                    ? { label: rubroProducto }
-                    : { label: 'Seleccionar rubro' }
-                }
-                options={rubros.map((rubro) => ({
-                  label: rubro.nombreRubro,
-                  value: rubro.nombreRubro,
-                }))}
-                onChange={(e) => {
-                  setRubroProducto(e.value);
-                  localStorage.setItem('rubroProducto', e.value);
-                }}
-              ></Select>
-            </Col>
-            <Col>
-              ¿No está el rubro? --- &nbsp;
-              <Button
-                type="button"
-                onClick={() => navigate(`/admin/rubro/new`)}
-              >
-                Crear rubro
-              </Button>
-            </Col>
-          </Row>
-        </Form.Group>
-
-        {/* <Form.Group className="mb-3" controlId="rubroProducto">
-          <Form.Label>Rubro</Form.Label>
-           
-
-          <Combobox
-            data={rubros}
-            dataKey="_id"
-            textField="nombreRubro"
-            placeholder="Seleccionar rubro"
-          ></Combobox>
-        </Form.Group> */}
-
-        {/* {rubros.map((rubro) => (
-                <tr key={rubro._id}>
-                  <td>{rubro._id}</td>
-                  <td>{rubro.nombreRubro}</td>
-                  <td>{rubro.altaRubro.toString()}</td>
-                  
-                </tr>
-              ))} */}
-
+        
         <Form.Group className="mb-3" controlId="stockProducto">
           <Form.Label>Stock</Form.Label>
           <Form.Control
+            type="Number"
+            min="0"
             value={stockProducto}
             onChange={(e) => {
               setStockProducto(e.target.value);
