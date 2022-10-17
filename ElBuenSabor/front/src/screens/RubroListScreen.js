@@ -39,7 +39,6 @@ const reducer = (state, action) => {
   }
 };
 
-
 export default function RubroListScreen() {
   const navigate = useNavigate();
   const [
@@ -84,7 +83,6 @@ export default function RubroListScreen() {
     }
   }, [page, userInfo, successDelete]);
 
-  
   const deleteHandler = async (rubro) => {
     if (window.confirm('Está seguro de elmininar?')) {
       try {
@@ -115,11 +113,7 @@ export default function RubroListScreen() {
         </Col>
         <Col className="col text-end">
           <div>
-            
-            <Button
-              type="button"
-              onClick={() => navigate(`/admin/rubro/new`)}
-            >
+            <Button type="button" onClick={() => navigate(`/admin/rubro/new`)}>
               Crear rubro
             </Button>
           </div>
@@ -140,7 +134,6 @@ export default function RubroListScreen() {
               <tr>
                 <th>ID</th>
                 <th>Nombre</th>
-                
                 <th>Alta</th>
                 <th>Acciones</th>
               </tr>
@@ -150,8 +143,9 @@ export default function RubroListScreen() {
                 <tr key={rubro._id}>
                   <td>{rubro._id}</td>
                   <td>{rubro.nombreRubro}</td>
-                  
-                  <td>{rubro.altaRubro.toString()}</td>
+
+                  {/*  <td>{rubro.altaRubro.toString()}</td> */}
+                  <td>{rubro.altaRubro ? 'Sí' : <p className="red">No</p>}</td>
                   <td>
                     <Button
                       type="button"

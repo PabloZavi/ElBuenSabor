@@ -119,3 +119,8 @@ main {
 .text-bold{
   font-weight: bold;
 }
+
+.red{
+  color: red;
+  font-weight: bold;
+}

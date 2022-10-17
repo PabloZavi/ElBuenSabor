@@ -48,6 +48,32 @@ userRouter.put(
   })
 );
 
+userRouter.put(
+  '/profile',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+    if (user) {
+      user.nombreUsuario = req.body.nombreUsuario/*  || user.nombreUsuario */;
+      user.emailUsuario = req.body.emailUsuario/*  || user.emailUsuario */;
+      if (req.body.passwordUsuario) {
+        user.passwordUsuario = bcrypt.hashSync(req.body.passwordUsuario, 8);
+      }
+
+      const updatedUser = await user.save();
+      res.send({
+        _id: updatedUser._id,
+        nombreUsuario: updatedUser.nombreUsuario,
+        emailUsuario: updatedUser.emailUsuario,
+        isAdmin: updatedUser.isAdmin,
+        token: generateToken(updatedUser),
+      });
+    } else {
+      res.status(404).send({ message: 'Usuario no encontrado' });
+    }
+  })
+);
+
 userRouter.delete(
   '/:id',
   isAuth,
@@ -110,30 +136,6 @@ userRouter.post(
   })
 );
 
-userRouter.put(
-  '/profile',
-  isAuth,
-  expressAsyncHandler(async (req, res) => {
-    const user = await User.findById(req.user._id);
-    if (user) {
-      user.nombreUsuario = req.body.nombreUsuario/*  || user.nombreUsuario */;
-      user.emailUsuario = req.body.emailUsuario/*  || user.emailUsuario */;
-      if (req.body.passwordUsuario) {
-        user.passwordUsuario = bcrypt.hashSync(req.body.passwordUsuario, 8);
-      }
 
-      const updatedUser = await user.save();
-      res.send({
-        _id: updatedUser._id,
-        nombreUsuario: updatedUser.nombreUsuario,
-        emailUsuario: updatedUser.emailUsuario,
-        isAdmin: updatedUser.isAdmin,
-        token: generateToken(updatedUser),
-      });
-    } else {
-      res.status(404).send({ message: 'Usuario no encontrado' });
-    }
-  })
-);
 
 export default userRouter;
