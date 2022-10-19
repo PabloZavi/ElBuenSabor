@@ -97,7 +97,9 @@ export default function ProductListScreen() {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
-      } catch (err) {}
+      } catch (err) {
+        dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
+      }
     };
     fetchData();
     if (successDelete) {
@@ -161,7 +163,10 @@ export default function ProductListScreen() {
         <Col className="col text-end">
           <div>
             {/* <Button type="button" onClick={createHandler}> */}
-            <Button type="button" onClick={() => navigate(`/admin/product/new`)}>
+            <Button
+              type="button"
+              onClick={() => navigate(`/admin/product/new`)}
+            >
               Crear producto
             </Button>
           </div>
@@ -195,7 +200,10 @@ export default function ProductListScreen() {
                   <td>{producto.nombreProducto}</td>
                   <td>$ {producto.precioVentaProducto}</td>
                   <td>{producto.rubroProducto}</td>
-                  <td>{producto.altaProducto.toString()}</td>
+                  {/* <td>{producto.altaProducto.toString()}</td> */}
+                  <td>
+                    {producto.altaProducto ? 'Sí' : <p className="red">No</p>}
+                  </td>
                   <td>
                     <Button
                       type="button"

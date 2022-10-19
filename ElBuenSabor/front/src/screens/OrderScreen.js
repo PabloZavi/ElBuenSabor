@@ -302,7 +302,15 @@ export default function OrderScreen() {
               </Card.Text>
               {order.isDelivered ? (
                 <MessageBox variant="success">
-                  Entregado {order.deliveredAt}
+                  Entregado{' '}
+                  {
+                    /* order.deliveredAt */
+                    order.deliveredAt.substring(8, 10) +
+                      '/' +
+                      order.deliveredAt.substring(5, 7) +
+                      '/' +
+                      order.deliveredAt.substring(0, 4)
+                  }
                 </MessageBox>
               ) : (
                 <MessageBox variant="danger">No entregado</MessageBox>
@@ -317,7 +325,17 @@ export default function OrderScreen() {
                 <strong>Método: </strong> {order.paymentMethod} <br />
               </Card.Text>
               {order.isPaid ? (
-                <MessageBox variant="success">Pagado {order.paidAt}</MessageBox>
+                <MessageBox variant="success">
+                  Pagado{' '}
+                  {
+                    /* order.paidAt */
+                    order.paidAt.substring(8, 10) +
+                      '/' +
+                      order.paidAt.substring(5, 7) +
+                      '/' +
+                      order.paidAt.substring(0, 4)
+                  }
+                </MessageBox>
               ) : (
                 <MessageBox variant="danger">No pagado</MessageBox>
               )}

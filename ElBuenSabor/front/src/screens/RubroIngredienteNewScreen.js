@@ -23,7 +23,7 @@ const reducer = (state, action) => {
   }
 };
 
-export default function RubroNewScreen() {
+export default function RubroIngredienteNewScreen() {
   const navigate = useNavigate();
   const [{ loadingUpload, loadingCreate }, dispatch] = useReducer(reducer, {
     //loading: true,
@@ -41,7 +41,7 @@ export default function RubroNewScreen() {
     try {
       dispatch({ type: 'CREATE_REQUEST' });
       await axios.post(
-        `/api/rubros`,
+        `/api/rubrosingredientes`,
         {
           nombreRubro,
           altaRubro,
@@ -61,9 +61,9 @@ export default function RubroNewScreen() {
   return (
     <Container className="small-container">
       <Helmet>
-        <title>Crear rubro de Productos</title>
+        <title>Crear rubro de Ingredientes</title>
       </Helmet>
-      <h1>Crear rubro de Productos</h1>
+      <h1>Crear rubro de Ingredientes</h1>
 
       <Form onSubmit={submitHandler}>
         <Form.Group className="mb-3" controlId="nombreRubro">

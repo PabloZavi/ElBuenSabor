@@ -66,15 +66,15 @@ export default function ProductNewScreen() {
   const { userInfo } = state;
 
   const [nombreProducto, setNombreProducto] = useState('');
-  const [tiempoCocinaProducto, setTiempoCocinaProducto] = useState(0);
+  const [tiempoCocinaProducto, setTiempoCocinaProducto] = useState();
   const [recetaProducto, setRecetaProducto] = useState('');
   const [descripcionProducto, setDescripcionProducto] = useState('');
   const [imagenProducto, setImagenProducto] = useState('');
-  const [precioVentaProducto, setPrecioVentaProducto] = useState('');
-  const [altaProducto, setAltaProducto] = useState(false);
+  const [precioVentaProducto, setPrecioVentaProducto] = useState();
+  const [altaProducto, setAltaProducto] = useState(true);
   const [rubroProducto, setRubroProducto] = useState('');
   /* const [rubroProducto, setRubroProducto] = useState(null); */
-  const [stockProducto, setStockProducto] = useState(0);
+  const [stockProducto, setStockProducto] = useState();
   const [isCeliaco, setIsCeliaco] = useState(false);
   const [isVegetariano, setIsVegetariano] = useState(false);
   const [rubros, setRubros] = useState([]);
@@ -92,7 +92,51 @@ export default function ProductNewScreen() {
     };
 
     fetchData();
+
+    localStorage.getItem('nombreProducto') &&
+      setNombreProducto(localStorage.getItem('nombreProducto'));
+    localStorage.getItem('tiempoCocinaProducto') &&
+      setTiempoCocinaProducto(localStorage.getItem('tiempoCocinaProducto'));
+    localStorage.getItem('recetaProducto') &&
+      setRecetaProducto(localStorage.getItem('recetaProducto'));
+    localStorage.getItem('descripcionProducto') &&
+      setDescripcionProducto(localStorage.getItem('descripcionProducto'));
+    localStorage.getItem('imagenProducto') &&
+      setImagenProducto(localStorage.getItem('imagenProducto'));
+    localStorage.getItem('precioVentaProducto') &&
+      setPrecioVentaProducto(localStorage.getItem('precioVentaProducto'));
+    localStorage.getItem('altaProducto') &&
+      setAltaProducto(
+        localStorage.getItem('altaProducto') === 'true' ? true : false
+      );
+    localStorage.getItem('isVegetariano') &&
+      setIsVegetariano(
+        localStorage.getItem('isVegetariano') === 'true' ? true : false
+      );
+    localStorage.getItem('isCeliaco') &&
+      setIsCeliaco(localStorage.getItem('isCeliaco') === 'true' ? true : false);
+    localStorage.getItem('rubroProducto') &&
+      setRubroProducto(localStorage.getItem('rubroProducto'));
+    localStorage.getItem('stockProducto') &&
+      setStockProducto(localStorage.getItem('stockProducto'));
   }, []);
+
+  function deleteLocalStorage() {
+    let userInfo = localStorage.getItem('userInfo');
+    /* localStorage.removeItem('nombreProducto')
+    localStorage.removeItem('tiempoCocinaProducto') 
+    localStorage.removeItem('recetaProducto')
+    localStorage.removeItem('descripcionProducto')
+    localStorage.removeItem('imagenProducto')
+    localStorage.removeItem('precioVentaProducto')
+    localStorage.removeItem('altaProducto')
+    localStorage.removeItem('isVegetariano') 
+    localStorage.removeItem('isCeliaco')
+    localStorage.removeItem('rubroProducto')
+    localStorage.removeItem('stockProducto') */
+    localStorage.clear();
+    localStorage.setItem('userInfo', userInfo);
+  }
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -117,10 +161,12 @@ export default function ProductNewScreen() {
       );
       dispatch({ type: 'CREATE_SUCCESS' });
       toast.success('Producto creado!');
+      deleteLocalStorage();
       navigate('/admin/products');
     } catch (err) {
       toast.error(getError(err));
       dispatch({ type: 'CREATE_FAIL' });
+      deleteLocalStorage();
     }
   };
 
@@ -157,24 +203,11 @@ export default function ProductNewScreen() {
           <Form.Label>Nombre</Form.Label>
           <Form.Control
             value={nombreProducto}
-            onChange={(e) => setNombreProducto(e.target.value)}
+            onChange={(e) => {
+              setNombreProducto(e.target.value);
+              localStorage.setItem('nombreProducto', e.target.value);
+            }}
             required
-          ></Form.Control>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="tiempoCocinaProducto">
-          <Form.Label>Tiempo de cocina</Form.Label>
-          <Form.Control
-            value={tiempoCocinaProducto}
-            onChange={(e) => setTiempoCocinaProducto(e.target.value)}
-            required
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="recetaProducto">
-          <Form.Label>Receta</Form.Label>
-          <Form.Control
-            value={recetaProducto}
-            onChange={(e) => setRecetaProducto(e.target.value)}
           ></Form.Control>
         </Form.Group>
 
@@ -182,59 +215,39 @@ export default function ProductNewScreen() {
           <Form.Label>Descripción</Form.Label>
           <Form.Control
             value={descripcionProducto}
-            onChange={(e) => setDescripcionProducto(e.target.value)}
+            onChange={(e) => {
+              setDescripcionProducto(e.target.value);
+              localStorage.setItem('descripcionProducto', e.target.value);
+            }}
           ></Form.Control>
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="imagenProducto">
-          <Form.Label>Imagen</Form.Label>
+        <Form.Group className="mb-3" controlId="recetaProducto">
+          <Form.Label>Receta</Form.Label>
           <Form.Control
-            value={imagenProducto}
-            onChange={(e) => setImagenProducto(e.target.value)}
+            as="textarea"
+            rows={3}
+            value={recetaProducto}
+            onChange={(e) => {
+              setRecetaProducto(e.target.value);
+              localStorage.setItem('recetaProducto', e.target.value);
+            }}
           ></Form.Control>
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="imageFile">
-          <Form.Label>Subir imagen</Form.Label>
-          <Form.Control type="file" onChange={uploadFileHandler}></Form.Control>
-          {loadingUpload && <LoadingBox></LoadingBox>}
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="precioVentaProducto">
-          <Form.Label>Precio de venta</Form.Label>
+        <Form.Group className="mb-3" controlId="tiempoCocinaProducto">
+          <Form.Label>Tiempo de cocina</Form.Label>
           <Form.Control
-            value={precioVentaProducto}
-            onChange={(e) => setPrecioVentaProducto(e.target.value)}
+            type="Number"
+            min="0"
+            value={tiempoCocinaProducto}
+            onChange={(e) => {
+              setTiempoCocinaProducto(e.target.value);
+              localStorage.setItem('tiempoCocinaProducto', e.target.value);
+            }}
+            required
           ></Form.Control>
         </Form.Group>
-
-        <Form.Check
-          className="mb-3"
-          type="checkbox"
-          id="altaProducto"
-          label="Está dado de alta?"
-          checked={altaProducto}
-          onChange={(e) => setAltaProducto(e.target.checked)}
-        ></Form.Check>
-
-        <Form.Check
-          className="mb-3"
-          type="checkbox"
-          id="isVegetariano"
-          label="Vegetariano?"
-          checked={isVegetariano}
-          onChange={(e) => setIsVegetariano(e.target.checked)}
-        ></Form.Check>
-
-        <Form.Check
-          className="mb-3"
-          type="checkbox"
-          id="isCeliaco"
-          label="Apto celíacos?"
-          checked={isCeliaco}
-          onChange={(e) => setIsCeliaco(e.target.checked)}
-        ></Form.Check>
-
         <Form.Group className="mb-3" controlId="rubroProducto">
           {/* <Form.Label>Rubro</Form.Label> */}
           {/* <Form.Control
@@ -262,10 +275,14 @@ export default function ProductNewScreen() {
                   label: rubro.nombreRubro,
                   value: rubro.nombreRubro,
                 }))}
-                onChange={(e) => setRubroProducto(e.value)}
+                onChange={(e) => {
+                  setRubroProducto(e.value);
+                  localStorage.setItem('rubroProducto', e.value);
+                }}
               ></Select>
             </Col>
             <Col>
+            ¿No está el rubro? &rArr; &nbsp;
               <Button
                 type="button"
                 onClick={() => navigate(`/admin/rubro/new`)}
@@ -297,20 +314,100 @@ export default function ProductNewScreen() {
                 </tr>
               ))} */}
 
-        <Form.Group className="mb-3" controlId="stockProducto">
-          <Form.Label>Stock</Form.Label>
+        <Form.Group className="mb-3" controlId="imagenProducto">
+          <Form.Label>Imagen</Form.Label>
           <Form.Control
-            value={stockProducto}
-            onChange={(e) => setStockProducto(e.target.value)}
+            value={imagenProducto}
+            onChange={(e) => {
+              setImagenProducto(e.target.value);
+              localStorage.setItem('imagenProducto', e.target.value);
+            }}
+          ></Form.Control>
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="imageFile">
+          <Form.Label>Subir imagen</Form.Label>
+          <Form.Control type="file" onChange={uploadFileHandler}></Form.Control>
+          {loadingUpload && <LoadingBox></LoadingBox>}
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="precioVentaProducto">
+          <Form.Label>Precio de venta</Form.Label>
+          <Form.Control
+            type="Number"
+            min="0"
+            value={precioVentaProducto}
+            onChange={(e) => {
+              setPrecioVentaProducto(e.target.value);
+              localStorage.setItem('precioVentaProducto', e.target.value);
+            }}
             required
           ></Form.Control>
         </Form.Group>
+
+        <Form.Check
+          className="mb-3"
+          type="checkbox"
+          id="altaProducto"
+          label="Está dado de alta?"
+          checked={altaProducto}
+          onChange={(e) => {
+            setAltaProducto(e.target.checked);
+            localStorage.setItem('altaProducto', e.target.checked);
+          }}
+        ></Form.Check>
+
+        <Form.Check
+          className="mb-3"
+          type="checkbox"
+          id="isVegetariano"
+          label="Vegetariano?"
+          checked={isVegetariano}
+          onChange={(e) => {
+            setIsVegetariano(e.target.checked);
+            localStorage.setItem('isVegetariano', e.target.checked);
+          }}
+        ></Form.Check>
+
+        <Form.Check
+          className="mb-3"
+          type="checkbox"
+          id="isCeliaco"
+          label="Apto celíacos?"
+          checked={isCeliaco}
+          onChange={(e) => {
+            setIsCeliaco(e.target.checked);
+            localStorage.setItem('isCeliaco', e.target.checked);
+          }}
+        ></Form.Check>
+
+        
+        <Form.Group className="mb-3" controlId="stockProducto">
+          <Form.Label>Stock</Form.Label>
+          <Form.Control
+            type="Number"
+            min="0"
+            value={stockProducto}
+            onChange={(e) => {
+              setStockProducto(e.target.value);
+              localStorage.setItem('stockProducto', e.target.value);
+            }}
+            required
+          ></Form.Control>
+        </Form.Group>
+
         <div className="mb-3">
           <Button disabled={loadingCreate || loadingUpload} type="submit">
             Crear producto
           </Button>
           {loadingCreate && <LoadingBox></LoadingBox>}{' '}
-          <Button type="button" onClick={() => navigate(`/admin/products`)}>
+          <Button
+            type="button"
+            onClick={() => {
+              deleteLocalStorage();
+              navigate(`/admin/products`);
+            }}
+          >
             Cancelar
           </Button>
         </div>

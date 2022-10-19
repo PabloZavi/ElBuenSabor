@@ -75,13 +75,7 @@ function Producto(props) {
             </Button>
           )}
         </Card.Body>
-        {/* <div className="producto-info">
         
-        <p>
-          <strong>{producto.precioVenta}</strong>
-        </p>
-        <button>Agregar al carrito</button>
-      </div> */}
       </Card>
     </div>
   );

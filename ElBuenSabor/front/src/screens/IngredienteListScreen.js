@@ -18,7 +18,7 @@ const reducer = (state, action) => {
     case 'FETCH_SUCCESS':
       return {
         ...state,
-        rubros: action.payload.rubros,
+        ingredientes: action.payload.ingredientes,
         page: action.payload.page,
         pages: action.payload.pages,
         loading: false,
@@ -39,13 +39,13 @@ const reducer = (state, action) => {
   }
 };
 
-export default function RubroListScreen() {
+export default function IngredienteListScreen() {
   const navigate = useNavigate();
   const [
     {
       loading,
       error,
-      rubros,
+      ingredientes,
       pages,
       loadingCreate,
       loadingDelete,
@@ -67,7 +67,7 @@ export default function RubroListScreen() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get(`/api/rubros/admin?page=${page}`, {
+        const { data } = await axios.get(`/api/ingredientes/admin?page=${page}`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
@@ -83,13 +83,13 @@ export default function RubroListScreen() {
     }
   }, [page, userInfo, successDelete]);
 
-  const deleteHandler = async (rubro) => {
+  const deleteHandler = async (ingrediente) => {
     if (window.confirm('Está seguro de elmininar?')) {
       try {
-        await axios.delete(`/api/rubros/${rubro._id}`, {
+        await axios.delete(`/api/ingredientes/${ingrediente._id}`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
-        toast.success('Rubro eliminado');
+        toast.success('Ingrediente eliminado');
         dispatch({
           type: 'DELETE_SUCCESS',
         });
@@ -105,16 +105,19 @@ export default function RubroListScreen() {
   return (
     <div>
       <Helmet>
-        <title>Lista de rubros</title>
+        <title>Lista de ingredientes</title>
       </Helmet>
       <Row>
         <Col>
-          <h1>Rubros de Productos</h1>
+          <h1>Ingredientes</h1>
         </Col>
         <Col className="col text-end">
           <div>
-            <Button type="button" onClick={() => navigate(`/admin/rubro/new`)}>
-              Crear rubro
+            <Button
+              type="button"
+              onClick={() => navigate(`/admin/ingrediente/new`)}
+            >
+              Crear ingrediente
             </Button>
           </div>
         </Col>
@@ -134,23 +137,32 @@ export default function RubroListScreen() {
               <tr>
                 <th>ID</th>
                 <th>Nombre</th>
+                <th>Precio de Costo</th>
+                <th>Stock Mínimo</th>
+                <th>Stock Actual</th>
+                <th>Rubro</th>
                 <th>Alta</th>
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
-              {rubros.map((rubro) => (
-                <tr key={rubro._id}>
-                  <td>{rubro._id}</td>
-                  <td>{rubro.nombreRubro}</td>
-
-                  {/*  <td>{rubro.altaRubro.toString()}</td> */}
-                  <td>{rubro.altaRubro ? 'Sí' : <p className="red">No</p>}</td>
+              {ingredientes.map((ingrediente) => (
+                <tr key={ingrediente._id}>
+                  <td>{ingrediente._id}</td>
+                  <td>{ingrediente.nombreIngrediente}</td>
+                  <td>$ {ingrediente.precioCostoIngrediente}</td>
+                  <td>{ingrediente.stockMinimoIngrediente}</td>
+                  <td>{ingrediente.stockActualIngrediente}</td>
+                  
+                  <td>{ingrediente.rubroIngrediente}</td>
+                  <td>
+                    {ingrediente.altaIngrediente ? 'Sí' : <p className="red">No</p>}
+                  </td>
                   <td>
                     <Button
                       type="button"
                       variant="light"
-                      onClick={() => navigate(`/admin/rubro/${rubro._id}`)}
+                      onClick={() => navigate(`/admin/ingrediente/${ingrediente._id}`)}
                     >
                       Editar
                     </Button>
@@ -158,7 +170,7 @@ export default function RubroListScreen() {
                     <Button
                       type="button"
                       variant="light"
-                      onClick={() => deleteHandler(rubro)}
+                      onClick={() => deleteHandler(ingrediente)}
                     >
                       Eliminar
                     </Button>
@@ -172,7 +184,7 @@ export default function RubroListScreen() {
               <Link
                 className={x + 1 === Number(page) ? 'btn text-bold' : 'btn'}
                 key={x + 1}
-                to={`/admin/rubros?page=${x + 1}`}
+                to={`/admin/ingredientes?page=${x + 1}`}
               >
                 {x + 1}
               </Link>

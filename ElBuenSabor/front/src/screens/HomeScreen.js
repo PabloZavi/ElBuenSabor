@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import axios from 'axios';
 import logger from 'use-reducer-logger';
 import Row from 'react-bootstrap/Row';
@@ -8,7 +8,9 @@ import { Helmet } from 'react-helmet-async';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import Carousel from 'react-elastic-carousel';
-import styled from 'styled-components';
+import Item from '../components/Item';
+import { toast } from 'react-toastify';
+import { getError } from '../utils';
 
 //import data from '../data';
 
@@ -36,6 +38,8 @@ function HomeScreen() {
       error: '',
     }
   );
+
+  const [categories, setCategories] = useState([]);
   //const [productos, setProductos] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -52,23 +56,27 @@ function HomeScreen() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get('/api/productos/categories');
+        setCategories(data);
+        //console.log(categories);
+      } catch (err) {
+        toast.error(getError(err));
+      }
+
+      //setProductos(result.data);
+    };
+    fetchData();
+  });
+
   const breakPoints = [
     { width: 1, itemsToShow: 1, pagination: false },
     { width: 550, itemsToShow: 2, pagination: false },
     { width: 768, itemsToShow: 4, pagination: false },
     { width: 1200, itemsToShow: 4, pagination: false },
   ];
-
-  const Item = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    margin: 15px;
-    padding: 0px;
-    flex-wrap: wrap;
-  `;
 
   //Se le agrega un mensaje mientras carga y si hay un error lo muestra, si no muestra los productos.
   return (
@@ -77,7 +85,26 @@ function HomeScreen() {
         <title>El Buen Sabor</title>
       </Helmet>
 
-      {/* <div className="productos">
+      {/* OPCIÓN 3 --> MOSTRAR DE FORMA AUTOMÁTICA Y POR SEPARADO LAS CATEGORÍAS QUE TIENEN AL MENOS UN PRODUCTO 
+        (CADA VEZ QUE SE AGREGUE UN NUEVO RUBRO Y UN NUEVO PRODUCTO A ESE RUBRO, SE MOSTRARÁ AUTOMÁTICAMENTE*/}
+      {categories.map((cat) => (
+        <div className="productos">
+          <h1>{cat}</h1>
+          <Carousel breakPoints={breakPoints} itemPadding={[0, 0]}>
+            {productos
+              .filter((prod) => prod.rubroProducto === cat)
+              .map((producto) => (
+                <Item key={producto._id} sm={6} md={4} lg={3} className="mb-3">
+                  <Producto producto={producto}></Producto>
+                </Item>
+              ))}
+          </Carousel>
+        </div>
+      ))}
+
+      {/* OPCIÓN 1 --> HACER MANUALMENTE CADA RUBRO Y MOSTRAR LOS PRODUCTOS AGRUPADOS POR RUBRO */}
+      {/*
+      <div className="productos">
         <h1>Nuestras Hamburguesas</h1>
         <Carousel breakPoints={breakPoints} itemPadding={[0, 0]}>
           {productos
@@ -89,7 +116,7 @@ function HomeScreen() {
             ))}
         </Carousel>
       </div>
-
+      
       <div className="productos">
         <h1>Nuestras Pizzas</h1>
         <Carousel breakPoints={breakPoints} itemPadding={[0, 0]}>
@@ -101,13 +128,10 @@ function HomeScreen() {
               </Item>
             ))}
         </Carousel>
-      </div>
- */}
+      </div> */}
 
-
-
-      
-      <h1> ¡Nuestros Productos! </h1>
+      {/* OPCIÓN 2 --> MOSTRAR DIRECTAMENTE TODOS LOS PRODUCTOS SIN DIFERENCIARLOS POR CATEGORIA */}
+      {/* <h1> ¡Nuestros Productos! </h1>
       <div className="productos">
         {loading ? (
           //<div>Cargando...</div>
@@ -124,7 +148,8 @@ function HomeScreen() {
             ))}
           </Row>
         )}
-      </div>
+      </div> */}
+
     </div>
   );
 }

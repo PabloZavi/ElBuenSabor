@@ -38,6 +38,12 @@ import ProductNewScreen from './screens/ProductNewScreen';
 import RubroListScreen from './screens/RubroListScreen';
 import RubroNewScreen from './screens/RubroNewScreen';
 import RubroEditScreen from './screens/RubroEditScreen';
+import RubroIngredienteListScreen from './screens/RubroIngredienteListScreen';
+import RubroIngredienteNewScreen from './screens/RubroIngredienteNewScreen';
+import RubroIngredienteEditScreen from './screens/RubroIngredienteEditScreen';
+import IngredienteListScreen from './screens/IngredienteListScreen';
+import IngredienteEditScreen from './screens/IngredienteEditScreen';
+import IngredienteNewScreen from './screens/IngredienteNewScreen';
 
 function App() {
   //Traemos el estado de la app desde el store
@@ -48,10 +54,11 @@ function App() {
   //Signout de un usuario. Limpiamos el Store y también el de navegador
   const signoutHandler = () => {
     ctxDispatch({ type: 'USER_SIGNOUT' });
-    localStorage.removeItem('userInfo');
-    localStorage.removeItem('shippingAddress');
-    localStorage.removeItem('paymentMethod');
-    localStorage.removeItem('cartItems');
+    //localStorage.removeItem('userInfo');
+    //localStorage.removeItem('shippingAddress');
+    //localStorage.removeItem('paymentMethod');
+    //localStorage.removeItem('cartItems');
+    localStorage.clear();
     window.location.href = '/signin';
   };
 
@@ -81,7 +88,7 @@ function App() {
       >
         <ToastContainer position="top-center" limit={1}></ToastContainer>
         <header>
-          <NavBar bg="dark" variant="dark" expand="lg">
+          <NavBar bg="dark" variant="dark" expand="lg" fixed="top">
             <Container>
               <Button
                 variant="dark"
@@ -141,9 +148,24 @@ function App() {
                       <LinkContainer to="/admin/products">
                         <NavDropdown.Item>Productos</NavDropdown.Item>
                       </LinkContainer>
-                      <LinkContainer to="/admin/rubros">
-                        <NavDropdown.Item>Rubros</NavDropdown.Item>
+
+                      <LinkContainer to="/admin/ingredientes">
+                        <NavDropdown.Item>Ingredientes</NavDropdown.Item>
                       </LinkContainer>
+
+                      <NavDropdown drop="end" id="nav-dropdown2" title="Rubros">
+                        <NavDropdown.Item href="/admin/rubros">
+                          Productos
+                        </NavDropdown.Item>
+                        <NavDropdown.Item href="/admin/rubrosingredientes">
+                          Ingredientes
+                        </NavDropdown.Item>
+                      </NavDropdown>
+
+                      {/* <LinkContainer to="/admin/rubros">
+                        <NavDropdown.Item>Rubros</NavDropdown.Item>
+                      </LinkContainer> */}
+
                       <LinkContainer to="/admin/orders">
                         <NavDropdown.Item>Pedidos</NavDropdown.Item>
                       </LinkContainer>
@@ -276,6 +298,33 @@ function App() {
               ></Route>
 
               <Route
+                path="/admin/ingredientes"
+                element={
+                  <AdminRoute>
+                    <IngredienteListScreen></IngredienteListScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
+                path="/admin/ingrediente/new"
+                element={
+                  <AdminRoute>
+                    <IngredienteNewScreen></IngredienteNewScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
+                path="/admin/ingrediente/:id"
+                element={
+                  <AdminRoute>
+                    <IngredienteEditScreen></IngredienteEditScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
                 path="/admin/user/:id"
                 element={
                   <AdminRoute>
@@ -301,12 +350,39 @@ function App() {
                   </AdminRoute>
                 }
               ></Route>
-              
+
               <Route
                 path="/admin/rubro/:id"
                 element={
                   <AdminRoute>
                     <RubroEditScreen></RubroEditScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
+                path="/admin/rubrosingredientes"
+                element={
+                  <AdminRoute>
+                    <RubroIngredienteListScreen></RubroIngredienteListScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
+                path="/admin/rubroingrediente/new"
+                element={
+                  <AdminRoute>
+                    <RubroIngredienteNewScreen></RubroIngredienteNewScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
+                path="/admin/rubroingrediente/:id"
+                element={
+                  <AdminRoute>
+                    <RubroIngredienteEditScreen></RubroIngredienteEditScreen>
                   </AdminRoute>
                 }
               ></Route>
