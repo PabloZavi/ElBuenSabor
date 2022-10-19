@@ -30,7 +30,7 @@ const reducer = (state, action) => {
   }
 };
 
-export default function RubroEditScreen() {
+export default function RubroIngredienteEditScreen() {
   const navigate = useNavigate();
   const params = useParams();
   const { id: rubroId } = params;
@@ -50,7 +50,7 @@ export default function RubroEditScreen() {
     const fetchData = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
-        const { data } = await axios.get(`/api/rubros/${rubroId}`);
+        const { data } = await axios.get(`/api/rubrosingredientes/${rubroId}`);
         setNombreRubro(data.nombreRubro);
         setAltaRubro(data.altaRubro);
         dispatch({ type: 'FETCH_SUCCESS' });
@@ -69,7 +69,7 @@ export default function RubroEditScreen() {
     try {
       dispatch({ type: 'UPDATE_REQUEST' });
       await axios.put(
-        `/api/rubros/${rubroId}`,
+        `/api/rubrosingredientes/${rubroId}`,
         {
           _id: rubroId,
           nombreRubro,
@@ -89,9 +89,9 @@ export default function RubroEditScreen() {
   return (
     <Container className="small-container">
       <Helmet>
-        <title>Editar rubro de Productos{rubroId}</title>
+        <title>Editar rubro de Ingredientes{rubroId}</title>
       </Helmet>
-      <h1>Editar rubro de Productos {rubroId}</h1>
+      <h1>Editar rubro de Ingredientes {rubroId}</h1>
 
       {loading ? (
         <LoadingBox></LoadingBox>

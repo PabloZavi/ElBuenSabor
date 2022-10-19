@@ -10,6 +10,7 @@ import morgan from 'morgan';
 import path from 'path';
 import uploadRouter from './routes/uploadRoutes.js';
 import rubroRouter from './routes/rubroRoutes.js';
+import rubroIngredienteRouter from './routes/rubroIngredienteRoutes.js';
 
 //fetch con las variables
 dotenv.config();
@@ -47,6 +48,7 @@ app.use('/api/orders', orderRouter);
 app.use('/api/upload', uploadRouter);
 app.use('/pago', pagoMercadoPagoRouter);
 app.use('/api/rubros', rubroRouter);
+app.use('/api/rubrosingredientes', rubroIngredienteRouter);
 /* app.get('/api/productos', (req, res) => {
   res.send(data.productos);
 }); */

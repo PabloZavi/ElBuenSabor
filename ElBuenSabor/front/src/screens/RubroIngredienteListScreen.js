@@ -39,7 +39,7 @@ const reducer = (state, action) => {
   }
 };
 
-export default function RubroListScreen() {
+export default function RubroIngredienteListScreen() {
   const navigate = useNavigate();
   const [
     {
@@ -67,7 +67,7 @@ export default function RubroListScreen() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get(`/api/rubros/admin?page=${page}`, {
+        const { data } = await axios.get(`/api/rubrosingredientes/admin?page=${page}`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
@@ -86,7 +86,7 @@ export default function RubroListScreen() {
   const deleteHandler = async (rubro) => {
     if (window.confirm('Está seguro de elmininar?')) {
       try {
-        await axios.delete(`/api/rubros/${rubro._id}`, {
+        await axios.delete(`/api/rubrosingredientes/${rubro._id}`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
         toast.success('Rubro eliminado');
@@ -105,15 +105,15 @@ export default function RubroListScreen() {
   return (
     <div>
       <Helmet>
-        <title>Lista de rubros</title>
+        <title>Lista de rubros Ingredientes</title>
       </Helmet>
       <Row>
         <Col>
-          <h1>Rubros de Productos</h1>
+          <h1>Rubros de Ingredientes</h1>
         </Col>
         <Col className="col text-end">
           <div>
-            <Button type="button" onClick={() => navigate(`/admin/rubro/new`)}>
+            <Button type="button" onClick={() => navigate(`/admin/rubroingrediente/new`)}>
               Crear rubro
             </Button>
           </div>
@@ -150,7 +150,7 @@ export default function RubroListScreen() {
                     <Button
                       type="button"
                       variant="light"
-                      onClick={() => navigate(`/admin/rubro/${rubro._id}`)}
+                      onClick={() => navigate(`/admin/rubroingrediente/${rubro._id}`)}
                     >
                       Editar
                     </Button>
@@ -172,7 +172,7 @@ export default function RubroListScreen() {
               <Link
                 className={x + 1 === Number(page) ? 'btn text-bold' : 'btn'}
                 key={x + 1}
-                to={`/admin/rubros?page=${x + 1}`}
+                to={`/admin/rubrosingredientes?page=${x + 1}`}
               >
                 {x + 1}
               </Link>

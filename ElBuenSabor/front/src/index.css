@@ -35,7 +35,8 @@ main {
 }
 
 /* Color "agregar al carrito" */
-.btn-primary, .btn-outline-primary {
+.btn-primary,
+.btn-outline-primary {
   background-color: #f0c040;
   color: black;
 }
@@ -53,17 +54,17 @@ main {
 
 .producto img {
   width: 100%;
-  max-width: 400px; 
+  max-width: 400px;
 }
 
-.producto-img3{
+.producto-img3 {
   width: 100%;
   height: 100%;
-  
+
   max-height: 200px;
 }
 
-.producto-img2{
+.producto-img2 {
   width: 250px;
   height: 200px;
 }
@@ -102,6 +103,7 @@ main {
   width: 240px;
   height: 100%;
   position: absolute;
+  top: 75px;
   left: -300px;
   background-color: #100901;
   transition: 0.5s;
@@ -116,11 +118,18 @@ main {
   left: 0;
 }
 
-.text-bold{
+.text-bold {
   font-weight: bold;
 }
 
-.red{
+.red {
   color: red;
   font-weight: bold;
 }
+
+#nav-dropdown2 {
+  color: black;
+  margin-left: 8px;
+}
+
+
