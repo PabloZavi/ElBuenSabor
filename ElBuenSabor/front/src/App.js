@@ -41,6 +41,9 @@ import RubroEditScreen from './screens/RubroEditScreen';
 import RubroIngredienteListScreen from './screens/RubroIngredienteListScreen';
 import RubroIngredienteNewScreen from './screens/RubroIngredienteNewScreen';
 import RubroIngredienteEditScreen from './screens/RubroIngredienteEditScreen';
+import IngredienteListScreen from './screens/IngredienteListScreen';
+import IngredienteEditScreen from './screens/IngredienteEditScreen';
+import IngredienteNewScreen from './screens/IngredienteNewScreen';
 
 function App() {
   //Traemos el estado de la app desde el store
@@ -144,6 +147,10 @@ function App() {
                       </LinkContainer>
                       <LinkContainer to="/admin/products">
                         <NavDropdown.Item>Productos</NavDropdown.Item>
+                      </LinkContainer>
+
+                      <LinkContainer to="/admin/ingredientes">
+                        <NavDropdown.Item>Ingredientes</NavDropdown.Item>
                       </LinkContainer>
 
                       <NavDropdown drop="end" id="nav-dropdown2" title="Rubros">
@@ -291,6 +298,33 @@ function App() {
               ></Route>
 
               <Route
+                path="/admin/ingredientes"
+                element={
+                  <AdminRoute>
+                    <IngredienteListScreen></IngredienteListScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
+                path="/admin/ingrediente/new"
+                element={
+                  <AdminRoute>
+                    <IngredienteNewScreen></IngredienteNewScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
+                path="/admin/ingrediente/:id"
+                element={
+                  <AdminRoute>
+                    <IngredienteEditScreen></IngredienteEditScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
                 path="/admin/user/:id"
                 element={
                   <AdminRoute>
@@ -326,7 +360,7 @@ function App() {
                 }
               ></Route>
 
-<Route
+              <Route
                 path="/admin/rubrosingredientes"
                 element={
                   <AdminRoute>
@@ -352,7 +386,6 @@ function App() {
                   </AdminRoute>
                 }
               ></Route>
-
             </Routes>
           </Container>
         </main>

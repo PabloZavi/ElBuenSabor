@@ -11,6 +11,8 @@ import path from 'path';
 import uploadRouter from './routes/uploadRoutes.js';
 import rubroRouter from './routes/rubroRoutes.js';
 import rubroIngredienteRouter from './routes/rubroIngredienteRoutes.js';
+import ingredienteRouter from './routes/ingredienteRoutes.js';
+import unidadRouter from './routes/unidadRoutes.js';
 
 //fetch con las variables
 dotenv.config();
@@ -43,12 +45,14 @@ app.get('/api/keys/mercadopago', (req, res) => {
 
 app.use('/api/seed', seedRouter);
 app.use('/api/productos', productoRouter);
+app.use('/api/ingredientes', ingredienteRouter);
 app.use('/api/users', userRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/upload', uploadRouter);
 app.use('/pago', pagoMercadoPagoRouter);
 app.use('/api/rubros', rubroRouter);
 app.use('/api/rubrosingredientes', rubroIngredienteRouter);
+app.use('/api/unidades', unidadRouter);
 /* app.get('/api/productos', (req, res) => {
   res.send(data.productos);
 }); */

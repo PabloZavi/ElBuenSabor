@@ -282,7 +282,7 @@ export default function ProductNewScreen() {
               ></Select>
             </Col>
             <Col>
-            ¿No está el rubro? --- &nbsp;
+            ¿No está el rubro? &rArr; &nbsp;
               <Button
                 type="button"
                 onClick={() => navigate(`/admin/rubro/new`)}
