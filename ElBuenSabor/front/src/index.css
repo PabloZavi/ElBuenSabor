@@ -108,6 +108,7 @@ main {
   left: -300px;
   background-color: #100901;
   transition: 0.5s;
+  position: fixed;
 }
 .site-container {
   transition: 0.4s;
