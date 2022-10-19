@@ -32,6 +32,7 @@ header a {
 main {
   /* padding: 1rem; */
   flex: 1;
+  margin-top: 50px;
 }
 
 /* Color "agregar al carrito" */
@@ -103,7 +104,7 @@ main {
   width: 240px;
   height: 100%;
   position: absolute;
-  top: 75px;
+  top: 55px;
   left: -300px;
   background-color: #100901;
   transition: 0.5s;
