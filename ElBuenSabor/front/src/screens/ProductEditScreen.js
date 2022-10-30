@@ -73,10 +73,13 @@ export default function ProductEditScreen() {
   const [precioVentaProducto, setPrecioVentaProducto] = useState();
   const [altaProducto, setAltaProducto] = useState(false);
   const [rubroProducto, setRubroProducto] = useState('');
-  const [stockProducto, setStockProducto] = useState();
+  //const [stockProducto, setStockProducto] = useState();
   const [isCeliaco, setIsCeliaco] = useState(false);
   const [isVegetariano, setIsVegetariano] = useState(false);
   const [rubros, setRubros] = useState([]);
+
+  const [ingredientesDB, setIngredientesDB] = useState([]);
+  const [ingredientesProducto, setIngredientesProducto] = useState([]);
 
   //PRIMERA ACLARACIÓN
   //¿Por qué se usa una lógica diferente a newProduct?
@@ -106,6 +109,7 @@ export default function ProductEditScreen() {
         //Cada vez que se carga la pantalla, trae la info de la DB
         const { data } = await axios.get(`/api/productos/${productId}`);
 
+        setIngredientesProducto(data.ingredientes);
         //Si no existe cada variable en el localStorage...
         //Se setean las variables del localStorage con la info de la DB
         //Si ya existen, no se hace nada
@@ -173,8 +177,8 @@ export default function ProductEditScreen() {
           );
         localStorage.getItem('rubroProductoEdit') &&
           setRubroProducto(localStorage.getItem('rubroProductoEdit'));
-        localStorage.getItem('stockProductoEdit') &&
-          setStockProducto(localStorage.getItem('stockProductoEdit'));
+        /* localStorage.getItem('stockProductoEdit') &&
+          setStockProducto(localStorage.getItem('stockProductoEdit')); */
 
         dispatch({ type: 'FETCH_SUCCESS' });
       } catch (err) {
@@ -224,7 +228,7 @@ export default function ProductEditScreen() {
           precioVentaProducto,
           altaProducto,
           rubroProducto,
-          stockProducto,
+          //stockProducto,
           isCeliaco,
           isVegetariano,
         },
@@ -435,7 +439,7 @@ export default function ProductEditScreen() {
             }}
           ></Form.Check>
 
-          <Form.Group className="mb-3" controlId="stockProducto">
+          {/* <Form.Group className="mb-3" controlId="stockProducto">
             <Form.Label>Stock</Form.Label>
             <Form.Control
               min="0"
@@ -447,7 +451,7 @@ export default function ProductEditScreen() {
               }}
               required
             ></Form.Control>
-          </Form.Group>
+          </Form.Group> */}
 
           <div className="mb-3">
             <Button disabled={loadingUpdate || loadingUpload} type="submit">

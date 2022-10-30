@@ -9,10 +9,9 @@ import Button from 'react-bootstrap/Button';
 import LoadingBox from '../components/LoadingBox';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
-import Select from 'react-select';
+//import Select from 'react-select';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import AddIngredient from '../components/AddIngredient';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 
@@ -77,7 +76,7 @@ export default function ProductNewScreen() {
   const [altaProducto, setAltaProducto] = useState(true);
   const [rubroProducto, setRubroProducto] = useState('');
   /* const [rubroProducto, setRubroProducto] = useState(null); */
-  const [stockProducto, setStockProducto] = useState();
+  //const [stockProducto, setStockProducto] = useState();
   const [isCeliaco, setIsCeliaco] = useState(false);
   const [isVegetariano, setIsVegetariano] = useState(false);
   const [rubros, setRubros] = useState([]);
@@ -130,8 +129,8 @@ export default function ProductNewScreen() {
       setIsCeliaco(localStorage.getItem('isCeliaco') === 'true' ? true : false);
     localStorage.getItem('rubroProducto') &&
       setRubroProducto(localStorage.getItem('rubroProducto'));
-    localStorage.getItem('stockProducto') &&
-      setStockProducto(localStorage.getItem('stockProducto'));
+    /* localStorage.getItem('stockProducto') &&
+      setStockProducto(localStorage.getItem('stockProducto')); */
     /* localStorage.getItem('ingredientesProducto') &&
       setIngredientesProducto(JSON.parse(localStorage.getItem('ingredientesProducto')));  */
   }, []);
@@ -733,7 +732,7 @@ export default function ProductNewScreen() {
                   <Col className="d-flex align-items-center mb-3">
                     <button
                       className="btn btn-outline-danger btn-sm"
-                      onClick={removeIngredient}
+                      onClick={(e) => removeIngredient(index)}
                     >
                       x
                     </button>

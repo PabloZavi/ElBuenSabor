@@ -23,10 +23,11 @@ function Producto(props) {
     //si existe le agregamos 1 a la cantidad, si no la ponemos en 1
     const cantidad = existItem ? existItem.cantidad + 1 : 1;
     const { data } = await axios.get(`api/productos/${item._id}`);
-    if (data.stockProducto < cantidad) {
+    //OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES!
+    /* if (data.stockProducto < cantidad) {
       toast.error('No hay stock del producto');
       return;
-    }
+    } */
     ctxDispatch({
       type: 'CART_ADD_ITEM',
       payload: { ...item, cantidad },
@@ -65,6 +66,7 @@ function Producto(props) {
               </Col>
             </Row>
           </Card.Text>
+          {/* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */}
           {producto.stockProducto === 0 ? (
             <Button variant="light" disabled>
               Sin stock

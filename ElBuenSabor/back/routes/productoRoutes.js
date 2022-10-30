@@ -83,7 +83,7 @@ productoRouter.put(
       product.precioVentaProducto = req.body.precioVentaProducto;
       product.altaProducto = req.body.altaProducto;
       product.rubroProducto = req.body.rubroProducto;
-      product.stockProducto = req.body.stockProducto;
+      //product.stockProducto = req.body.stockProducto;
       product.isCeliaco = req.body.isCeliaco;
       product.isVegetariano = req.body.isVegetariano;
       await product.save();

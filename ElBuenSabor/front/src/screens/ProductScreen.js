@@ -68,6 +68,7 @@ function ProductScreen() {
     //Nos traemos los datos del producto que queremos agregar...
     const { data } = await axios.get(`/api/productos/${producto._id}`);
     //y verificamos si hay stock
+    /* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */
     if (data.stock < cantidad) {
       window.alert('No hay stock del producto');
       return;
@@ -142,6 +143,7 @@ function ProductScreen() {
                   <Row>
                     <Col>Estado: </Col>
                     <Col>
+                    {/* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */}
                       {producto.stockProducto > 0 ? (
                         <Badge bg="success"> Disponible </Badge>
                       ) : (
@@ -151,6 +153,7 @@ function ProductScreen() {
                   </Row>
                 </ListGroup.Item>
 
+                        {/* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */}
                 {producto.stockProducto > 0 && (
                   <ListGroup.Item>
                     <div className="d-grid">
