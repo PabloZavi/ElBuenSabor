@@ -37,8 +37,8 @@ productoRouter.get('/', async (req, res) => {
 productoRouter.get(
   '/prueba',
   expressAsyncHandler(async (req, res) => {
-    const orders = await Producto.find().populate('ingredientes', 'ingrediente');
-    res.send(orders);
+    const productos = await Producto.find().populate({path: 'ingredientes.ingrediente'});
+    res.send(productos);
   })
 );
 
