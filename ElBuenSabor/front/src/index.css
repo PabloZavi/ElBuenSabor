@@ -134,4 +134,22 @@ main {
   margin-left: 8px;
 }
 
+.medium-large-input {
+  width: 280px
+}
 
+.medium-input {
+  width: 240px
+}
+
+.medium-small-input {
+  width: 200px
+}
+
+.small-input {
+  width: 120px
+}
+
+.extra-small-input {
+  width: 60px
+}

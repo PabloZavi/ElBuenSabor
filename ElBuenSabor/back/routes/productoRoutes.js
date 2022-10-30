@@ -34,6 +34,14 @@ productoRouter.get('/', async (req, res) => {
   })
 ); */
 
+productoRouter.get(
+  '/prueba',
+  expressAsyncHandler(async (req, res) => {
+    const orders = await Producto.find().populate('ingredientes', 'ingrediente');
+    res.send(orders);
+  })
+);
+
 productoRouter.post(
   '/',
   isAuth,
@@ -49,9 +57,10 @@ productoRouter.post(
       altaProducto: req.body.altaProducto,
       rubroProducto: req.body.rubroProducto,
       //Atributo a eliminar:
-      stockProducto: req.body.stockProducto,
+      //stockProducto: req.body.stockProducto,
       isCeliaco: req.body.isCeliaco,
       isVegetariano: req.body.isVegetariano,
+      ingredientes: req.body.ingredientesProducto,
     });
     const producto = await newProducto.save();
     res.send({ message: 'Producto creado' });
