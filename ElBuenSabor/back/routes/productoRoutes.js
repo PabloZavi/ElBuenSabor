@@ -6,7 +6,7 @@ import { isAdmin, isAuth } from '../utils.js';
 const productoRouter = express.Router();
 
 productoRouter.get('/', async (req, res) => {
-  const productos = await Producto.find();
+  const productos = await Producto.find().populate({path: 'ingredientes.ingrediente'});
   res.send(productos);
 });
 
@@ -200,7 +200,7 @@ productoRouter.get('/nombre/:nombre', async (req, res) => {
 //Busco un producto por su id
 productoRouter.get('/:id', async (req, res) => {
   try {
-    const producto = await Producto.findById(req.params.id);
+    const producto = await Producto.findById(req.params.id).populate({path: 'ingredientes.ingrediente'});
     if (producto) {
       res.send(producto);
     } else {
