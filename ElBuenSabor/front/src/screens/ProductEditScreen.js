@@ -82,6 +82,7 @@ export default function ProductEditScreen() {
 
   const [ingredientesDB, setIngredientesDB] = useState([]);
   const [ingredientesProducto, setIngredientesProducto] = useState([]);
+  const [costoProducto, setCostoProducto] = useState(0);
 
   //PRIMERA ACLARACIÓN
   //¿Por qué se usa una lógica diferente a newProduct?
@@ -165,7 +166,10 @@ export default function ProductEditScreen() {
           localStorage.setItem('isVegetarianoEdit', data.isVegetariano);
 
         !localStorage.getItem('ingredientesEdit') &&
-          localStorage.setItem('ingredientesEdit', JSON.stringify(data.ingredientes));
+          localStorage.setItem(
+            'ingredientesEdit',
+            JSON.stringify(data.ingredientes)
+          );
 
         //Y acá seteamos las variables de la pantalla con la info del localStorage
         //cada vez que se carga la página
@@ -203,7 +207,7 @@ export default function ProductEditScreen() {
           setRubroProducto(localStorage.getItem('rubroProductoEdit'));
         /* localStorage.getItem('stockProductoEdit') &&
           setStockProducto(localStorage.getItem('stockProductoEdit')); */
-      
+
         dispatch({ type: 'FETCH_SUCCESS' });
       } catch (err) {
         dispatch({
@@ -234,7 +238,25 @@ export default function ProductEditScreen() {
     };
 
     fetchData();
+
+    
   }, []);
+
+  useEffect(()=>{
+    const calcularCosto = () => {
+      setCostoProducto(0);
+      let costo = 0;
+      ingredientesProducto &&
+        ingredientesProducto.map(
+          (ing) =>
+          ing.ingrediente !== '' && 
+            (costo =
+              costo + ing.cantidad * ing.ingrediente.precioCostoIngrediente)
+        );
+      setCostoProducto(costo);
+    };
+    calcularCosto();
+  }, [ingredientesProducto])
 
   function getRubros() {
     return axios.get(`/api/rubros`);
@@ -243,6 +265,18 @@ export default function ProductEditScreen() {
   function getIngredientesDB() {
     return axios.get(`/api/ingredientes`);
   }
+
+  /* const calcularCosto = () => {
+    setCostoProducto(0);
+    let costo = 0;
+    ingredientesProducto &&
+      ingredientesProducto.map(
+        (ing) =>
+          (costo =
+            costo + ing.cantidad * ing.ingrediente.precioCostoIngrediente)
+      );
+    setCostoProducto(costo);
+  }; */
 
   const addIngredient = () => {
     setIngredientesProducto([
@@ -259,19 +293,23 @@ export default function ProductEditScreen() {
     const rows = [...ingredientesProducto];
     rows.splice(index, 1);
     setIngredientesProducto(rows);
+    //calcularCosto();
   };
 
   const handleChange = (index, e) => {
     const name = e.target.name;
     const value = e.target.value;
     const list = [...ingredientesProducto];
-    name==='cantidad'? list[index][name] = parseInt(value) : list[index][name] = value;
+    name === 'cantidad'
+      ? (list[index][name] = parseInt(value))
+      : (list[index][name] = value);
     setIngredientesProducto(list);
-    
+    //calcularCosto();
+
     console.log(ingredientesProducto);
   };
 
-  const changeIngredient = (index, e) => {
+  /* const changeIngredient = (index, e) => {
     const { value } = e.target;
     const list = [...ingredientesProducto];
     list[index].ingrediente = value;
@@ -294,7 +332,7 @@ export default function ProductEditScreen() {
     setIngredientesProducto(list);
     console.log(ingredientesProducto);
   };
-
+ */
   function deleteLocalStorage() {
     let userInfo = localStorage.getItem('userInfo');
     localStorage.clear();
@@ -407,7 +445,6 @@ export default function ProductEditScreen() {
           <TextField
             className="mb-3"
             fullWidth
-            required
             id="descripcionProducto"
             label="Descripción"
             value={descripcionProducto}
@@ -432,7 +469,6 @@ export default function ProductEditScreen() {
           <TextField
             className="mb-3"
             fullWidth
-            required
             multiline
             rows={4}
             id="recetaProducto"
@@ -583,19 +619,6 @@ export default function ProductEditScreen() {
               required
             ></Form.Control>
           </Form.Group> */}
-          <TextField
-            required
-            id="precioVentaProducto"
-            label="Precio de venta"
-            value={precioVentaProducto || ''}
-            className="medium-input mb-3"
-            type="Number"
-            min="0"
-            onChange={(e) => {
-              setPrecioVentaProducto(e.target.value);
-              localStorage.setItem('precioVentaProducto', e.target.value);
-            }}
-          />
 
           <Form.Check
             className="mb-3"
@@ -650,7 +673,6 @@ export default function ProductEditScreen() {
           <Container className="mt-3 square border border-dark mb-3">
             <h2 className="text-center">Ingredientes</h2>
             <Row>
-              
               {ingredientesProducto.map((data, index) => {
                 return (
                   <Row className="row my-3" key={index}>
@@ -664,11 +686,9 @@ export default function ProductEditScreen() {
                         //value={data.ingrediente.nombreIngrediente || data.ingrediente || ''}
                         //value={data.ingrediente}
                         label={data.ingrediente.nombreIngrediente}
-                        
                         //onChange={(e) => changeIngredient(index, e)}
                         onChange={(e) => handleChange(index, e)}
-                        >
-                          
+                      >
                         {ingredientesDB.map((ingrediente) => (
                           <MenuItem
                             key={ingrediente.nombreIngrediente}
@@ -702,7 +722,8 @@ export default function ProductEditScreen() {
                           }}
                           id="unidad"
                           label="unidad"
-                          value={data.ingrediente &&
+                          value={
+                            data.ingrediente &&
                             data.ingrediente.unidadDeMedidaIngrediente
                           }
                           //onChange={(e) => changeUnityIngredient(index, e)}
@@ -734,6 +755,36 @@ export default function ProductEditScreen() {
               </Row>
             </Row>
           </Container>
+
+          <Row>
+            <Col>
+              <TextField
+                required
+                id="precioVentaProducto"
+                label="Precio de venta"
+                value={precioVentaProducto || ''}
+                className="medium-input mb-3"
+                type="Number"
+                min="0"
+                onChange={(e) => {
+                  setPrecioVentaProducto(e.target.value);
+                  localStorage.setItem('precioVentaProducto', e.target.value);
+                }}
+              />
+            </Col>
+            <Col>
+              <TextField
+                id="costoProducto"
+                label="Costo del producto"
+                value={costoProducto || ''}
+                className="medium-input mb-3"
+                type="Number"
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+            </Col>
+          </Row>
 
           <div className="mb-3">
             <Button disabled={loadingUpdate || loadingUpload} type="submit">
