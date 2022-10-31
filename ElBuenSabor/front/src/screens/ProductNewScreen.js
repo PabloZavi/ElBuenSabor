@@ -84,6 +84,7 @@ export default function ProductNewScreen() {
   const [ingredientesDB, setIngredientesDB] = useState([]);
   const [ingredientesProducto, setIngredientesProducto] = useState([]);
   //const [listId, setListId] = useState(1);
+  const [costoProducto, setCostoProducto] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -135,6 +136,22 @@ export default function ProductNewScreen() {
       setIngredientesProducto(JSON.parse(localStorage.getItem('ingredientesProducto')));  */
   }, []);
 
+  useEffect(()=>{
+    const calcularCosto = () => {
+      setCostoProducto(0);
+      let costo = 0;
+      ingredientesProducto &&
+        ingredientesProducto.map(
+          (ing) =>
+          ing.ingrediente !== '' && 
+            (costo =
+              costo + ing.cantidad * ing.ingrediente.precioCostoIngrediente)
+        );
+      setCostoProducto(costo);
+    };
+    calcularCosto();
+  }, [ingredientesProducto])
+
   function getRubros() {
     return axios.get(`/api/rubros`);
   }
@@ -184,6 +201,19 @@ export default function ProductNewScreen() {
     />
   )); */
 
+  /* const calcularCosto = () => {
+    setCostoProducto(0);
+    let costo = 0;
+    ingredientesProducto &&
+      ingredientesProducto.map(
+        (ing) =>
+          (costo =
+            costo + ing.cantidad * ing.ingrediente.precioCostoIngrediente)
+
+      );
+    setCostoProducto(costo);
+  }; */
+
   const addIngredient = () => {
     setIngredientesProducto([
       ...ingredientesProducto,
@@ -199,16 +229,19 @@ export default function ProductNewScreen() {
     rows.splice(index, 1);
     setIngredientesProducto(rows);
     //localStorage.setItem('ingredientesProducto', JSON.stringify(rows));
+    //calcularCosto();
   };
 
   const handleChange = (index, e) => {
     const name = e.target.name;
     const value = e.target.value;
     const list = [...ingredientesProducto];
-    name==='cantidad'? list[index][name] = parseInt(value) : list[index][name] = value;
+    name === 'cantidad'
+      ? (list[index][name] = parseInt(value))
+      : (list[index][name] = value);
     setIngredientesProducto(list);
-    
-    
+    //calcularCosto();
+
     //console.log("e: " + e)
     //console.log("e.target: " + e.target)
     ////const { name, value } = e.target;
@@ -303,7 +336,6 @@ export default function ProductNewScreen() {
       <h1>Crear producto </h1>
 
       <Form onSubmit={submitHandler}>
-
         <TextField
           className="mb-3"
           fullWidth
@@ -330,7 +362,6 @@ export default function ProductNewScreen() {
         <TextField
           className="mb-3"
           fullWidth
-          required
           id="descripcionProducto"
           label="Descripción"
           value={descripcionProducto}
@@ -353,7 +384,6 @@ export default function ProductNewScreen() {
         <TextField
           className="mb-3"
           fullWidth
-          required
           multiline
           rows={4}
           id="recetaProducto"
@@ -598,19 +628,6 @@ export default function ProductNewScreen() {
           {loadingUpload && <LoadingBox></LoadingBox>}
         </Form.Group>
 
-        <TextField
-          required
-          id="precioVentaProducto"
-          label="Precio de venta"
-          value={precioVentaProducto || ''}
-          className="medium-input mb-3"
-          type="Number"
-          min="0"
-          onChange={(e) => {
-            setPrecioVentaProducto(e.target.value);
-            localStorage.setItem('precioVentaProducto', e.target.value);
-          }}
-        />
         {/* <Form.Group className="mb-3" controlId="precioVentaProducto">
           <Form.Label>Precio de venta</Form.Label>
           <Form.Control
@@ -679,7 +696,6 @@ export default function ProductNewScreen() {
         <Container className="mt-3 square border border-dark mb-3">
           <h2 className="text-center">Ingredientes</h2>
           <Row>
-
             {ingredientesProducto.map((data, index) => {
               return (
                 <Row className="row my-3" key={index}>
@@ -717,7 +733,7 @@ export default function ProductNewScreen() {
                       value={data.cantidad}
                       className="small-input mb-3"
                       name="cantidad"
-                      type="Number"
+                      type="number"
                       min="0"
                       onChange={(e) => handleChange(index, e)}
                     />
@@ -761,6 +777,36 @@ export default function ProductNewScreen() {
             </Row>
           </Row>
         </Container>
+
+        <Row>
+          <Col>
+            <TextField
+              required
+              id="precioVentaProducto"
+              label="Precio de venta"
+              value={precioVentaProducto || ''}
+              className="medium-input mb-3"
+              type="Number"
+              min="0"
+              onChange={(e) => {
+                setPrecioVentaProducto(e.target.value);
+                localStorage.setItem('precioVentaProducto', e.target.value);
+              }}
+            />
+          </Col>
+          <Col>
+            <TextField
+              id="costoProducto"
+              label="Costo del producto"
+              value={costoProducto || ''}
+              className="medium-input mb-3"
+              type="Number"
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+          </Col>
+        </Row>
 
         <div className="mb-3">
           <Button disabled={loadingCreate || loadingUpload} type="submit">
