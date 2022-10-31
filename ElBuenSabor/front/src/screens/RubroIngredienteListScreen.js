@@ -152,7 +152,8 @@ export default function RubroIngredienteListScreen() {
                       variant="light"
                       onClick={() => navigate(`/admin/rubroingrediente/${rubro._id}`)}
                     >
-                      Editar
+                      <i class="bi bi-pencil-fill"></i>
+                      {/* Editar */}
                     </Button>
                     &nbsp;
                     <Button
@@ -160,7 +161,8 @@ export default function RubroIngredienteListScreen() {
                       variant="light"
                       onClick={() => deleteHandler(rubro)}
                     >
-                      Eliminar
+                      <i class="bi bi-trash"></i>
+                      {/* Eliminar */}
                     </Button>
                   </td>
                 </tr>

@@ -164,7 +164,8 @@ export default function IngredienteListScreen() {
                       variant="light"
                       onClick={() => navigate(`/admin/ingrediente/${ingrediente._id}`)}
                     >
-                      Editar
+                      <i class="bi bi-pencil-fill"></i>
+                      {/* Editar */}
                     </Button>
                     &nbsp;
                     <Button
@@ -172,7 +173,8 @@ export default function IngredienteListScreen() {
                       variant="light"
                       onClick={() => deleteHandler(ingrediente)}
                     >
-                      Eliminar
+                      <i class="bi bi-trash"></i>
+                      {/* Eliminar */}
                     </Button>
                   </td>
                 </tr>
