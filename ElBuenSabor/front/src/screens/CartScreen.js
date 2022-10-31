@@ -19,6 +19,7 @@ export default function CartScreen() {
 
   const updateCartHandler = async (item, cantidad) => {
     const { data } = await axios.get(`api/productos/${item._id}`);
+    /* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */
     if (data.stockProducto < cantidad) {
       window.alert('No hay stock del producto');
       return;
@@ -92,7 +93,7 @@ export default function CartScreen() {
                         onClick={() =>
                           updateCartHandler(item, item.cantidad + 1)
                         }
-                        disabled={item.cantidad === item.stockProducto}
+                        disabled={item.cantidad === item.stockProducto} /* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */
                       >
                         <i className="bi bi-file-plus-fill"></i>
                       </Button>

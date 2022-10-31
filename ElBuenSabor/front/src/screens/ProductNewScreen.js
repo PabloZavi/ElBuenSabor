@@ -9,9 +9,11 @@ import Button from 'react-bootstrap/Button';
 import LoadingBox from '../components/LoadingBox';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
-import Select from 'react-select';
+//import Select from 'react-select';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -74,18 +76,28 @@ export default function ProductNewScreen() {
   const [altaProducto, setAltaProducto] = useState(true);
   const [rubroProducto, setRubroProducto] = useState('');
   /* const [rubroProducto, setRubroProducto] = useState(null); */
-  const [stockProducto, setStockProducto] = useState();
+  //const [stockProducto, setStockProducto] = useState();
   const [isCeliaco, setIsCeliaco] = useState(false);
   const [isVegetariano, setIsVegetariano] = useState(false);
   const [rubros, setRubros] = useState([]);
 
+  const [ingredientesDB, setIngredientesDB] = useState([]);
+  const [ingredientesProducto, setIngredientesProducto] = useState([]);
+  //const [listId, setListId] = useState(1);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let { data } = await axios.get(`/api/rubros`);
+        ////let { data } = await axios.get(`/api/rubros`);
         //datos = JSON.parse(datos);
         //console.log(data);
-        setRubros(data);
+        ////setRubros(data);
+        Promise.all([getRubros(), getIngredientesDB()]).then(function (
+          results
+        ) {
+          setRubros(results[0].data);
+          setIngredientesDB(results[1].data);
+        });
       } catch (err) {
         toast.error(getError(err));
       }
@@ -117,9 +129,99 @@ export default function ProductNewScreen() {
       setIsCeliaco(localStorage.getItem('isCeliaco') === 'true' ? true : false);
     localStorage.getItem('rubroProducto') &&
       setRubroProducto(localStorage.getItem('rubroProducto'));
-    localStorage.getItem('stockProducto') &&
-      setStockProducto(localStorage.getItem('stockProducto'));
+    /* localStorage.getItem('stockProducto') &&
+      setStockProducto(localStorage.getItem('stockProducto')); */
+    /* localStorage.getItem('ingredientesProducto') &&
+      setIngredientesProducto(JSON.parse(localStorage.getItem('ingredientesProducto')));  */
   }, []);
+
+  function getRubros() {
+    return axios.get(`/api/rubros`);
+  }
+
+  function getIngredientesDB() {
+    return axios.get(`/api/ingredientes`);
+  }
+
+  /* const updateIngredient = (ingredientObj) => {
+    const updatedIngredients = ingredientesProducto.map((ingredient) => {
+      if (ingredient.listId === ingredientObj.listId) {
+        return ingredientObj;
+      }
+      return ingredient;
+    });
+    setIngredientesProducto(updatedIngredients);
+  };
+
+  const removeIngredient = (ingredientObj) => {
+    const updatedIngredients = ingredientesProducto.filter(
+      (ingredient) => ingredient.listId !== ingredientObj.listId
+    );
+    setIngredientesProducto(updatedIngredients);
+  };
+
+  const addIngredient = () => {
+    setIngredientesProducto([
+      ...ingredientesProducto,
+      {
+        listId: listId,
+        ingredient_id: 0,
+        cantidad: 0,
+        unidadDeMedidaIngrediente: '',
+      },
+    ]);
+    setListId(listId + 1);
+  };
+
+  const renderIngredients = ingredientesProducto.map((ingredienteProducto) => (
+    <AddIngredient
+      key={ingredienteProducto.listId}
+      ingredienteProducto={ingredienteProducto}
+      ingredientes={ingredientesDB}
+      listId={listId - 1}
+      updateIngredient={updateIngredient}
+      removeIngredient={removeIngredient}
+    />
+  )); */
+
+  const addIngredient = () => {
+    setIngredientesProducto([
+      ...ingredientesProducto,
+      {
+        ingrediente: '',
+        cantidad: 0,
+      },
+    ]);
+  };
+
+  const removeIngredient = (index) => {
+    const rows = [...ingredientesProducto];
+    rows.splice(index, 1);
+    setIngredientesProducto(rows);
+    //localStorage.setItem('ingredientesProducto', JSON.stringify(rows));
+  };
+
+  const handleChange = (index, e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    const list = [...ingredientesProducto];
+    name==='cantidad'? list[index][name] = parseInt(value) : list[index][name] = value;
+    setIngredientesProducto(list);
+    
+    
+    //console.log("e: " + e)
+    //console.log("e.target: " + e.target)
+    ////const { name, value } = e.target;
+    //console.log(value)
+    //console.log(e.target)
+    ////const list = [...ingredientesProducto];
+    ////list[index][name] = value;
+    ////setIngredientesProducto(list);
+    //localStorage.setItem('ingredientesProducto', JSON.stringify(list));
+    //console.log(list)
+    //console.log(typeof(list))
+    console.log(ingredientesProducto);
+  };
 
   function deleteLocalStorage() {
     let userInfo = localStorage.getItem('userInfo');
@@ -153,9 +255,10 @@ export default function ProductNewScreen() {
           precioVentaProducto,
           altaProducto,
           rubroProducto,
-          stockProducto,
+          //stockProducto,
           isCeliaco,
           isVegetariano,
+          ingredientesProducto,
         },
         { headers: { Authorization: `Bearer ${userInfo.token}` } }
       );
@@ -185,6 +288,7 @@ export default function ProductNewScreen() {
       dispatch({ type: 'UPLOAD_SUCCESS' });
       toast.success('Imagen subida correctamente!');
       setImagenProducto(data.secure_url);
+      localStorage.setItem('imagenProducto', data.secure_url);
     } catch (err) {
       toast.error(getError(err));
       dispatch({ type: 'UPLOAD_FAIL' });
@@ -199,7 +303,20 @@ export default function ProductNewScreen() {
       <h1>Crear producto </h1>
 
       <Form onSubmit={submitHandler}>
-        <Form.Group className="mb-3" controlId="nombreProducto">
+
+        <TextField
+          className="mb-3"
+          fullWidth
+          required
+          id="nombreProducto"
+          label="Nombre"
+          value={nombreProducto}
+          onChange={(e) => {
+            setNombreProducto(e.target.value);
+            localStorage.setItem('nombreProducto', e.target.value);
+          }}
+        />
+        {/*<Form.Group className="mb-3" controlId="nombreProducto"> 
           <Form.Label>Nombre</Form.Label>
           <Form.Control
             value={nombreProducto}
@@ -208,10 +325,21 @@ export default function ProductNewScreen() {
               localStorage.setItem('nombreProducto', e.target.value);
             }}
             required
-          ></Form.Control>
-        </Form.Group>
+          ></Form.Control> </Form.Group>*/}
 
-        <Form.Group className="mb-3" controlId="descripcionProducto">
+        <TextField
+          className="mb-3"
+          fullWidth
+          required
+          id="descripcionProducto"
+          label="Descripción"
+          value={descripcionProducto}
+          onChange={(e) => {
+            setDescripcionProducto(e.target.value);
+            localStorage.setItem('descripcionProducto', e.target.value);
+          }}
+        />
+        {/* <Form.Group className="mb-3" controlId="descripcionProducto">
           <Form.Label>Descripción</Form.Label>
           <Form.Control
             value={descripcionProducto}
@@ -220,9 +348,24 @@ export default function ProductNewScreen() {
               localStorage.setItem('descripcionProducto', e.target.value);
             }}
           ></Form.Control>
-        </Form.Group>
+        </Form.Group> */}
 
-        <Form.Group className="mb-3" controlId="recetaProducto">
+        <TextField
+          className="mb-3"
+          fullWidth
+          required
+          multiline
+          rows={4}
+          id="recetaProducto"
+          label="Receta"
+          value={recetaProducto}
+          onChange={(e) => {
+            setRecetaProducto(e.target.value);
+            localStorage.setItem('recetaProducto', e.target.value);
+          }}
+        />
+
+        {/*  <Form.Group className="mb-3" controlId="recetaProducto">
           <Form.Label>Receta</Form.Label>
           <Form.Control
             as="textarea"
@@ -233,11 +376,74 @@ export default function ProductNewScreen() {
               localStorage.setItem('recetaProducto', e.target.value);
             }}
           ></Form.Control>
-        </Form.Group>
+        </Form.Group> */}
 
-        <Form.Group className="mb-3" controlId="tiempoCocinaProducto">
-          <Form.Label>Tiempo de cocina</Form.Label>
+        {/* <Form.Group className="mb-3" controlId="ingredientes">
+          <Form.Label>Ingredientes</Form.Label>
+          <Row>
+            <Col>Ingrediente</Col>
+            <Col>Cantidad</Col>
+            <Col>Unidad</Col>
+            <Col>Borrar</Col>
+          </Row>
+          <Row>{renderIngredients}</Row>
+          <Row>
+            <Button variant="warning" onClick={addIngredient}>
+              Agregar ingrediente
+            </Button>
+          </Row>
+        </Form.Group> */}
+
+        {/*         <Form.Group className="mb-3" controlId="ingredientes">
+        <Form.Label>Ingredientes</Form.Label>
+          <Row>
+            <Col>Ingrediente</Col>
+            <Col>Cantidad</Col>
+            <Col>Unidad</Col>
+            <Col>Borrar</Col>
+          </Row>
+
+            {ingredientesProducto.map((ingProd)=> (
+              <Col>
+              <Select
+                defaultValue={
+                   { label: ingProd }
+                    
+                }
+                options={ingredientesDB.map((ing) => ({
+                  label: ing.nombreIngrediente,
+                  value: ing.nombreIngrediente,
+                }))}
+                onChange={(e) => {
+                  updateIngredient(ingProd)
+                }}
+              ></Select>
+            </Col>
+            ))
+            }
+
+          <Row>
+            <Col>
+              <Select
+                defaultValue={
+                  rubroProducto
+                    ? { label: rubroProducto }
+                    : { label: 'Seleccionar ingrediente' }
+                }
+                options={ingredientesDB.map((ing) => ({
+                  label: ing.nombreIngrediente,
+                  value: ing.nombreIngrediente,
+                }))}
+                onChange={(e) => {
+                  setRubroProducto(e.value);
+                  localStorage.setItem('rubroProducto', e.value);
+                }}
+              ></Select>
+            </Col>
+            <Col>
+            
           <Form.Control
+            className="smaller-input"
             type="Number"
             min="0"
             value={tiempoCocinaProducto}
@@ -247,15 +453,60 @@ export default function ProductNewScreen() {
             }}
             required
           ></Form.Control>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="rubroProducto">
-          {/* <Form.Label>Rubro</Form.Label> */}
-          {/* <Form.Control
+        </Col>
+        <Col>
+        gr
+        </Col>
+            <Col>
+              
+              <Button
+                type="button"
+                onClick={() => navigate(`/borraringrediente`)}
+              >
+                x
+              </Button>
+            </Col>
+          </Row>
+        </Form.Group> */}
+
+        <TextField
+          required
+          id="tiempoCocinaProducto"
+          label="Tiempo de cocina (mins)"
+          value={tiempoCocinaProducto || ''}
+          className="medium-small-input mb-3"
+          type="Number"
+          min="0"
+          onChange={(e) => {
+            setTiempoCocinaProducto(e.target.value);
+            localStorage.setItem('tiempoCocinaProducto', e.target.value);
+          }}
+        />
+
+        {/* <Form.Group className="mb-3" controlId="tiempoCocinaProducto">
+          <Form.Label>Tiempo de cocina</Form.Label>
+          <Form.Control
+            className="smaller-input"
+            type="Number"
+            min="0"
+            value={tiempoCocinaProducto}
+            onChange={(e) => {
+              setTiempoCocinaProducto(e.target.value);
+              localStorage.setItem('tiempoCocinaProducto', e.target.value);
+            }}
+            required
+          ></Form.Control>
+        </Form.Group> */}
+
+        {/* <Form.Group className="mb-3" controlId="rubroProducto"> */}
+        {/* <Form.Label>Rubro</Form.Label> */}
+        {/* <Form.Label>Rubro</Form.Label> */}
+        {/* <Form.Control
             value={rubroProducto}
             onChange={(e) => setRubroProducto(e.target.value)}
             required
           ></Form.Control> */}
-          {/* <Form.Select>
+        {/* <Form.Select>
             {rubros.map((rubro) => (
               <option key={rubro._id} value={rubro.nombreRubro}>{rubro.nombreRubro}</option>
             ))}
@@ -263,9 +514,28 @@ export default function ProductNewScreen() {
             
           </Form.Select> */}
 
-          <Row>
-            <Col>
-              <Select
+        <Row>
+          <Col>
+            <TextField
+              className="medium-large-input mb-3"
+              required
+              id="rubroProducto"
+              select
+              label="Seleccionar rubro"
+              value={rubroProducto}
+              onChange={(e) => {
+                setRubroProducto(e.target.value);
+                localStorage.setItem('rubroProducto', e.target.value);
+              }}
+            >
+              {rubros.map((rubro) => (
+                <MenuItem key={rubro.nombreRubro} value={rubro.nombreRubro}>
+                  {rubro.nombreRubro}
+                </MenuItem>
+              ))}
+            </TextField>
+
+            {/* <Select
                 defaultValue={
                   rubroProducto
                     ? { label: rubroProducto }
@@ -279,19 +549,16 @@ export default function ProductNewScreen() {
                   setRubroProducto(e.value);
                   localStorage.setItem('rubroProducto', e.value);
                 }}
-              ></Select>
-            </Col>
-            <Col>
+              ></Select> */}
+          </Col>
+          <Col className="d-flex align-items-center mb-3">
             ¿No está el rubro? &rArr; &nbsp;
-              <Button
-                type="button"
-                onClick={() => navigate(`/admin/rubro/new`)}
-              >
-                Crear rubro
-              </Button>
-            </Col>
-          </Row>
-        </Form.Group>
+            <Button type="button" onClick={() => navigate(`/admin/rubro/new`)}>
+              Crear rubro
+            </Button>
+          </Col>
+        </Row>
+        {/* </Form.Group> */}
 
         {/* <Form.Group className="mb-3" controlId="rubroProducto">
           <Form.Label>Rubro</Form.Label>
@@ -314,7 +581,7 @@ export default function ProductNewScreen() {
                 </tr>
               ))} */}
 
-        <Form.Group className="mb-3" controlId="imagenProducto">
+        {/* <Form.Group className="mb-3" controlId="imagenProducto">
           <Form.Label>Imagen</Form.Label>
           <Form.Control
             value={imagenProducto}
@@ -323,7 +590,7 @@ export default function ProductNewScreen() {
               localStorage.setItem('imagenProducto', e.target.value);
             }}
           ></Form.Control>
-        </Form.Group>
+        </Form.Group> */}
 
         <Form.Group className="mb-3" controlId="imageFile">
           <Form.Label>Subir imagen</Form.Label>
@@ -331,9 +598,23 @@ export default function ProductNewScreen() {
           {loadingUpload && <LoadingBox></LoadingBox>}
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="precioVentaProducto">
+        <TextField
+          required
+          id="precioVentaProducto"
+          label="Precio de venta"
+          value={precioVentaProducto || ''}
+          className="medium-input mb-3"
+          type="Number"
+          min="0"
+          onChange={(e) => {
+            setPrecioVentaProducto(e.target.value);
+            localStorage.setItem('precioVentaProducto', e.target.value);
+          }}
+        />
+        {/* <Form.Group className="mb-3" controlId="precioVentaProducto">
           <Form.Label>Precio de venta</Form.Label>
           <Form.Control
+            className="smaller-input"
             type="Number"
             min="0"
             value={precioVentaProducto}
@@ -343,7 +624,7 @@ export default function ProductNewScreen() {
             }}
             required
           ></Form.Control>
-        </Form.Group>
+        </Form.Group> */}
 
         <Form.Check
           className="mb-3"
@@ -381,8 +662,7 @@ export default function ProductNewScreen() {
           }}
         ></Form.Check>
 
-        
-        <Form.Group className="mb-3" controlId="stockProducto">
+        {/* <Form.Group className="mb-3" controlId="stockProducto">
           <Form.Label>Stock</Form.Label>
           <Form.Control
             type="Number"
@@ -394,7 +674,93 @@ export default function ProductNewScreen() {
             }}
             required
           ></Form.Control>
-        </Form.Group>
+        </Form.Group> */}
+
+        <Container className="mt-3 square border border-dark mb-3">
+          <h2 className="text-center">Ingredientes</h2>
+          <Row>
+
+            {ingredientesProducto.map((data, index) => {
+              return (
+                <Row className="row my-3" key={index}>
+                  <Col>
+                    <TextField
+                      className="medium-input mb-3"
+                      required
+                      id="ingrediente"
+                      name="ingrediente"
+                      select
+                      label="Seleccionar ingrediente"
+                      value={data.ingrediente}
+                      onChange={(e) => handleChange(index, e)}
+                    >
+                      {ingredientesDB.map(
+                        (
+                          ingrediente //ver si causa conflicto que se llame ingrediente
+                        ) => (
+                          <MenuItem
+                            key={ingrediente.nombreIngrediente}
+                            value={ingrediente}
+                          >
+                            {ingrediente.nombreIngrediente}
+                          </MenuItem>
+                        )
+                      )}
+                    </TextField>
+                  </Col>
+
+                  <Col>
+                    <TextField
+                      required
+                      id="cantidad"
+                      label="cantidad"
+                      value={data.cantidad}
+                      className="small-input mb-3"
+                      name="cantidad"
+                      type="Number"
+                      min="0"
+                      onChange={(e) => handleChange(index, e)}
+                    />
+                  </Col>
+                  <Col>
+                    {data.ingrediente && (
+                      <TextField
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                        id="unidad"
+                        label="unidad"
+                        value={
+                          data.ingrediente &&
+                          data.ingrediente.unidadDeMedidaIngrediente
+                        }
+                        className="extra-small-input mb-3"
+                      />
+                    )}
+                  </Col>
+                  <Col className="d-flex align-items-center mb-3">
+                    <button
+                      className="btn btn-outline-danger btn-sm"
+                      onClick={(e) => removeIngredient(index)}
+                    >
+                      x
+                    </button>
+                  </Col>
+                </Row>
+              );
+            })}
+
+            <Row>
+              <Button
+                variant="warning"
+                onClick={addIngredient}
+                className="mb-3"
+              >
+                Agregar ingrediente
+              </Button>
+            </Row>
+          </Row>
+        </Container>
 
         <div className="mb-3">
           <Button disabled={loadingCreate || loadingUpload} type="submit">

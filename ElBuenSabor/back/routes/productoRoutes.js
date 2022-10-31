@@ -6,7 +6,7 @@ import { isAdmin, isAuth } from '../utils.js';
 const productoRouter = express.Router();
 
 productoRouter.get('/', async (req, res) => {
-  const productos = await Producto.find();
+  const productos = await Producto.find().populate({path: 'ingredientes.ingrediente'});
   res.send(productos);
 });
 
@@ -34,6 +34,14 @@ productoRouter.get('/', async (req, res) => {
   })
 ); */
 
+/* productoRouter.get(
+  '/prueba',
+  expressAsyncHandler(async (req, res) => {
+    const productos = await Producto.find().populate({path: 'ingredientes.ingrediente'});
+    res.send(productos);
+  })
+); */
+
 productoRouter.post(
   '/',
   isAuth,
@@ -49,9 +57,10 @@ productoRouter.post(
       altaProducto: req.body.altaProducto,
       rubroProducto: req.body.rubroProducto,
       //Atributo a eliminar:
-      stockProducto: req.body.stockProducto,
+      //stockProducto: req.body.stockProducto,
       isCeliaco: req.body.isCeliaco,
       isVegetariano: req.body.isVegetariano,
+      ingredientes: req.body.ingredientesProducto,
     });
     const producto = await newProducto.save();
     res.send({ message: 'Producto creado' });
@@ -74,9 +83,10 @@ productoRouter.put(
       product.precioVentaProducto = req.body.precioVentaProducto;
       product.altaProducto = req.body.altaProducto;
       product.rubroProducto = req.body.rubroProducto;
-      product.stockProducto = req.body.stockProducto;
+      //product.stockProducto = req.body.stockProducto;
       product.isCeliaco = req.body.isCeliaco;
       product.isVegetariano = req.body.isVegetariano;
+      product.ingredientes = req.body.ingredientesProducto;
       await product.save();
       res.send({ message: 'Producto actualizado' });
     } else {
@@ -191,7 +201,9 @@ productoRouter.get('/nombre/:nombre', async (req, res) => {
 //Busco un producto por su id
 productoRouter.get('/:id', async (req, res) => {
   try {
-    const producto = await Producto.findById(req.params.id);
+    const producto = await Producto.findById(req.params.id).populate({path: 'ingredientes.ingrediente'});
+    //Con el select() puedo decir qué campos enviar (por ejemplo se excluye el _id de cada ingrediente)
+    //const producto = await Producto.findById(req.params.id).populate({path: 'ingredientes.ingrediente'}).select({'ingredientes.ingrediente':1, 'ingredientes.cantidad':1});
     if (producto) {
       res.send(producto);
     } else {
