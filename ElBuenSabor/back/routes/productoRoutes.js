@@ -34,13 +34,13 @@ productoRouter.get('/', async (req, res) => {
   })
 ); */
 
-productoRouter.get(
+/* productoRouter.get(
   '/prueba',
   expressAsyncHandler(async (req, res) => {
     const productos = await Producto.find().populate({path: 'ingredientes.ingrediente'});
     res.send(productos);
   })
-);
+); */
 
 productoRouter.post(
   '/',
@@ -86,6 +86,7 @@ productoRouter.put(
       //product.stockProducto = req.body.stockProducto;
       product.isCeliaco = req.body.isCeliaco;
       product.isVegetariano = req.body.isVegetariano;
+      product.ingredientes = req.body.ingredientesProducto;
       await product.save();
       res.send({ message: 'Producto actualizado' });
     } else {
@@ -201,6 +202,8 @@ productoRouter.get('/nombre/:nombre', async (req, res) => {
 productoRouter.get('/:id', async (req, res) => {
   try {
     const producto = await Producto.findById(req.params.id).populate({path: 'ingredientes.ingrediente'});
+    //Con el select() puedo decir qué campos enviar (por ejemplo se excluye el _id de cada ingrediente)
+    //const producto = await Producto.findById(req.params.id).populate({path: 'ingredientes.ingrediente'}).select({'ingredientes.ingrediente':1, 'ingredientes.cantidad':1});
     if (producto) {
       res.send(producto);
     } else {

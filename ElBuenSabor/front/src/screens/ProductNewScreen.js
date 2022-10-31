@@ -202,14 +202,21 @@ export default function ProductNewScreen() {
   };
 
   const handleChange = (index, e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    const list = [...ingredientesProducto];
+    name==='cantidad'? list[index][name] = parseInt(value) : list[index][name] = value;
+    setIngredientesProducto(list);
+    
+    
     //console.log("e: " + e)
     //console.log("e.target: " + e.target)
-    const { name, value } = e.target;
+    ////const { name, value } = e.target;
     //console.log(value)
     //console.log(e.target)
-    const list = [...ingredientesProducto];
-    list[index][name] = value;
-    setIngredientesProducto(list);
+    ////const list = [...ingredientesProducto];
+    ////list[index][name] = value;
+    ////setIngredientesProducto(list);
     //localStorage.setItem('ingredientesProducto', JSON.stringify(list));
     //console.log(list)
     //console.log(typeof(list))
@@ -296,6 +303,7 @@ export default function ProductNewScreen() {
       <h1>Crear producto </h1>
 
       <Form onSubmit={submitHandler}>
+
         <TextField
           className="mb-3"
           fullWidth
@@ -671,6 +679,7 @@ export default function ProductNewScreen() {
         <Container className="mt-3 square border border-dark mb-3">
           <h2 className="text-center">Ingredientes</h2>
           <Row>
+
             {ingredientesProducto.map((data, index) => {
               return (
                 <Row className="row my-3" key={index}>
@@ -679,10 +688,10 @@ export default function ProductNewScreen() {
                       className="medium-input mb-3"
                       required
                       id="ingrediente"
+                      name="ingrediente"
                       select
                       label="Seleccionar ingrediente"
                       value={data.ingrediente}
-                      name="ingrediente"
                       onChange={(e) => handleChange(index, e)}
                     >
                       {ingredientesDB.map(
