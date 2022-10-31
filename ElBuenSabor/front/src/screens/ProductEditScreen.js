@@ -419,6 +419,7 @@ export default function ProductEditScreen() {
             ></Form.Control>
           </Form.Group> */}
           <TextField
+          inputProps={{ maxLength: 40 }}
             className="mb-3"
             fullWidth
             required
@@ -494,13 +495,14 @@ export default function ProductEditScreen() {
             ></Form.Control>
           </Form.Group> */}
           <TextField
+          InputProps={{ inputProps: { min: 0 } }}
             required
             id="tiempoCocinaProducto"
             label="Tiempo de cocina (mins)"
             value={tiempoCocinaProducto || ''}
             className="medium-small-input mb-3"
             type="Number"
-            min="0"
+            //min="0"
             onChange={(e) => {
               setTiempoCocinaProducto(e.target.value);
               localStorage.setItem('tiempoCocinaProducto', e.target.value);
@@ -702,6 +704,7 @@ export default function ProductEditScreen() {
 
                     <Col>
                       <TextField
+                      InputProps={{ inputProps: { min: 0 } }}
                         required
                         id="cantidad"
                         label="cantidad"
@@ -709,7 +712,7 @@ export default function ProductEditScreen() {
                         className="small-input mb-3"
                         name="cantidad"
                         type="Number"
-                        min="0"
+                        //min="0"
                         //onChange={(e) => changeQuantityIngredient(index, e)}
                         onChange={(e) => handleChange(index, e)}
                       />
@@ -759,13 +762,14 @@ export default function ProductEditScreen() {
           <Row>
             <Col>
               <TextField
+              InputProps={{ inputProps: { min: 0 } }}
                 required
                 id="precioVentaProducto"
                 label="Precio de venta"
                 value={precioVentaProducto || ''}
                 className="medium-input mb-3"
                 type="Number"
-                min="0"
+                //min="0"
                 onChange={(e) => {
                   setPrecioVentaProducto(e.target.value);
                   localStorage.setItem('precioVentaProducto', e.target.value);
