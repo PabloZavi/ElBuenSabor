@@ -104,7 +104,7 @@ export default function UserListScreen() {
                 <td>{user._id}</td>
                 <td>{user.nombreUsuario}</td>
                 <td>{user.emailUsuario}</td>
-                <td>{user.isAdmin ? 'Sí' : 'No'}</td>
+                <td>{user.isAdmin ? <p className="green">Sí</p> : 'No'}</td>
                 <td>
                   <Button
                     type="button"
