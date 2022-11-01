@@ -111,7 +111,8 @@ export default function UserListScreen() {
                     variant="light"
                     onClick={() => navigate(`/admin/user/${user._id}`)}
                   >
-                    Editar
+                    <i class="bi bi-pencil-fill"></i>
+                    {/* Editar */}
                   </Button>
                   &nbsp;
                   <Button
@@ -119,7 +120,8 @@ export default function UserListScreen() {
                     variant="light"
                     onClick={() => deleteHandler(user)}
                   >
-                    Eliminar
+                    <i class="bi bi-trash"></i>
+                    {/* Eliminar */}
                   </Button>
                 </td>
               </tr>

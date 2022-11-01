@@ -89,9 +89,11 @@ export default function RubroEditScreen() {
   return (
     <Container className="small-container">
       <Helmet>
-        <title>Editar rubro de Productos{rubroId}</title>
+        {/* <title>Editar rubro de Productos{rubroId}</title> */}
+        <title>Editar rubro de Productos{nombreRubro}</title>
       </Helmet>
-      <h1>Editar rubro de Productos {rubroId}</h1>
+      {/* <h1>Editar rubro de Productos {rubroId}</h1> */}
+      <h1>Editar rubro de Productos <br/><p style={ { color: 'blue' } }>{nombreRubro}</p></h1>
 
       {loading ? (
         <LoadingBox></LoadingBox>

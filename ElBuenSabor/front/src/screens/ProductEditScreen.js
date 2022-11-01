@@ -395,9 +395,11 @@ export default function ProductEditScreen() {
   return (
     <Container className="small-container">
       <Helmet>
-        <title>Editar producto {productId}</title>
+        {/* <title>Editar producto {productId}</title> */}
+        <title>Editar producto {nombreProducto}</title>
       </Helmet>
-      <h1>Editar producto {productId}</h1>
+      {/* <h1>Editar producto {productId}</h1> */}
+      <h1>Editar producto <br/><p style={ { color: 'blue' } }>{nombreProducto}</p></h1>
 
       {loading ? (
         <LoadingBox></LoadingBox>

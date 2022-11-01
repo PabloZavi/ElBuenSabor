@@ -89,9 +89,11 @@ export default function RubroIngredienteEditScreen() {
   return (
     <Container className="small-container">
       <Helmet>
-        <title>Editar rubro de Ingredientes{rubroId}</title>
+        {/* <title>Editar rubro de Ingredientes{rubroId}</title> */}
+        <title>Editar rubro de Ingredientes{nombreRubro}</title>
       </Helmet>
-      <h1>Editar rubro de Ingredientes {rubroId}</h1>
+      {/* <h1>Editar rubro de Ingredientes {rubroId}</h1> */}
+      <h1>Editar rubro de Ingredientes <br/><p style={ { color: 'blue' } }>{nombreRubro}</p></h1>
 
       {loading ? (
         <LoadingBox></LoadingBox>
