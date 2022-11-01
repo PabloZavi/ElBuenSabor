@@ -105,7 +105,7 @@ function App() {
                 <SearchBox></SearchBox>
                 <Nav className="me-auto w-100 justify-content-end">
                   <Link to="/cart" className="nav-link">
-                    Carrito
+                    <i class="bi bi-cart"> Carrito</i>
                     {cart.cartItems.length > 0 && (
                       <Badge pill bg="danger">
                         {cart.cartItems.reduce((a, c) => a + c.cantidad, 0)}
@@ -114,7 +114,12 @@ function App() {
                   </Link>
                   {userInfo ? (
                     <NavDropdown
-                      title={userInfo.nombreUsuario}
+                      title={
+                        <i class="bi bi-person" width="50" height="50">
+                          {' '}
+                          {userInfo.nombreUsuario}
+                        </i>
+                      }
                       id="basic-nav-dropdown"
                     >
                       <LinkContainer to="/profile">

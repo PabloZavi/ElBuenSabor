@@ -87,9 +87,11 @@ export default function UserEditScreen() {
   return (
     <Container className="small-container">
       <Helmet>
-        <title>Editar usuario {userId}</title>
+        {/* <title>Editar usuario {userId}</title> */}
+        <title>Editar usuario {nombreUsuario}</title>
       </Helmet>
-      <h1>Editar usuario {userId}</h1>
+      {/* <h1>Editar usuario <br/>{userId}</h1> */}
+      <h1>Editar usuario <br/><p style={ { color: 'blue' } }>{nombreUsuario}</p></h1>
 
       {loading ? (
         <LoadingBox></LoadingBox>

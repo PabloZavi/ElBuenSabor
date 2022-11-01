@@ -217,9 +217,11 @@ export default function IngredienteEditScreen() {
   return (
     <Container className="small-container">
       <Helmet>
-        <title>Editar ingrediente {ingredienteId}</title>
+        {/* <title>Editar ingrediente {ingredienteId}</title> */}
+        <title>Editar ingrediente {nombreIngrediente}</title>
       </Helmet>
-      <h1>Editar ingrediente {ingredienteId}</h1>
+      {/* <h1>Editar ingrediente {ingredienteId}</h1> */}
+      <h1>Editar ingrediente <br/><p style={ { color: 'blue' } }>{nombreIngrediente}</p></h1>
 
       {loading ? (
         <LoadingBox></LoadingBox>

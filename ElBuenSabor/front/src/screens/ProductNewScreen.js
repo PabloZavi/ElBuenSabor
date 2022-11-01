@@ -136,21 +136,21 @@ export default function ProductNewScreen() {
       setIngredientesProducto(JSON.parse(localStorage.getItem('ingredientesProducto')));  */
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     const calcularCosto = () => {
       setCostoProducto(0);
       let costo = 0;
       ingredientesProducto &&
         ingredientesProducto.map(
           (ing) =>
-          ing.ingrediente !== '' && 
+            ing.ingrediente !== '' &&
             (costo =
               costo + ing.cantidad * ing.ingrediente.precioCostoIngrediente)
         );
       setCostoProducto(costo);
     };
     calcularCosto();
-  }, [ingredientesProducto])
+  }, [ingredientesProducto]);
 
   function getRubros() {
     return axios.get(`/api/rubros`);
@@ -337,6 +337,7 @@ export default function ProductNewScreen() {
 
       <Form onSubmit={submitHandler}>
         <TextField
+          inputProps={{ maxLength: 40 }}
           className="mb-3"
           fullWidth
           required
@@ -501,12 +502,13 @@ export default function ProductNewScreen() {
 
         <TextField
           required
+          InputProps={{ inputProps: { min: 0 } }}
           id="tiempoCocinaProducto"
           label="Tiempo de cocina (mins)"
           value={tiempoCocinaProducto || ''}
           className="medium-small-input mb-3"
           type="Number"
-          min="0"
+          //min="0"
           onChange={(e) => {
             setTiempoCocinaProducto(e.target.value);
             localStorage.setItem('tiempoCocinaProducto', e.target.value);
@@ -727,6 +729,7 @@ export default function ProductNewScreen() {
 
                   <Col>
                     <TextField
+                      InputProps={{ inputProps: { min: 0 } }}
                       required
                       id="cantidad"
                       label="cantidad"
@@ -734,7 +737,7 @@ export default function ProductNewScreen() {
                       className="small-input mb-3"
                       name="cantidad"
                       type="number"
-                      min="0"
+                      //min="0"
                       onChange={(e) => handleChange(index, e)}
                     />
                   </Col>
@@ -781,13 +784,14 @@ export default function ProductNewScreen() {
         <Row>
           <Col>
             <TextField
+              InputProps={{ inputProps: { min: 0 } }}
               required
               id="precioVentaProducto"
               label="Precio de venta"
               value={precioVentaProducto || ''}
               className="medium-input mb-3"
               type="Number"
-              min="0"
+              //min="0"
               onChange={(e) => {
                 setPrecioVentaProducto(e.target.value);
                 localStorage.setItem('precioVentaProducto', e.target.value);
@@ -796,6 +800,7 @@ export default function ProductNewScreen() {
           </Col>
           <Col>
             <TextField
+              sx={{ border: 'none', '& fieldset': { border: 'none' } }}
               id="costoProducto"
               label="Costo del producto"
               value={costoProducto || ''}

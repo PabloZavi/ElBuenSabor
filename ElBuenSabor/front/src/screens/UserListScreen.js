@@ -104,14 +104,15 @@ export default function UserListScreen() {
                 <td>{user._id}</td>
                 <td>{user.nombreUsuario}</td>
                 <td>{user.emailUsuario}</td>
-                <td>{user.isAdmin ? 'Sí' : 'No'}</td>
+                <td>{user.isAdmin ? <p className="green">Sí</p> : 'No'}</td>
                 <td>
                   <Button
                     type="button"
                     variant="light"
                     onClick={() => navigate(`/admin/user/${user._id}`)}
                   >
-                    Editar
+                    <i class="bi bi-pencil-fill"></i>
+                    {/* Editar */}
                   </Button>
                   &nbsp;
                   <Button
@@ -119,7 +120,8 @@ export default function UserListScreen() {
                     variant="light"
                     onClick={() => deleteHandler(user)}
                   >
-                    Eliminar
+                    <i class="bi bi-trash"></i>
+                    {/* Eliminar */}
                   </Button>
                 </td>
               </tr>
