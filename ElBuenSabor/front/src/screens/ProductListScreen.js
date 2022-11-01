@@ -210,7 +210,7 @@ export default function ProductListScreen() {
                       variant="light"
                       onClick={() => navigate(`/admin/product/${producto._id}`)}
                     >
-                      <i class="bi bi-pencil-fill"></i>
+                      <i className="bi bi-pencil-fill"></i>
                       {/* Editar */}
                     </Button>
                     &nbsp;
@@ -219,7 +219,7 @@ export default function ProductListScreen() {
                       variant="light"
                       onClick={() => deleteHandler(producto)}
                     >
-                      <i class="bi bi-trash"></i>
+                      <i className="bi bi-trash"></i>
                       {/* Eliminar */}
                     </Button>
                   </td>

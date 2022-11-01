@@ -45,6 +45,8 @@ import IngredienteListScreen from './screens/IngredienteListScreen';
 import IngredienteEditScreen from './screens/IngredienteEditScreen';
 import IngredienteNewScreen from './screens/IngredienteNewScreen';
 
+import { DateTime } from 'luxon';
+
 function App() {
   //Traemos el estado de la app desde el store
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -77,6 +79,41 @@ function App() {
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      isOpen();
+    }, 60000); //60000 es 1 minuto - 300000 son 5 minutos
+    return () => clearInterval(interval);
+  }, []);
+
+  function isOpen() {
+    let dt = DateTime;
+    dt.toLocaleString(DateTime.DATE_SHORT);
+    //console.log(dt.now())
+    let diaSemanaActual = dt
+      .now()
+      .setZone('America/Argentina/Mendoza')
+      .setLocale('es').weekdayLong;
+
+    let horaActual = dt
+      .now()
+      .setZone('America/Argentina/Mendoza')
+      .setLocale('es').hour;
+
+    let minutoActual = dt
+      .now()
+      .setZone('America/Argentina/Mendoza')
+      .setLocale('es').minute;
+
+    let localAbierto =
+      (horaActual >= 20 && horaActual <= 23 && minutoActual <= 59) ||
+      ((diaSemanaActual === 'sábado' || diaSemanaActual === 'domingo') &&
+        horaActual > 11 &&
+        horaActual < 15);
+    localStorage.setItem('localAbierto', localAbierto);
+    //console.log("Esta abierto: " + localAbierto)
+  }
+
   return (
     <BrowserRouter>
       <div
@@ -105,7 +142,7 @@ function App() {
                 <SearchBox></SearchBox>
                 <Nav className="me-auto w-100 justify-content-end">
                   <Link to="/cart" className="nav-link">
-                    <i class="bi bi-cart"> Carrito</i>
+                    <i className="bi bi-cart"> Carrito</i>
                     {cart.cartItems.length > 0 && (
                       <Badge pill bg="danger">
                         {cart.cartItems.reduce((a, c) => a + c.cantidad, 0)}
@@ -115,7 +152,7 @@ function App() {
                   {userInfo ? (
                     <NavDropdown
                       title={
-                        <i class="bi bi-person" width="50" height="50">
+                        <i className="bi bi-person" width="50" height="50">
                           {' '}
                           {userInfo.nombreUsuario}
                         </i>
