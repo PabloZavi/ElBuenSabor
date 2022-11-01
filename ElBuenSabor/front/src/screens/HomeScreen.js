@@ -92,7 +92,7 @@ function HomeScreen() {
           <h1>{cat}</h1>
           <Carousel breakPoints={breakPoints} itemPadding={[0, 0]}>
             {productos
-              .filter((prod) => prod.rubroProducto === cat)
+              .filter((prod) => prod.rubroProducto === cat && prod.altaProducto===true)
               .map((producto) => (
                 <Item key={producto._id} sm={6} md={4} lg={3} className="mb-3">
                   <Producto producto={producto}></Producto>

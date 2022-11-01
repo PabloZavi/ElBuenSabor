@@ -729,7 +729,7 @@ export default function ProductNewScreen() {
 
                   <Col>
                     <TextField
-                    InputProps={{ inputProps: { min: 0 } }}
+                      InputProps={{ inputProps: { min: 0 } }}
                       required
                       id="cantidad"
                       label="cantidad"
@@ -784,7 +784,7 @@ export default function ProductNewScreen() {
         <Row>
           <Col>
             <TextField
-            InputProps={{ inputProps: { min: 0 } }}
+              InputProps={{ inputProps: { min: 0 } }}
               required
               id="precioVentaProducto"
               label="Precio de venta"
@@ -800,6 +800,7 @@ export default function ProductNewScreen() {
           </Col>
           <Col>
             <TextField
+              sx={{ border: 'none', '& fieldset': { border: 'none' } }}
               id="costoProducto"
               label="Costo del producto"
               value={costoProducto || ''}

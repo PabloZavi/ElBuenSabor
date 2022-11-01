@@ -238,25 +238,23 @@ export default function ProductEditScreen() {
     };
 
     fetchData();
-
-    
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     const calcularCosto = () => {
       setCostoProducto(0);
       let costo = 0;
       ingredientesProducto &&
         ingredientesProducto.map(
           (ing) =>
-          ing.ingrediente !== '' && 
+            ing.ingrediente !== '' &&
             (costo =
               costo + ing.cantidad * ing.ingrediente.precioCostoIngrediente)
         );
       setCostoProducto(costo);
     };
     calcularCosto();
-  }, [ingredientesProducto])
+  }, [ingredientesProducto]);
 
   function getRubros() {
     return axios.get(`/api/rubros`);
@@ -419,7 +417,7 @@ export default function ProductEditScreen() {
             ></Form.Control>
           </Form.Group> */}
           <TextField
-          inputProps={{ maxLength: 40 }}
+            inputProps={{ maxLength: 40 }}
             className="mb-3"
             fullWidth
             required
@@ -495,7 +493,7 @@ export default function ProductEditScreen() {
             ></Form.Control>
           </Form.Group> */}
           <TextField
-          InputProps={{ inputProps: { min: 0 } }}
+            InputProps={{ inputProps: { min: 0 } }}
             required
             id="tiempoCocinaProducto"
             label="Tiempo de cocina (mins)"
@@ -704,7 +702,7 @@ export default function ProductEditScreen() {
 
                     <Col>
                       <TextField
-                      InputProps={{ inputProps: { min: 0 } }}
+                        InputProps={{ inputProps: { min: 0 } }}
                         required
                         id="cantidad"
                         label="cantidad"
@@ -762,7 +760,7 @@ export default function ProductEditScreen() {
           <Row>
             <Col>
               <TextField
-              InputProps={{ inputProps: { min: 0 } }}
+                InputProps={{ inputProps: { min: 0 } }}
                 required
                 id="precioVentaProducto"
                 label="Precio de venta"
@@ -778,6 +776,7 @@ export default function ProductEditScreen() {
             </Col>
             <Col>
               <TextField
+                sx={{ border: 'none', '& fieldset': { border: 'none' } }}
                 id="costoProducto"
                 label="Costo del producto"
                 value={costoProducto || ''}
