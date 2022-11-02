@@ -120,7 +120,8 @@ function App() {
       .setZone('America/Argentina/Mendoza')
       .setLocale('es').weekdayLong;
 
-    let horaActual = dt.now().setZone('America/Argentina/Mendoza').setLocale('es').hour;
+    //let horaActual = dt.now().setZone('America/Argentina/Mendoza').setLocale('es').hour;
+    let horaActual = dt.now().setZone('America/Toronto').setLocale('es').hour;
     //let horaActual = dt.now().setZone('Pacific/Gambier').setLocale('es').hour;
 
     let minutoActual = dt
