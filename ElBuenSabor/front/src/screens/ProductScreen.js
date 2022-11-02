@@ -105,28 +105,26 @@ function ProductScreen() {
               </Helmet>
               <h1>{producto.nombreProducto}</h1>
             </ListGroup.Item>
+            <ListGroup.Item>$ {producto.precioVentaProducto}</ListGroup.Item>
+            <ListGroup.Item>{producto.descripcionProducto}</ListGroup.Item>
             <ListGroup.Item>
-              $ {producto.precioVentaProducto}
+              <Row>
+                <Col>
+                  {producto.isCeliaco && (
+                    <h5>
+                      <Badge bg="primary"> Apto celíacos </Badge>
+                    </h5>
+                  )}
+                </Col>
+                <Col>
+                  {producto.isVegetariano && (
+                    <h5>
+                      <Badge bg="primary"> Apto vegetarianos </Badge>
+                    </h5>
+                  )}
+                </Col>
+              </Row>
             </ListGroup.Item>
-            <ListGroup.Item>
-              {producto.descripcionProducto}
-            </ListGroup.Item>
-            <ListGroup.Item>
-                  <Row>
-                    
-                    <Col>
-                      {producto.isCeliaco && (
-                        <h5><Badge bg="primary"> Apto celíacos </Badge></h5>
-                      ) }
-                    </Col>
-                    <Col>
-                      {producto.isVegetariano && (
-                        <h5><Badge bg="primary"> Apto vegetarianos </Badge></h5>
-                      ) }
-                    </Col>
-                  </Row>
-                </ListGroup.Item>
-
           </ListGroup>
         </Col>
         <Col md={3}>
@@ -143,7 +141,7 @@ function ProductScreen() {
                   <Row>
                     <Col>Estado: </Col>
                     <Col>
-                    {/* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */}
+                      {/* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */}
                       {producto.stockProducto > 0 ? (
                         <Badge bg="success"> Disponible </Badge>
                       ) : (
@@ -153,8 +151,8 @@ function ProductScreen() {
                   </Row>
                 </ListGroup.Item>
 
-                        {/* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */}
-                        {/*
+                {/* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */}
+                {/*
                         if(producto.stockProducto > 0){
                           (<ListGroup.Item>
                     <div className="d-grid">
@@ -168,11 +166,16 @@ function ProductScreen() {
                 {producto.stockProducto > 0 && (
                   <ListGroup.Item>
                     <div className="d-grid">
-                    <Button 
-              disabled={localStorage.getItem('localAbierto')==='false'}
-              onClick={() => addToCartHandler(producto)}>
-              {localStorage.getItem('localAbierto')==='true'? ('Agregar al carrito') : ('Local cerrado')}
-            </Button>
+                      <Button
+                        disabled={
+                          localStorage.getItem('localAbierto') === 'false'
+                        }
+                        onClick={() => addToCartHandler(producto)}
+                      >
+                        {localStorage.getItem('localAbierto') !== 'false'
+                          ? 'Agregar al carrito'
+                          : 'Local cerrado'}
+                      </Button>
                       {/* <Button onClick={addToCartHandler} variant="primary">
                         Agregar al carrito
                       </Button> */}

@@ -94,7 +94,7 @@ export default function UserListScreen() {
               <th>ID</th>
               <th>Nombre</th>
               <th>Mail</th>
-              <th>Administrador?</th>
+              <th className="text-align-center">Admin?</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -104,7 +104,18 @@ export default function UserListScreen() {
                 <td>{user._id}</td>
                 <td>{user.nombreUsuario}</td>
                 <td>{user.emailUsuario}</td>
-                <td>{user.isAdmin ? <p className="green">Sí</p> : 'No'}</td>
+                {/* <td>{user.isAdmin ? <p className="green">Sí</p> : 'No'}</td> */}
+                <td className="text-align-center">
+                  {user.isAdmin ? (
+                    <h3 className="red ">
+                      <i className="bi bi-check"></i>
+                    </h3>
+                  ) : (
+                    <h3>
+                      <i className="bi bi-x"></i>
+                    </h3>
+                  )}
+                </td>
                 <td>
                   <Button
                     type="button"

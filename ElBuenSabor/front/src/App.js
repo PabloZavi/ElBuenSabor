@@ -102,12 +102,6 @@ function App() {
         'https://www.albawaba.com/sites/default/files/im/English_Slideshows_/SS_Ramadan_problems_/image02.gif',
       imageWidth: 300,
       imageHeight: 200,
-      /* backdrop: `
-    rgba(0,0,123,0.4)
-    url("https://www.albawaba.com/sites/default/files/im/English_Slideshows_/SS_Ramadan_problems_/image02.gif?width=400&enable=upscale")
-    center top
-    no-repeat
-  `, */
     });
   }
 
@@ -120,7 +114,10 @@ function App() {
       .setZone('America/Argentina/Mendoza')
       .setLocale('es').weekdayLong;
 
-    let horaActual = dt.now().setZone('America/Argentina/Mendoza').setLocale('es').hour; //-3
+    let horaActual = dt
+      .now()
+      .setZone('America/Argentina/Mendoza')
+      .setLocale('es').hour; //-3
     //let horaActual = dt.now().setZone('America/Toronto').setLocale('es').hour; //-4
     //let horaActual = dt.now().setZone('Pacific/Gambier').setLocale('es').hour; //-9
     //let horaActual = dt.now().setZone('Europe/Madrid').setLocale('es').hour; //+1
@@ -136,7 +133,7 @@ function App() {
       ((diaSemanaActual === 'sábado' || diaSemanaActual === 'domingo') &&
         horaActual > 11 &&
         horaActual < 15);
-    localStorage.setItem('localAbierto', localAbierto);
+    //localStorage.setItem('localAbierto', localAbierto);
     //console.log("Esta abierto: " + localAbierto)
   }
 
@@ -208,39 +205,57 @@ function App() {
                     </Link>
                   )}
                   {/* Ojo acá el condicional que verifica si isAdmin para mostrar la sección Admin */}
+
                   {userInfo && userInfo.isAdmin && (
-                    <NavDropdown title="Administrador" id="admin-nav-dropdown">
-                      <LinkContainer to="/admin/dashboard">
-                        <NavDropdown.Item>Tablero</NavDropdown.Item>
-                      </LinkContainer>
-                      <LinkContainer to="/admin/products">
-                        <NavDropdown.Item>Productos</NavDropdown.Item>
-                      </LinkContainer>
+                    <>
+                      <Nav className="navbar">
+                        <i className="vr invert-color large-margin-left"></i>
+                      </Nav>
 
-                      <LinkContainer to="/admin/ingredientes">
-                        <NavDropdown.Item>Ingredientes</NavDropdown.Item>
-                      </LinkContainer>
+                      <NavDropdown
+                        title="Administración"
+                        id="admin-nav-dropdown"
+                      >
+                        <LinkContainer to="/admin/dashboard">
+                          <NavDropdown.Item>
+                            Estadísticas{' '}
+                            <i className="bi bi-bar-chart-fill align-right"></i>{' '}
+                          </NavDropdown.Item>
+                          {/* <NavDropdown.Item>Estadísticas <i className="bi bi-graph-up-arrow align-right"></i> </NavDropdown.Item> */}
+                        </LinkContainer>
+                        <LinkContainer to="/admin/products">
+                          <NavDropdown.Item>Productos</NavDropdown.Item>
+                        </LinkContainer>
 
-                      <NavDropdown drop="end" id="nav-dropdown2" title="Rubros">
-                        <NavDropdown.Item href="/admin/rubros">
-                          Productos
-                        </NavDropdown.Item>
-                        <NavDropdown.Item href="/admin/rubrosingredientes">
-                          Ingredientes
-                        </NavDropdown.Item>
+                        <LinkContainer to="/admin/ingredientes">
+                          <NavDropdown.Item>Ingredientes</NavDropdown.Item>
+                        </LinkContainer>
+
+                        <NavDropdown
+                          drop="end"
+                          id="nav-dropdown2"
+                          title="Rubros"
+                        >
+                          <NavDropdown.Item href="/admin/rubros">
+                            Productos
+                          </NavDropdown.Item>
+                          <NavDropdown.Item href="/admin/rubrosingredientes">
+                            Ingredientes
+                          </NavDropdown.Item>
+                        </NavDropdown>
+
+                        {/* <LinkContainer to="/admin/rubros">
+      <NavDropdown.Item>Rubros</NavDropdown.Item>
+    </LinkContainer> */}
+
+                        <LinkContainer to="/admin/orders">
+                          <NavDropdown.Item>Pedidos</NavDropdown.Item>
+                        </LinkContainer>
+                        <LinkContainer to="/admin/users">
+                          <NavDropdown.Item>Usuarios</NavDropdown.Item>
+                        </LinkContainer>
                       </NavDropdown>
-
-                      {/* <LinkContainer to="/admin/rubros">
-                        <NavDropdown.Item>Rubros</NavDropdown.Item>
-                      </LinkContainer> */}
-
-                      <LinkContainer to="/admin/orders">
-                        <NavDropdown.Item>Pedidos</NavDropdown.Item>
-                      </LinkContainer>
-                      <LinkContainer to="/admin/users">
-                        <NavDropdown.Item>Usuarios</NavDropdown.Item>
-                      </LinkContainer>
-                    </NavDropdown>
+                    </>
                   )}
                 </Nav>
               </NavBar.Collapse>

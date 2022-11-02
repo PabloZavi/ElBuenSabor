@@ -158,3 +158,20 @@ main {
 .extra-small-input {
   width: 60px;
 }
+
+.align-right {
+  float: right;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.invert-color{
+  filter: invert(100%);
+}
+
+.large-margin-left{
+  margin-left: 10px;
+  margin-right: 10px;
+}

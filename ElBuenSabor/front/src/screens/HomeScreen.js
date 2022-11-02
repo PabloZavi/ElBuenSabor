@@ -69,7 +69,7 @@ function HomeScreen() {
       //setProductos(result.data);
     };
     fetchData();
-  });
+  }, []);
 
   const breakPoints = [
     { width: 1, itemsToShow: 1, pagination: false },

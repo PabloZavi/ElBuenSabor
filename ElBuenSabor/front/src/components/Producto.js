@@ -75,7 +75,7 @@ function Producto(props) {
             <Button 
               disabled={localStorage.getItem('localAbierto')==='false'}
               onClick={() => addToCartHandler(producto)}>
-              {localStorage.getItem('localAbierto')==='true'? ('Agregar al carrito') : ('Local cerrado')}
+              {localStorage.getItem('localAbierto')!=='false'? ('Agregar al carrito') : ('Local cerrado')}
             </Button>
           )}
         </Card.Body>
