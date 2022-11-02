@@ -6,9 +6,9 @@ const orderSchema = new mongoose.Schema(
       {
         nombreProducto: { type: String, required: true },
         cantidad: { type: Number, required: true },
-        imagenProducto: { type: String, required: true },
+        imagenProducto: { type: String },
         precioVentaProducto: { type: Number, required: true },
-        descripcionProducto: { type: String, required: true },
+        descripcionProducto: { type: String },
         producto: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Producto',
