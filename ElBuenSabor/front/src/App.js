@@ -120,9 +120,11 @@ function App() {
       .setZone('America/Argentina/Mendoza')
       .setLocale('es').weekdayLong;
 
-    //let horaActual = dt.now().setZone('America/Argentina/Mendoza').setLocale('es').hour;
-    let horaActual = dt.now().setZone('America/Toronto').setLocale('es').hour;
-    //let horaActual = dt.now().setZone('Pacific/Gambier').setLocale('es').hour;
+    let horaActual = dt.now().setZone('America/Argentina/Mendoza').setLocale('es').hour; //-3
+    //let horaActual = dt.now().setZone('America/Toronto').setLocale('es').hour; //-4
+    //let horaActual = dt.now().setZone('Pacific/Gambier').setLocale('es').hour; //-9
+    //let horaActual = dt.now().setZone('Europe/Madrid').setLocale('es').hour; //+1
+    //VER TIME ZONES EN: https://momentjs.com/timezone/
 
     let minutoActual = dt
       .now()
