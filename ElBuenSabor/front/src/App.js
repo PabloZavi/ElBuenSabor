@@ -46,6 +46,7 @@ import IngredienteEditScreen from './screens/IngredienteEditScreen';
 import IngredienteNewScreen from './screens/IngredienteNewScreen';
 
 import { DateTime } from 'luxon';
+import Swal from 'sweetalert2';
 
 function App() {
   //Traemos el estado de la app desde el store
@@ -80,11 +81,35 @@ function App() {
   }, []);
 
   useEffect(() => {
+    isOpen();
     const interval = setInterval(() => {
       isOpen();
     }, 60000); //60000 es 1 minuto - 300000 son 5 minutos
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    localStorage.getItem('localAbierto') === 'false' && closeMessage();
+  }, []);
+
+  function closeMessage() {
+    Swal.fire({
+      title: '¡El local se encuentra cerrado!',
+      html: '<br> Nuestro horario de atención es: <br> Todos los días de 20 a 00 <br> Sábados y Domingos de 11 a 15 <br><br> Igual podrás ver todos nuestros productos hasta que abramos',
+      //icon: 'info',
+      confirmButtonText: 'OK',
+      imageUrl:
+        'https://www.albawaba.com/sites/default/files/im/English_Slideshows_/SS_Ramadan_problems_/image02.gif',
+      imageWidth: 300,
+      imageHeight: 200,
+      /* backdrop: `
+    rgba(0,0,123,0.4)
+    url("https://www.albawaba.com/sites/default/files/im/English_Slideshows_/SS_Ramadan_problems_/image02.gif?width=400&enable=upscale")
+    center top
+    no-repeat
+  `, */
+    });
+  }
 
   function isOpen() {
     let dt = DateTime;
@@ -95,10 +120,8 @@ function App() {
       .setZone('America/Argentina/Mendoza')
       .setLocale('es').weekdayLong;
 
-    let horaActual = dt
-      .now()
-      .setZone('America/Argentina/Mendoza')
-      .setLocale('es').hour;
+    let horaActual = dt.now().setZone('America/Argentina/Mendoza').setLocale('es').hour;
+    //let horaActual = dt.now().setZone('Pacific/Gambier').setLocale('es').hour;
 
     let minutoActual = dt
       .now()
