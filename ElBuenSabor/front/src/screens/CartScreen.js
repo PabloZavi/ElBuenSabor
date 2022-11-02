@@ -93,7 +93,9 @@ export default function CartScreen() {
                         onClick={() =>
                           updateCartHandler(item, item.cantidad + 1)
                         }
-                        disabled={item.cantidad === item.stockProducto} /* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */
+                        disabled={
+                          item.cantidad === item.stockProducto
+                        } /* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */
                       >
                         <i className="bi bi-file-plus-fill"></i>
                       </Button>
@@ -136,9 +138,14 @@ export default function CartScreen() {
                       type="button"
                       variant="primary"
                       onClick={checkoutHandler}
-                      disabled={cartItems.length === 0 || localStorage.getItem('localAbierto')==='false'}
+                      disabled={
+                        cartItems.length === 0 ||
+                        localStorage.getItem('localAbierto') === 'false'
+                      }
                     >
-                      {localStorage.getItem('localAbierto')==='true'? ('Ir al pago') : ('No se puede pagar. Local cerrado')}
+                      {localStorage.getItem('localAbierto') !== 'false'
+                        ? 'Ir al pago'
+                        : 'No se puede pagar. Local cerrado'}
                     </Button>
                   </div>
                 </ListGroup.Item>

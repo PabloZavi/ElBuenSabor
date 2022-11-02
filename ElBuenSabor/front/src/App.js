@@ -102,12 +102,6 @@ function App() {
         'https://www.albawaba.com/sites/default/files/im/English_Slideshows_/SS_Ramadan_problems_/image02.gif',
       imageWidth: 300,
       imageHeight: 200,
-      /* backdrop: `
-    rgba(0,0,123,0.4)
-    url("https://www.albawaba.com/sites/default/files/im/English_Slideshows_/SS_Ramadan_problems_/image02.gif?width=400&enable=upscale")
-    center top
-    no-repeat
-  `, */
     });
   }
 
@@ -139,7 +133,7 @@ function App() {
       ((diaSemanaActual === 'sábado' || diaSemanaActual === 'domingo') &&
         horaActual > 11 &&
         horaActual < 15);
-    localStorage.setItem('localAbierto', localAbierto);
+    //localStorage.setItem('localAbierto', localAbierto);
     //console.log("Esta abierto: " + localAbierto)
   }
 
