@@ -136,9 +136,9 @@ export default function CartScreen() {
                       type="button"
                       variant="primary"
                       onClick={checkoutHandler}
-                      disabled={cartItems.length === 0}
+                      disabled={cartItems.length === 0 || localStorage.getItem('localAbierto')==='false'}
                     >
-                      Ir al pago
+                      {localStorage.getItem('localAbierto')==='true'? ('Ir al pago') : ('No se puede pagar. Local cerrado')}
                     </Button>
                   </div>
                 </ListGroup.Item>

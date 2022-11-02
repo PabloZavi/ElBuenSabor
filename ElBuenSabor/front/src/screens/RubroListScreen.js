@@ -152,7 +152,7 @@ export default function RubroListScreen() {
                       variant="light"
                       onClick={() => navigate(`/admin/rubro/${rubro._id}`)}
                     >
-                      <i class="bi bi-pencil-fill"></i>
+                      <i className="bi bi-pencil-fill"></i>
                       {/* Editar */}
                     </Button>
                     &nbsp;
@@ -161,7 +161,7 @@ export default function RubroListScreen() {
                       variant="light"
                       onClick={() => deleteHandler(rubro)}
                     >
-                      <i class="bi bi-trash"></i>
+                      <i className="bi bi-trash"></i>
                       {/* Eliminar */}
                     </Button>
                   </td>

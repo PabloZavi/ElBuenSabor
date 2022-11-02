@@ -154,12 +154,28 @@ function ProductScreen() {
                 </ListGroup.Item>
 
                         {/* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */}
-                {producto.stockProducto > 0 && (
-                  <ListGroup.Item>
+                        {/*
+                        if(producto.stockProducto > 0){
+                          (<ListGroup.Item>
                     <div className="d-grid">
                       <Button onClick={addToCartHandler} variant="primary">
                         Agregar al carrito
                       </Button>
+                    </div>
+                  </ListGroup.Item>)
+                        }
+                        */}
+                {producto.stockProducto > 0 && (
+                  <ListGroup.Item>
+                    <div className="d-grid">
+                    <Button 
+              disabled={localStorage.getItem('localAbierto')==='false'}
+              onClick={() => addToCartHandler(producto)}>
+              {localStorage.getItem('localAbierto')==='true'? ('Agregar al carrito') : ('Local cerrado')}
+            </Button>
+                      {/* <Button onClick={addToCartHandler} variant="primary">
+                        Agregar al carrito
+                      </Button> */}
                     </div>
                   </ListGroup.Item>
                 )}
