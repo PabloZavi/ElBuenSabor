@@ -16,10 +16,10 @@ export default function ShipingAdressScreen() {
     cart: { shippingAddress },
   } = state;
 
-  const [fullName, setFullName] = useState(shippingAddress.fullName || '');
-  const [address, setAddress] = useState(shippingAddress.address || ''); 
-  const [location, setLocation] = useState(shippingAddress.location || '');
-  const [phone, setPhone] = useState(shippingAddress.phone || '');
+  const [fullName, setFullName] = useState(shippingAddress.fullName || userInfo.nombreUsuario || '');
+  const [address, setAddress] = useState(shippingAddress.address || userInfo.address || ''); 
+  const [location, setLocation] = useState(shippingAddress.location || userInfo.location || '');
+  const [phone, setPhone] = useState(shippingAddress.phone || userInfo.phone || '');
 
   //Si el usuario no está logueado, no podré ingresar a shippingAddress
   useEffect(() => {
@@ -54,11 +54,11 @@ export default function ShipingAdressScreen() {
   return (
     <div>
       <Helmet>
-        <title>Dirección</title>
+        <title>Opción de entrega</title>
       </Helmet>
       <CheckoutSteps step1 step2></CheckoutSteps>
       <div className="container small-container">
-        <h1 className="my-3">Dirección</h1>
+        <h1 className="my-3">Opción de entrega</h1>
         <Form onSubmit={submitHandler}>
           <Form.Group className="mb-3" controlId="fullName">
             <Form.Label>Nombre y apellido</Form.Label>

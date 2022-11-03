@@ -10,6 +10,7 @@ import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { Store } from '../Store';
 import { getError } from '../utils';
+import TextField from '@mui/material/TextField';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -47,6 +48,9 @@ export default function UserEditScreen() {
   const [nombreUsuario, setNombreUsuario] = useState('');
   const [emailUsuario, setEmailUsuario] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
+  const [address, setAddress] = useState('');
+  const [location, setLocation] = useState('');
+  const [phone, setPhone] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,6 +62,9 @@ export default function UserEditScreen() {
         setNombreUsuario(data.nombreUsuario);
         setEmailUsuario(data.emailUsuario);
         setIsAdmin(data.isAdmin);
+        setAddress(data.address);
+        setLocation(data.location);
+        setPhone(data.phone);
         dispatch({ type: 'FETCH_SUCCESS' });
       } catch (err) {
         dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
@@ -72,12 +79,20 @@ export default function UserEditScreen() {
       dispatch({ type: 'UPDATE_REQUEST' });
       await axios.put(
         `/api/users/${userId}`,
-        { _id: userId, nombreUsuario, emailUsuario, isAdmin },
+        {
+          _id: userId,
+          nombreUsuario,
+          emailUsuario,
+          isAdmin,
+          address,
+          location,
+          phone,
+        },
         { headers: { Authorization: `Bearer ${userInfo.token}` } }
       );
       toast.success('Usuario actualizado');
       dispatch({ type: 'UPDATE_SUCCESS' });
-      navigate(('/admin/users'))
+      navigate('/admin/users');
     } catch (err) {
       toast.error(getError(err));
       dispatch({ type: 'UPDATE_FAIL' });
@@ -91,7 +106,10 @@ export default function UserEditScreen() {
         <title>Editar usuario {nombreUsuario}</title>
       </Helmet>
       {/* <h1>Editar usuario <br/>{userId}</h1> */}
-      <h1>Editar usuario <br/><p style={ { color: 'blue' } }>{nombreUsuario}</p></h1>
+      <h1>
+        Editar usuario <br />
+        <p style={{ color: 'blue' }}>{nombreUsuario}</p>
+      </h1>
 
       {loading ? (
         <LoadingBox></LoadingBox>
@@ -99,23 +117,48 @@ export default function UserEditScreen() {
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
         <Form onSubmit={submitHandler}>
-          <Form.Group className="mb-3" controlId="nombreUsuario">
-            <Form.Label>Nombre</Form.Label>
+          {/* <Form.Group className="mb-3" controlId="nombreUsuario">
+            <Form.Label>Nombre y apellido</Form.Label>
             <Form.Control
               value={nombreUsuario}
               onChange={(e) => setNombreUsuario(e.target.value)}
               required
             ></Form.Control>
-          </Form.Group>
+          </Form.Group> */}
+          <TextField
+            className="mb-3 large-input"
+            //fullWidth
+            required
+            id="nombreUsuario"
+            label="Nombre y apellido"
+            value={nombreUsuario}
+            onChange={(e) => {
+              setNombreUsuario(e.target.value);
+            }}
+          />
+          <br />
 
-          <Form.Group className="mb-3" controlId="emailUsuario">
+          {/* <Form.Group className="mb-3" controlId="emailUsuario">
             <Form.Label>Email</Form.Label>
             <Form.Control
               value={emailUsuario}
               onChange={(e) => setEmailUsuario(e.target.value)}
               required
             ></Form.Control>
-          </Form.Group>
+          </Form.Group> */}
+          <TextField
+            className="mb-3 large-input"
+            //fullWidth
+            required
+            type="email"
+            id="emailUsuario"
+            label="Email"
+            value={emailUsuario}
+            onChange={(e) => {
+              setEmailUsuario(e.target.value);
+            }}
+          />
+          <br />
 
           <Form.Check
             className="mb-3"
@@ -125,6 +168,40 @@ export default function UserEditScreen() {
             checked={isAdmin}
             onChange={(e) => setIsAdmin(e.target.checked)}
           ></Form.Check>
+
+          <br />
+          <TextField
+            className="mb-3 large-input"
+            id="address"
+            label="Calle y número"
+            helperText="Por ej 'San Martín 813'"
+            value={address}
+            onChange={(e) => {
+              setAddress(e.target.value);
+            }}
+          />
+          <br />
+          <TextField
+            className="mb-3 medium-large-input"
+            id="location"
+            label="Departamento"
+            helperText="Por ej 'Las Heras'"
+            value={location}
+            onChange={(e) => {
+              setLocation(e.target.value);
+            }}
+          />
+          <br />
+
+          <TextField
+            className="mb-3 medium-large-input"
+            id="phone"
+            label="Teléfono"
+            value={phone}
+            onChange={(e) => {
+              setPhone(e.target.value);
+            }}
+          />
 
           <div className="mb-3">
             <Button disabled={loadingUpdate} type="submit">

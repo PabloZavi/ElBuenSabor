@@ -336,6 +336,7 @@ export default function ProductNewScreen() {
       <h1>Crear producto </h1>
 
       <Form onSubmit={submitHandler}>
+        
         <TextField
           inputProps={{ maxLength: 40 }}
           className="mb-3"
