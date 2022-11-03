@@ -36,11 +36,10 @@ export default function ProfileScreen() {
   const submitHandler = async (e) => {
     e.preventDefault();
     if (passwordUsuario !== confirmPasswordUsuario) {
-        toast.error('Las contraseñas no coinciden');
-        return;
-      }
+      toast.error('Las contraseñas no coinciden');
+      return;
+    }
     try {
-        
       const { data } = await axios.put(
         '/api/users/profile',
         {

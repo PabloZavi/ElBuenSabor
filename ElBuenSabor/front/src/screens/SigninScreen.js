@@ -69,6 +69,7 @@ export default function SigninScreen() {
           <Form.Label>Email</Form.Label>
           <Form.Control
             type="email"
+            autoComplete="username"
             required
             onChange={(e) => setEmailUsuario(e.target.value)}
           ></Form.Control>
@@ -77,6 +78,7 @@ export default function SigninScreen() {
           <Form.Label>Contraseña</Form.Label>
           <Form.Control
             type="password"
+            autoComplete="current-password"
             required
             onChange={(e) => setPasswordUsuario(e.target.value)}
           ></Form.Control>
