@@ -122,15 +122,15 @@ export default function OrderScreen() {
     //dispatch({ type: 'PAY_REQUEST' });
     try {
       //Mando a pagoMercadoPagoRoutes el número de pedido y el total
-      console.log(order.totalPrice);
-      console.log(orderId);
+      //console.log(order.totalPrice);
+      //console.log(orderId);
       //guardo en 'data' la respuesta de MP
       const { data } = await axios.post('/pago', {
         orderId,
         totalPrice,
       });
       //data.message contiene la dirección!
-      console.log(data.message);
+      //console.log(data.message);
       //order.isPaid = true;
       //Extraigo la dirección de MP para pagar y redirecciono
       //Abre en la misma ventana
@@ -293,13 +293,28 @@ export default function OrderScreen() {
         <Col md={8}>
           <Card className="mb-3">
             <Card.Body>
-              <Card.Title>Dirección de entrega</Card.Title>
-              <Card.Text>
+              <Card.Title>Opción de entrega</Card.Title>
+              {order.shippingOption==='local'
+              ? <Card.Text>Retira en local <br/>
+              <strong>Nombre: </strong> {order.user.nombreUsuario}{' '}
+              
+              </Card.Text>
+              : <Card.Text>
+                Entrega a domicilio <br/>
                 <strong>Nombre: </strong> {order.shippingAddress.fullName}{' '}
                 <br />
                 <strong>Dirección: </strong> {order.shippingAddress.address},
                 {order.shippingAddress.location}, {order.shippingAddress.phone}
               </Card.Text>
+              }
+              
+
+              
+
+
+
+
+
               {order.isDelivered ? (
                 <MessageBox variant="success">
                   Entregado{' '}
@@ -315,6 +330,10 @@ export default function OrderScreen() {
               ) : (
                 <MessageBox variant="danger">No entregado</MessageBox>
               )}
+
+
+
+
             </Card.Body>
           </Card>
 

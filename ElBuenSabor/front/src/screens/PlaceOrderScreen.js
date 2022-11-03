@@ -42,7 +42,7 @@ export default function PlaceOrderScreen() {
 
   cart.taxPrice = round2(0.21 * cart.itemsPrice);
   cart.discount =
-    cart.paymentMethod === 'Efectivo'
+    cart.shippingOption === 'local'
       ? -round2((cart.itemsPrice + cart.taxPrice) * 0.1)
       : round2(0);
   cart.totalPrice = cart.itemsPrice + cart.discount + cart.taxPrice;
@@ -61,6 +61,7 @@ export default function PlaceOrderScreen() {
           discount: cart.discount,
           taxPrice: cart.taxPrice,
           totalPrice: cart.totalPrice,
+          shippingOption: cart.shippingOption,
         },
         {
           headers: {
@@ -74,6 +75,9 @@ export default function PlaceOrderScreen() {
       dispatch({ type: 'CREATE_SUCCESS' });
       //Dejo el carrito libre para otra compra
       localStorage.removeItem('cartItems');
+      localStorage.removeItem('shippingAddress');
+      localStorage.removeItem('paymentMethod');
+      localStorage.removeItem('shippingOption');
       navigate(`/order/${data.order._id}`);
     } catch (err) {
       dispatch({ type: 'CREATE_FAIL' });
@@ -82,6 +86,7 @@ export default function PlaceOrderScreen() {
   };
 
   useEffect(() => {
+    //console.log(cart.shippingOption);
     if (!cart.paymentMethod) {
       navigate('/payment');
     }
@@ -97,15 +102,27 @@ export default function PlaceOrderScreen() {
         <Col md={8}>
           <Card className="mb-3">
             <Card.Body>
-              <Card.Title>Dirección de entrega</Card.Title>
-              <Card.Text>
-                <strong>Nombre: </strong> {cart.shippingAddress.fullName} <br />
-                <strong>Dirección: </strong> {cart.shippingAddress.address},
-                {cart.shippingAddress.location}
-                <br />
-                <strong>Teléfono: </strong>
-                {cart.shippingAddress.phone}
-              </Card.Text>
+              <Card.Title>Opción de entrega</Card.Title>
+
+              {cart.shippingOption === 'local' ? (
+                <strong>
+                  Retira en local <br />
+                  <br />
+                </strong>
+              ) : (
+                <Card.Text>
+                  <strong>Entrega a domicilio </strong> <br />
+                  <br />
+                  <strong>Nombre: </strong> {cart.shippingAddress.fullName}{' '}
+                  <br />
+                  <strong>Dirección: </strong> {cart.shippingAddress.address},
+                  {cart.shippingAddress.location}
+                  <br />
+                  <strong>Teléfono: </strong>
+                  {cart.shippingAddress.phone}
+                </Card.Text>
+              )}
+
               <Link to="/shipping">Editar</Link>
             </Card.Body>
           </Card>
