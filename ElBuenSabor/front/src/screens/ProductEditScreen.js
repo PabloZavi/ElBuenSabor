@@ -704,7 +704,7 @@ export default function ProductEditScreen() {
 
                     <Col>
                       <TextField
-                        InputProps={{ inputProps: { min: 0 } }}
+                        InputProps={{ inputProps: { min: 0, step: 0.01 } }}
                         required
                         id="cantidad"
                         label="cantidad"
@@ -763,7 +763,7 @@ export default function ProductEditScreen() {
           <Row>
             <Col>
               <TextField
-                InputProps={{ inputProps: { min: 0 } }}
+                InputProps={{ inputProps: { min: 0, step: 0.01 } }}
                 required
                 id="precioVentaProducto"
                 label="Precio de venta"

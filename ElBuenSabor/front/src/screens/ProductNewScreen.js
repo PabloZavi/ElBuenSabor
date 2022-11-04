@@ -336,7 +336,6 @@ export default function ProductNewScreen() {
       <h1>Crear producto </h1>
 
       <Form onSubmit={submitHandler}>
-        
         <TextField
           inputProps={{ maxLength: 40 }}
           className="mb-3"
@@ -730,8 +729,9 @@ export default function ProductNewScreen() {
 
                   <Col>
                     <TextField
-                      InputProps={{ inputProps: { min: 0 } }}
+                      InputProps={{ inputProps: { min: 0, step: 0.01 } }}
                       required
+                      min="0"
                       id="cantidad"
                       label="cantidad"
                       value={data.cantidad}
@@ -748,7 +748,10 @@ export default function ProductNewScreen() {
                         InputProps={{
                           readOnly: true,
                         }}
-                        sx={{ border: 'none', '& fieldset': { border: 'none' } }}
+                        sx={{
+                          border: 'none',
+                          '& fieldset': { border: 'none' },
+                        }}
                         id="unidad"
                         label="unidad"
                         value={
@@ -786,7 +789,7 @@ export default function ProductNewScreen() {
         <Row>
           <Col>
             <TextField
-              InputProps={{ inputProps: { min: 0 } }}
+              InputProps={{ inputProps: { min: 0, step: 0.01 } }}
               required
               id="precioVentaProducto"
               label="Precio de venta"
