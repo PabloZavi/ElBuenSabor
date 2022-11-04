@@ -17,12 +17,33 @@ function Producto(props) {
     cart: { cartItems },
   } = state;
 
+  /* const stock = async (prod)=>{
+    for(const ing in prod.ingredientes){
+      const ingDB = await axios.get(`api/ingredientes/${ing.ingrediente._id}`)
+
+    }
+  } */
+
+  const stock = async (prod)=>{
+    console.log(prod)
+    //for(const ing in prod.ingredientes){
+      for(let ing=0; ing<prod.ingredientes.length;ing++){
+      console.log("cantidad necesitada: " + prod.ingredientes[ing].cantidad)
+      console.log("cantidad en DB: " + prod.ingredientes[ing].ingrediente.stockActualIngrediente)
+      if(prod.ingredientes[ing].cantidad > prod.ingredientes[ing].ingrediente.stockActualIngrediente){
+        return false;
+      }
+
+    }
+    return true;
+  }
+
   const addToCartHandler = async (item) => {
     //Comprobamos si ya existe en el carrito el item que queremos agregar
     const existItem = cartItems.find((x) => x._id === producto._id);
     //si existe le agregamos 1 a la cantidad, si no la ponemos en 1
     const cantidad = existItem ? existItem.cantidad + 1 : 1;
-    const { data } = await axios.get(`api/productos/${item._id}`);
+    const { prod } = await axios.get(`api/productos/${item._id}`);
     //OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES!
     /* if (data.stockProducto < cantidad) {
       toast.error('No hay stock del producto');
@@ -67,7 +88,8 @@ function Producto(props) {
             </Row>
           </Card.Text>
           {/* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */}
-          {producto.stockProducto === 0 ? (
+          {/* {producto.stockProducto === 0 ? ( */}
+          {(stock(producto)===false) ? (
             <Button variant="light" disabled>
               Sin stock
             </Button>
