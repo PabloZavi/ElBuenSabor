@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
 import CheckoutSteps from '../components/CheckoutSteps';
 import { Helmet } from 'react-helmet-async';
 import Row from 'react-bootstrap/Row';
@@ -36,16 +36,21 @@ export default function PlaceOrderScreen() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart, userInfo } = state;
   const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
+
   cart.itemsPrice = round2(
     cart.cartItems.reduce((a, c) => a + c.cantidad * c.precioVentaProducto, 0)
   );
 
   cart.taxPrice = round2(0.21 * cart.itemsPrice);
+
   cart.discount =
     cart.shippingOption === 'local'
       ? -round2((cart.itemsPrice + cart.taxPrice) * 0.1)
       : round2(0);
+
   cart.totalPrice = cart.itemsPrice + cart.discount + cart.taxPrice;
+
+  cart.totalCost = calcularCosto();
 
   const placeOrderHandler = async () => {
     try {
@@ -61,6 +66,7 @@ export default function PlaceOrderScreen() {
           discount: cart.discount,
           taxPrice: cart.taxPrice,
           totalPrice: cart.totalPrice,
+          totalCost: cart.totalCost,
           shippingOption: cart.shippingOption,
         },
         {
@@ -86,11 +92,24 @@ export default function PlaceOrderScreen() {
   };
 
   useEffect(() => {
-    //console.log(cart.shippingOption);
     if (!cart.paymentMethod) {
       navigate('/payment');
     }
   }, [cart, navigate]);
+
+  function calcularCosto() {
+    let costo = 0;
+    for (let i = 0; i < cart.cartItems.length; i++) {
+      for (let j = 0; j < cart.cartItems[i].ingredientes.length; j++) {
+        costo +=
+          cart.cartItems[i].cantidad *
+          cart.cartItems[i].ingredientes[j].cantidad *
+          cart.cartItems[i].ingredientes[j].ingrediente.precioCostoIngrediente;
+      }
+    }
+    return round2(costo);
+  }
+
   return (
     <div>
       <CheckoutSteps step1 step2 step3 step4></CheckoutSteps>
