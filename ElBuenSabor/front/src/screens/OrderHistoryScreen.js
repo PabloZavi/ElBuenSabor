@@ -64,6 +64,7 @@ export default function OrderHistoryScreen() {
               <td>ID</td>
               <td>Fecha</td>
               <td>Total</td>
+              <td>Forma de pago</td>
               <td>Pagado?</td>
               <td>Entregado?</td>
               <td>Acciones</td>
@@ -75,11 +76,28 @@ export default function OrderHistoryScreen() {
                 <td>{order._id}</td>
                 <td>{order.createdAt.substring(0, 10)}</td>
                 <td>$ {order.totalPrice.toFixed(2)}</td>
-                <td>{order.isPaid ? order.paidAt.substring(0, 10) : 'No'}</td>
+                <td>{order.paymentMethod}</td>
                 <td>
-                  {order.isDelivered
-                    ? order.deliveredAt.substring(0, 10)
-                    : 'No'}
+                  {order.isPaid ? (
+                    order.paidAt.substring(8, 10) +
+                    '/' +
+                    order.paidAt.substring(5, 7) +
+                    '/' +
+                    order.paidAt.substring(0, 4)
+                  ) : (
+                    <p className="red">No</p>
+                  )}
+                </td>
+                <td>
+                  {order.isDelivered ? (
+                    order.deliveredAt.substring(8, 10) +
+                    '/' +
+                    order.deliveredAt.substring(5, 7) +
+                    '/' +
+                    order.deliveredAt.substring(0, 4)
+                  ) : (
+                    <p className="red">No</p>
+                  )}
                 </td>
                 <td>
                   <Button

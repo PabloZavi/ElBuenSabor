@@ -55,7 +55,7 @@ export default function PlaceOrderScreen() {
   const placeOrderHandler = async () => {
     try {
       dispatch({ type: 'CREATE_REQUEST' });
-
+      //console.log(cart.totalCost)
       const { data } = await axios.post(
         '/api/orders',
         {
@@ -84,9 +84,46 @@ export default function PlaceOrderScreen() {
       localStorage.removeItem('shippingAddress');
       localStorage.removeItem('paymentMethod');
       localStorage.removeItem('shippingOption');
+      await discountIngredients();
       navigate(`/order/${data.order._id}`);
     } catch (err) {
       dispatch({ type: 'CREATE_FAIL' });
+      toast.error(getError(err));
+    }
+  };
+
+  const discountIngredients = async () => {
+    try {
+      for (let i = 0; i < cart.cartItems.length; i++) {
+        for (let j = 0; j < cart.cartItems[i].ingredientes.length; j++) {
+          console.log(
+            'nombre ingrediente: ' +
+              cart.cartItems[i].ingredientes[j].ingrediente.nombreIngrediente
+          );
+          console.log(
+            'id ingrediente: ' +
+              cart.cartItems[i].ingredientes[j].ingrediente._id
+          );
+          console.log(
+            'cantidad a descontar: ' +
+              cart.cartItems[i].cantidad *
+                cart.cartItems[i].ingredientes[j].cantidad
+          );
+
+          const resp = await axios.put(
+            `/api/ingredientes/${cart.cartItems[i].ingredientes[j].ingrediente._id}/discount`,
+            {
+              _id: cart.cartItems[i].ingredientes[j].ingrediente._id,
+              cantidad:
+                cart.cartItems[i].cantidad *
+                cart.cartItems[i].ingredientes[j].cantidad,
+            },
+            { headers: { Authorization: `Bearer ${userInfo.token}` } }
+          );
+          console.log(resp);
+        }
+      }
+    } catch (err) {
       toast.error(getError(err));
     }
   };
@@ -107,6 +144,7 @@ export default function PlaceOrderScreen() {
           cart.cartItems[i].ingredientes[j].ingrediente.precioCostoIngrediente;
       }
     }
+
     return round2(costo);
   }
 

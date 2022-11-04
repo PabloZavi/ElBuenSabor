@@ -209,9 +209,10 @@ export default function OrderScreen() {
   
     loadScript('https://sdk.mercadopago.com/js/v2', handleScriptLoad);
   }; */
-
   useEffect(() => {
-    setPaid(urlParams.get('paid'));
+    if (urlParams.get('paid')) {
+      setPaid(urlParams.get('paid'));
+    }
 
     if (paid !== undefined) {
       if (paid === 'false' || paid === 'pending') {
@@ -219,7 +220,10 @@ export default function OrderScreen() {
         setPaid('');
       }
     }
+    setTotalPrice(order.totalPrice);
+  }, [order.totalPrice, paid, urlParams]);
 
+  useEffect(() => {
     const fetchOrder = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
@@ -235,8 +239,6 @@ export default function OrderScreen() {
     if (!userInfo) {
       return navigate('/login');
     }
-
-    setTotalPrice(order.totalPrice);
 
     if (
       !order._id ||
@@ -261,7 +263,7 @@ export default function OrderScreen() {
       };
       loadMercadoPagoScript();
     } */
-  }, [order, userInfo, orderId, navigate, paid, urlParams, successDeliver]);
+  }, [navigate, order._id, orderId, successDeliver, userInfo]);
 
   async function deliverOrderHandler() {
     try {
@@ -294,26 +296,21 @@ export default function OrderScreen() {
           <Card className="mb-3">
             <Card.Body>
               <Card.Title>Opción de entrega</Card.Title>
-              {order.shippingOption==='local'
-              ? <Card.Text>Retira en local <br/>
-              <strong>Nombre: </strong> {order.user.nombreUsuario}{' '}
-              
-              </Card.Text>
-              : <Card.Text>
-                Entrega a domicilio <br/>
-                <strong>Nombre: </strong> {order.shippingAddress.fullName}{' '}
-                <br />
-                <strong>Dirección: </strong> {order.shippingAddress.address},
-                {order.shippingAddress.location}, {order.shippingAddress.phone}
-              </Card.Text>
-              }
-              
-
-              
-
-
-
-
+              {order.shippingOption === 'local' ? (
+                <Card.Text>
+                  Retira en local <br />
+                  <strong>Nombre: </strong> {order.user.nombreUsuario}{' '}
+                </Card.Text>
+              ) : (
+                <Card.Text>
+                  Entrega a domicilio <br />
+                  <strong>Nombre: </strong> {order.shippingAddress.fullName}{' '}
+                  <br />
+                  <strong>Dirección: </strong> {order.shippingAddress.address},
+                  {order.shippingAddress.location},{' '}
+                  {order.shippingAddress.phone}
+                </Card.Text>
+              )}
 
               {order.isDelivered ? (
                 <MessageBox variant="success">
@@ -330,10 +327,6 @@ export default function OrderScreen() {
               ) : (
                 <MessageBox variant="danger">No entregado</MessageBox>
               )}
-
-
-
-
             </Card.Body>
           </Card>
 
