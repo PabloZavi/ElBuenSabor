@@ -107,7 +107,7 @@ ingredienteRouter.get(
   expressAsyncHandler(async (req, res) => {
     const { query } = req;
     const page = query.page || 1;
-    const pageSize = query.pageSize || 10; //Elegir cuántos productos mostrar por pantalla
+    const pageSize = query.pageSize || 15; //Elegir cuántos productos mostrar por pantalla
     const ingredientes = await Ingrediente.find()
       .skip(pageSize * (page - 1))
       .limit(pageSize);

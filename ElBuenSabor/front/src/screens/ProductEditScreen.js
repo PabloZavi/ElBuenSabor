@@ -299,7 +299,7 @@ export default function ProductEditScreen() {
     const value = e.target.value;
     const list = [...ingredientesProducto];
     name === 'cantidad'
-      ? (list[index][name] = parseInt(value))
+      ? (list[index][name] = parseFloat(value))
       : (list[index][name] = value);
     setIngredientesProducto(list);
     //calcularCosto();
@@ -723,6 +723,7 @@ export default function ProductEditScreen() {
                           InputProps={{
                             readOnly: true,
                           }}
+                          sx={{ border: 'none', '& fieldset': { border: 'none' } }}
                           id="unidad"
                           label="unidad"
                           value={

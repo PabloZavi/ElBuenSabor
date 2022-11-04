@@ -120,7 +120,7 @@ productoRouter.get(
   expressAsyncHandler(async (req, res) => {
     const { query } = req;
     const page = query.page || 1;
-    const pageSize = query.pageSize || 10; //Elegir cuántos productos mostrar por pantalla
+    const pageSize = query.pageSize || 15; //Elegir cuántos productos mostrar por pantalla
     const productos = await Producto.find()
       //.populate('rubroProducto', 'nombreRubro')
       .skip(pageSize * (page - 1))
