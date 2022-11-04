@@ -6,7 +6,7 @@ import { Store } from '../Store';
 import { getError } from '../utils';
 
 export default function PaidOkScreen() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const { state } = useContext(Store);
   const { userInfo } = state;
@@ -16,6 +16,8 @@ export default function PaidOkScreen() {
 
   const payment_id = urlParams.get('payment_id');
   const external_reference = urlParams.get('external_reference');
+
+  actPedido();
 
   async function actPedido() {
     try {
@@ -27,16 +29,13 @@ export default function PaidOkScreen() {
         {
           headers: { authorization: `Bearer ${userInfo.token}` },
         }
-      );
+      ); 
+      //Usar navigate, NO window.location.href, si no se pierde el localStorage
+      navigate(`/order/${external_reference}`);
     } catch (err) {
       toast.error(getError(err));
     }
   }
 
-  actPedido();
-  //Usar navigate, NO window.location.href, si no se pierde el localStorage 
   //window.location.href = `/order/${external_reference}`;
-  navigate(`/order/${external_reference}`);
-
-  
 }

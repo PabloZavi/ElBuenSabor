@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
 import CheckoutSteps from '../components/CheckoutSteps';
 import { Helmet } from 'react-helmet-async';
 import Row from 'react-bootstrap/Row';
@@ -36,21 +36,26 @@ export default function PlaceOrderScreen() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart, userInfo } = state;
   const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
+
   cart.itemsPrice = round2(
     cart.cartItems.reduce((a, c) => a + c.cantidad * c.precioVentaProducto, 0)
   );
 
   cart.taxPrice = round2(0.21 * cart.itemsPrice);
+
   cart.discount =
-    cart.paymentMethod === 'Efectivo'
+    cart.shippingOption === 'local'
       ? -round2((cart.itemsPrice + cart.taxPrice) * 0.1)
       : round2(0);
+
   cart.totalPrice = cart.itemsPrice + cart.discount + cart.taxPrice;
+
+  cart.totalCost = calcularCosto();
 
   const placeOrderHandler = async () => {
     try {
       dispatch({ type: 'CREATE_REQUEST' });
-
+      //console.log(cart.totalCost)
       const { data } = await axios.post(
         '/api/orders',
         {
@@ -61,6 +66,8 @@ export default function PlaceOrderScreen() {
           discount: cart.discount,
           taxPrice: cart.taxPrice,
           totalPrice: cart.totalPrice,
+          totalCost: cart.totalCost,
+          shippingOption: cart.shippingOption,
         },
         {
           headers: {
@@ -74,9 +81,49 @@ export default function PlaceOrderScreen() {
       dispatch({ type: 'CREATE_SUCCESS' });
       //Dejo el carrito libre para otra compra
       localStorage.removeItem('cartItems');
+      localStorage.removeItem('shippingAddress');
+      localStorage.removeItem('paymentMethod');
+      localStorage.removeItem('shippingOption');
+      await discountIngredients();
       navigate(`/order/${data.order._id}`);
     } catch (err) {
       dispatch({ type: 'CREATE_FAIL' });
+      toast.error(getError(err));
+    }
+  };
+
+  const discountIngredients = async () => {
+    try {
+      for (let i = 0; i < cart.cartItems.length; i++) {
+        for (let j = 0; j < cart.cartItems[i].ingredientes.length; j++) {
+          console.log(
+            'nombre ingrediente: ' +
+              cart.cartItems[i].ingredientes[j].ingrediente.nombreIngrediente
+          );
+          console.log(
+            'id ingrediente: ' +
+              cart.cartItems[i].ingredientes[j].ingrediente._id
+          );
+          console.log(
+            'cantidad a descontar: ' +
+              cart.cartItems[i].cantidad *
+                cart.cartItems[i].ingredientes[j].cantidad
+          );
+
+          const resp = await axios.put(
+            `/api/ingredientes/${cart.cartItems[i].ingredientes[j].ingrediente._id}/discount`,
+            {
+              _id: cart.cartItems[i].ingredientes[j].ingrediente._id,
+              cantidad:
+                cart.cartItems[i].cantidad *
+                cart.cartItems[i].ingredientes[j].cantidad,
+            },
+            { headers: { Authorization: `Bearer ${userInfo.token}` } }
+          );
+          console.log(resp);
+        }
+      }
+    } catch (err) {
       toast.error(getError(err));
     }
   };
@@ -86,6 +133,21 @@ export default function PlaceOrderScreen() {
       navigate('/payment');
     }
   }, [cart, navigate]);
+
+  function calcularCosto() {
+    let costo = 0;
+    for (let i = 0; i < cart.cartItems.length; i++) {
+      for (let j = 0; j < cart.cartItems[i].ingredientes.length; j++) {
+        costo +=
+          cart.cartItems[i].cantidad *
+          cart.cartItems[i].ingredientes[j].cantidad *
+          cart.cartItems[i].ingredientes[j].ingrediente.precioCostoIngrediente;
+      }
+    }
+
+    return round2(costo);
+  }
+
   return (
     <div>
       <CheckoutSteps step1 step2 step3 step4></CheckoutSteps>
@@ -97,15 +159,27 @@ export default function PlaceOrderScreen() {
         <Col md={8}>
           <Card className="mb-3">
             <Card.Body>
-              <Card.Title>Dirección de entrega</Card.Title>
-              <Card.Text>
-                <strong>Nombre: </strong> {cart.shippingAddress.fullName} <br />
-                <strong>Dirección: </strong> {cart.shippingAddress.address},
-                {cart.shippingAddress.location}
-                <br />
-                <strong>Teléfono: </strong>
-                {cart.shippingAddress.phone}
-              </Card.Text>
+              <Card.Title>Opción de entrega</Card.Title>
+
+              {cart.shippingOption === 'local' ? (
+                <strong>
+                  Retira en local <br />
+                  <br />
+                </strong>
+              ) : (
+                <Card.Text>
+                  <strong>Entrega a domicilio </strong> <br />
+                  <br />
+                  <strong>Nombre: </strong> {cart.shippingAddress.fullName}{' '}
+                  <br />
+                  <strong>Dirección: </strong> {cart.shippingAddress.address},
+                  {cart.shippingAddress.location}
+                  <br />
+                  <strong>Teléfono: </strong>
+                  {cart.shippingAddress.phone}
+                </Card.Text>
+              )}
+
               <Link to="/shipping">Editar</Link>
             </Card.Body>
           </Card>

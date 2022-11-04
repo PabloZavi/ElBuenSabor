@@ -32,6 +32,8 @@ orderRouter.post(
       discount: req.body.discount,
       taxPrice: req.body.taxPrice,
       totalPrice: req.body.totalPrice,
+      shippingOption: req.body.shippingOption,
+      totalCost: req.body.totalCost,
       //Esta info la tengo después de que el middleware 'isAuth' verifica el token
       user: req.user._id,
     });
@@ -104,7 +106,10 @@ orderRouter.get(
   isAuth,
   expressAsyncHandler(async (req, res) => {
     //Buscamos el pedido en la base de datos
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id).populate(
+      'user',
+      'nombreUsuario'
+    );
     if (order) {
       res.send(order);
     } else {

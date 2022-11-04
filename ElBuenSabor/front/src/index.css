@@ -139,6 +139,10 @@ main {
   margin-left: 8px;
 }
 
+.large-input {
+  width: 500px;
+}
+
 .medium-large-input {
   width: 280px;
 }
@@ -174,4 +178,12 @@ main {
 .large-margin-left{
   margin-left: 10px;
   margin-right: 10px;
+}
+
+.large-margin-up {
+  margin-top: 50px;
+}
+
+.medium-margin-up {
+  margin-top: 30px;
 }

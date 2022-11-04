@@ -8,6 +8,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Store } from '../Store';
 import { toast } from 'react-toastify';
 import { getError } from '../utils';
+import TextField from '@mui/material/TextField';
 
 export default function SignupScreen() {
   const navigate = useNavigate();
@@ -23,6 +24,9 @@ export default function SignupScreen() {
   const [emailUsuario, setEmailUsuario] = useState('');
   const [passwordUsuario, setPasswordUsuario] = useState('');
   const [confirmPasswordUsuario, setConfirmPasswordUsuario] = useState('');
+  const [address, setAddress] = useState('');
+  const [location, setLocation] = useState('');
+  const [phone, setPhone] = useState('');
 
   //Guardamos el usuario en el store si el login es exitoso
 
@@ -41,6 +45,9 @@ export default function SignupScreen() {
         nombreUsuario,
         emailUsuario,
         passwordUsuario,
+        address,
+        location,
+        phone,
       });
       //Si el login es exitoso, 'despachamos' la acción USER_SIGNIN y le pasamos data
       //(actualizamos el store)
@@ -67,42 +74,132 @@ export default function SignupScreen() {
   return (
     <Container className="small-container">
       <Helmet>
-        <title>Acceso</title>
+        <title>Registro de usuario</title>
       </Helmet>
 
-      <h1 className="my-3">Acceso</h1>
+      <h1 className="my-3">Registro de usuario</h1>
       <Form onSubmit={submitHandler}>
-        <Form.Group className="mb-3" controlId="nombreUsuario">
+        {/* <Form.Group className="mb-3" controlId="nombreUsuario">
           <Form.Label>Nombre y apellido</Form.Label>
           <Form.Control
             required
             onChange={(e) => setNombreUsuario(e.target.value)}
           ></Form.Control>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="emailUsuario">
+        </Form.Group> */}
+        <br />
+        <TextField
+          className="mb-3 large-input"
+          //fullWidth
+          required
+          id="nombreUsuario"
+          label="Nombre y apellido"
+          value={nombreUsuario}
+          onChange={(e) => {
+            setNombreUsuario(e.target.value);
+          }}
+        />
+
+        <br />
+
+        {/* <Form.Group className="mb-3" controlId="emailUsuario">
           <Form.Label>Email</Form.Label>
           <Form.Control
             type="email"
             required
             onChange={(e) => setEmailUsuario(e.target.value)}
           ></Form.Control>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="passwordUsuario">
+        </Form.Group> */}
+        <TextField
+          className="mb-3 large-input"
+          //fullWidth
+          required
+          type="email"
+          id="emailUsuario"
+          label="Email"
+          value={emailUsuario}
+          onChange={(e) => {
+            setEmailUsuario(e.target.value);
+          }}
+        />
+        <br />
+        {/* <Form.Group className="mb-3" controlId="passwordUsuario">
           <Form.Label>Contraseña</Form.Label>
           <Form.Control
             type="password"
             required
+            autoComplete="new-password"
             onChange={(e) => setPasswordUsuario(e.target.value)}
           ></Form.Control>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="confirmPasswordUsuario">
+        </Form.Group> */}
+
+        <TextField
+          className="mb-3 medium-input"
+          required
+          type="password"
+          id="passwordUsuario"
+          label="Contraseña"
+          value={passwordUsuario}
+          autoComplete="new-password"
+          onChange={(e) => {
+            setPasswordUsuario(e.target.value);
+          }}
+        />
+        <br />
+        {/* <Form.Group className="mb-3" controlId="confirmPasswordUsuario">
           <Form.Label>Confirmar contraseña</Form.Label>
           <Form.Control
             type="password"
             required
+            autoComplete="new-password"
             onChange={(e) => setConfirmPasswordUsuario(e.target.value)}
           ></Form.Control>
-        </Form.Group>
+        </Form.Group> */}
+
+        <TextField
+          className="mb-3 medium-input"
+          required
+          type="password"
+          id="confirmPasswordUsuario"
+          label="Confirmar contraseña"
+          value={confirmPasswordUsuario}
+          autoComplete="new-password"
+          onChange={(e) => {
+            setConfirmPasswordUsuario(e.target.value);
+          }}
+        />
+        <br />
+        <TextField
+          className="mb-3 large-input"
+          id="address"
+          label="Calle y número"
+          helperText="Por ej 'San Martín 813'"
+          value={address}
+          onChange={(e) => {
+            setAddress(e.target.value);
+          }}
+        />
+        <br />
+        <TextField
+          className="mb-3 medium-large-input"
+          id="location"
+          label="Departamento"
+          helperText="Por ej 'Las Heras'"
+          value={location}
+          onChange={(e) => {
+            setLocation(e.target.value);
+          }}
+        />
+        <br />
+
+        <TextField
+          className="mb-3 medium-large-input"
+          id="phone"
+          label="Teléfono"
+          value={phone}
+          onChange={(e) => {
+            setPhone(e.target.value);
+          }}
+        />
         <div className="mb-3">
           <Button type="submit">Registrate</Button>
         </div>

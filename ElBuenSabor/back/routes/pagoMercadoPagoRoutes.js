@@ -16,9 +16,9 @@ pagoMercadoPagoRouter.post(
     });
     let preference = {
       back_urls: {
-        success: `${process.env.HOST}/paidok`,
-        failure: `${process.env.HOST}/order/${req.body.orderId}?paid=false`,
-        pending: `${process.env.HOST}/order/${req.body.orderId}?paid=pending`,
+        success: `${process.env.HOSTFRONT}/paidok`,
+        failure: `${process.env.HOSTFRONT}/order/${req.body.orderId}?paid=false`,
+        pending: `${process.env.HOSTFRONT}/order/${req.body.orderId}?paid=pending`,
       },
       auto_return: "approved",
       "payment_methods": {

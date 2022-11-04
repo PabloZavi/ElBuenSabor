@@ -10,7 +10,6 @@ ingredienteRouter.get('/', async (req, res) => {
   res.send(ingredientes);
 });
 
-
 ingredienteRouter.post(
   '/',
   isAuth,
@@ -31,6 +30,35 @@ ingredienteRouter.post(
 );
 
 ingredienteRouter.put(
+  '/:id/discount',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const ingrediente = await Ingrediente.findOneAndUpdate(
+      { _id: req.body._id },
+      { $inc: { stockActualIngrediente: -req.body.cantidad } },
+      { new: true }
+    );
+    res.send({
+      message:
+        'Ingrediente ' +
+        ingrediente.nombreIngrediente +
+        ' stock nuevo: ' +
+        ingrediente.stockActualIngrediente,
+    });
+    // const ingrediente = await Ingrediente.findById(req.params.id);
+    // if (ingrediente) {
+
+    //   //order.isDelivered = true;
+    //   //order.deliveredAt = Date.now();
+    //   await ingrediente.save();
+    //   //res.send({ message: 'Pedido entregado!' });
+    // } else {
+    //   res.status(404).send({ message: 'Ingrediente no encontrado' });
+    // }
+  })
+);
+
+ingredienteRouter.put(
   '/:id',
   isAuth,
   isAdmin,
@@ -41,7 +69,8 @@ ingredienteRouter.put(
       ingrediente.nombreIngrediente = req.body.nombreIngrediente;
       ingrediente.stockMinimoIngrediente = req.body.stockMinimoIngrediente;
       ingrediente.stockActualIngrediente = req.body.stockActualIngrediente;
-      ingrediente.unidadDeMedidaIngrediente = req.body.unidadDeMedidaIngrediente;
+      ingrediente.unidadDeMedidaIngrediente =
+        req.body.unidadDeMedidaIngrediente;
       ingrediente.precioCostoIngrediente = req.body.precioCostoIngrediente;
       ingrediente.altaIngrediente = req.body.altaIngrediente;
       ingrediente.rubroIngrediente = req.body.rubroIngrediente;
@@ -91,7 +120,6 @@ ingredienteRouter.get(
     });
   })
 );
-
 
 ingredienteRouter.get('/:id', async (req, res) => {
   try {

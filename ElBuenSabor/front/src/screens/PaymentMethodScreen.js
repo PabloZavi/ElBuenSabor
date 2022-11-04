@@ -5,31 +5,56 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Store } from '../Store';
 import { useNavigate } from 'react-router-dom';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 
 export default function PaymentMethodScreen() {
   const navigate = useNavigate();
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const {
-    cart: { shippingAddress, paymentMethod },
+    cart: { shippingAddress, paymentMethod, shippingOption },
   } = state;
 
-  const [paymentMethodName, setPaymentMethod] = useState(
+  const [paymentMethodName, setPaymentMethodName] = useState(
     paymentMethod || 'MercadoPago'
   );
 
   useEffect(() => {
-    if (!shippingAddress.address) {
-      //Si no existe todavía una dirección, volver a shipping (anterior)
+    if (!shippingAddress.address && !shippingOption) {
+      //Si no existe todavía una dirección y tampoco una opción de entrega, volver a shipping (anterior)
       navigate('/shipping');
     }
-  }, [shippingAddress, navigate]); //Acordarse de siempre poner las variables que usamos en un useEffect
+
+    //Si la opción de envío es domicilio, seteo directamente la forma de pago a MercadoPago
+    //en Store y en localStorage
+    if (shippingOption === 'domicilio') {
+      setPaymentMethodName('MercadoPago');
+      ctxDispatch({ type: 'SAVE_PAYMENT_METHOD', payload: paymentMethodName });
+      localStorage.setItem('paymentMethod', paymentMethodName);
+    }
+  }, [
+    shippingAddress,
+    navigate,
+    shippingOption,
+    paymentMethodName,
+    ctxDispatch,
+  ]); //Acordarse de siempre poner las variables que usamos en un useEffect
 
   const submitHandler = (e) => {
     e.preventDefault();
+
     ctxDispatch({ type: 'SAVE_PAYMENT_METHOD', payload: paymentMethodName });
     localStorage.setItem('paymentMethod', paymentMethodName);
     navigate('/placeorder');
   };
+
+  const handleChange = (event) => {
+    setPaymentMethodName(event.target.value);
+  };
+
   return (
     <div>
       <CheckoutSteps step1 step2 step3></CheckoutSteps>
@@ -39,27 +64,53 @@ export default function PaymentMethodScreen() {
         </Helmet>
         <h1 className="my-3">Método de pago</h1>
         <Form onSubmit={submitHandler}>
-          <div className="mb-3">
+          <FormControl>
+            <RadioGroup
+              name="paymentMethod"
+              value={paymentMethodName}
+              onChange={handleChange}
+            >
+              <FormControlLabel
+                value="MercadoPago"
+                control={<Radio />}
+                label="Mercado Pago"
+              />
+              {shippingOption === 'local' && (
+                <FormControlLabel
+                  value="Efectivo"
+                  control={<Radio />}
+                  label="Efectivo"
+                />
+              )}
+            </RadioGroup>
+          </FormControl>
+
+          {/* <div className="mb-3">
             <Form.Check
               type="radio"
               id="MercadoPago"
               label="Mercado Pago"
               value="MercadoPago"
-              checked={paymentMethodName === 'MercadoPago'}
-              onChange={(e) => setPaymentMethod(e.target.value)}
+              checked={shippingOption==='domicilio' || paymentMethodName === 'MercadoPago'}
+              onChange={(e) => setPaymentMethodName(e.target.value)}
             ></Form.Check>
           </div>
-          <div className="mb-3">
-            <Form.Check
-              type="radio"
-              id="Efectivo"
-              label="Efectivo en local (10% de descuento)"
-              value="Efectivo"
-              checked={paymentMethodName === 'Efectivo'}
-              onChange={(e) => setPaymentMethod(e.target.value)}
-            ></Form.Check>
-          </div>
-          <div className="mb-3">
+
+          
+            <div className="mb-3">
+              <Form.Check
+                type="radio"
+                id="Efectivo"
+                label="Efectivo en local"
+                value="Efectivo"
+                checked={paymentMethodName === 'Efectivo'}
+                onChange={(e) => setPaymentMethodName(e.target.value)}
+              ></Form.Check>
+            </div>
+          )}
+ */}
+
+          <div className="mb-3 large-margin-up">
             <Button type="submit">Continuar</Button>
           </div>
         </Form>

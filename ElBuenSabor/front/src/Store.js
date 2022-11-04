@@ -19,6 +19,10 @@ const initialState = {
       ? localStorage.getItem('paymentMethod')
       : '',
 
+    shippingOption: localStorage.getItem('shippingOption')
+      ? localStorage.getItem('shippingOption')
+      : '',
+
     //cartItems tiene que venir del localStorage
     cartItems: localStorage.getItem('cartItems') //Si cartItems existe en el localStorage...
       ? JSON.parse(localStorage.getItem('cartItems')) //usamos parse para convertir el string en un jsObject
@@ -67,7 +71,7 @@ function reducer(state, action) {
     }
     case 'CART_CLEAR':
       //Mantenemos el estado del context, también del cart, pero cambiamos el estado de los cartItems a un array vacío
-      return { ...state, cart: { ...state.cart, cartItems: [] } };
+      return { ...state, cart: { ...state.cart, cartItems: [], paymentMethod:'', shippingOption: '' } };
     case 'USER_SIGNIN': {
       //Mantenemos el estado anterior y actualizamos la info del usuario con la info
       //que vino desde el back
@@ -78,7 +82,12 @@ function reducer(state, action) {
       return {
         ...state,
         userInfo: null,
-        cart: { cartItems: [], shippingAddress: {}, paymentMethod: '' },
+        cart: {
+          cartItems: [],
+          shippingAddress: {},
+          paymentMethod: '',
+          shippingOption: '',
+        },
       };
     }
     //Lo único que se cambiará en el estado es el cart, y lo único del cart es la shippingAddress
@@ -92,11 +101,21 @@ function reducer(state, action) {
         },
       };
 
+    case 'SAVE_SHIPPING_OPTION':
+      return {
+        ...state, //no tocamos otros campos en el state más que el cart
+        cart: {
+          ...state.cart, //y del cart lo único es la shippingAddress
+          shippingOption: action.payload,
+        },
+      };
+
     case 'SAVE_PAYMENT_METHOD':
       return {
         ...state,
         cart: { ...state.cart, paymentMethod: action.payload },
       };
+      
     default:
       return state;
   }
