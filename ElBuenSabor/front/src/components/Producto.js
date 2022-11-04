@@ -24,19 +24,17 @@ function Producto(props) {
     }
   } */
 
-  const stock = async (prod)=>{
-    console.log(prod)
-    //for(const ing in prod.ingredientes){
-      for(let ing=0; ing<prod.ingredientes.length;ing++){
-      console.log("cantidad necesitada: " + prod.ingredientes[ing].cantidad)
-      console.log("cantidad en DB: " + prod.ingredientes[ing].ingrediente.stockActualIngrediente)
-      if(prod.ingredientes[ing].cantidad > prod.ingredientes[ing].ingrediente.stockActualIngrediente){
+  function stock (prod)  {
+    for (let ing = 0; ing < prod.ingredientes.length; ing++) {
+      if (
+        prod.ingredientes[ing].cantidad >
+        prod.ingredientes[ing].ingrediente.stockActualIngrediente
+      ) {
         return false;
       }
-
     }
     return true;
-  }
+  };
 
   const addToCartHandler = async (item) => {
     //Comprobamos si ya existe en el carrito el item que queremos agregar
@@ -89,15 +87,18 @@ function Producto(props) {
           </Card.Text>
           {/* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */}
           {/* {producto.stockProducto === 0 ? ( */}
-          {(stock(producto)===false) ? (
+          {stock(producto) === false ? (
             <Button variant="light" disabled>
               Sin stock
             </Button>
           ) : (
-            <Button 
-              disabled={localStorage.getItem('localAbierto')==='false'}
-              onClick={() => addToCartHandler(producto)}>
-              {localStorage.getItem('localAbierto')!=='false'? ('Agregar al carrito') : ('Local cerrado')}
+            <Button
+              disabled={localStorage.getItem('localAbierto') === 'false'}
+              onClick={() => addToCartHandler(producto)}
+            >
+              {localStorage.getItem('localAbierto') !== 'false'
+                ? 'Agregar al carrito'
+                : 'Local cerrado'}
             </Button>
           )}
         </Card.Body>

@@ -179,6 +179,7 @@ export default function IngredienteNewScreen() {
           <Form.Control
             type="Number"
             min="0"
+            step="0.01"
             value={stockMinimoIngrediente}
             onChange={(e) => {
               setStockMinimoIngrediente(e.target.value);
@@ -193,6 +194,7 @@ export default function IngredienteNewScreen() {
           <Form.Control
             type="Number"
             min="0"
+            step="0.01"
             value={stockActualIngrediente}
             onChange={(e) => {
               setStockActualIngrediente(e.target.value);
@@ -260,6 +262,7 @@ export default function IngredienteNewScreen() {
           <Form.Control
             type="Number"
             min="0"
+            step="0.01"
             value={precioCostoIngrediente}
             onChange={(e) => {
               setPrecioCostoIngrediente(e.target.value);

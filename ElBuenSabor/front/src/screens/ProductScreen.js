@@ -38,6 +38,19 @@ function ProductScreen() {
     loading: true,
     error: '',
   });
+
+  function stock (prod)  {
+    for (let ing = 0; ing < prod.ingredientes.length; ing++) {
+      if (
+        prod.ingredientes[ing].cantidad >
+        prod.ingredientes[ing].ingrediente.stockActualIngrediente
+      ) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       dispatch({ type: 'FETCH_REQUEST' });
@@ -142,7 +155,7 @@ function ProductScreen() {
                     <Col>Estado: </Col>
                     <Col>
                       {/* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */}
-                      {producto.stockProducto > 0 ? (
+                      {stock(producto) ? (
                         <Badge bg="success"> Disponible </Badge>
                       ) : (
                         <Badge bg="danger"> Sin stock </Badge>
@@ -163,7 +176,7 @@ function ProductScreen() {
                   </ListGroup.Item>)
                         }
                         */}
-                {producto.stockProducto > 0 && (
+                {stock(producto) && (
                   <ListGroup.Item>
                     <div className="d-grid">
                       <Button
