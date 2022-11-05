@@ -17,10 +17,30 @@ export default function CartScreen() {
     cart: { cartItems },
   } = state;
 
+  const calcularCantidad = (item) => {
+    //const { data: producto } = await axios.get(`api/productos/${item._id}`);
+    let cantidad = 0;
+    for (let i = 0; i < item.ingredientes.length; i++) {
+      if (i === 0) {
+        cantidad = Math.floor(
+          item.ingredientes[i].ingrediente.stockActualIngrediente /
+          item.ingredientes[i].cantidad);
+          
+      }
+      if (Math.floor(item.ingredientes[i].ingrediente.stockActualIngrediente/item.ingredientes[i].cantidad) < cantidad) {
+        cantidad = Math.floor(item.ingredientes[i].ingrediente.stockActualIngrediente/item.ingredientes[i].cantidad);
+      }
+    }
+    //console.log(cantidad);
+    return cantidad;
+  };
+
   const updateCartHandler = async (item, cantidad) => {
     const { data } = await axios.get(`api/productos/${item._id}`);
     /* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */
-    if (data.stockProducto < cantidad) {
+    /* if (producto.stockProducto < cantidad) { */
+    
+    if (calcularCantidad(data) < cantidad) {
       window.alert('No hay stock del producto');
       return;
     }
@@ -78,6 +98,7 @@ export default function CartScreen() {
                       </Link>
                     </Col>
                     <Col md={2}>
+                      
                       <Button
                         onClick={() =>
                           updateCartHandler(item, item.cantidad - 1)
@@ -87,18 +108,21 @@ export default function CartScreen() {
                       >
                         <i className="bi bi-file-minus-fill"></i>
                       </Button>{' '}
+
                       <span>{item.cantidad}</span>{' '}
+
                       <Button
                         variant="light"
                         onClick={() =>
                           updateCartHandler(item, item.cantidad + 1)
                         }
                         disabled={
-                          item.cantidad === item.stockProducto
+                          item.cantidad === calcularCantidad(item)
                         } /* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */
                       >
                         <i className="bi bi-file-plus-fill"></i>
                       </Button>
+
                     </Col>
                     <Col md={2}>$ {item.precioVentaProducto}</Col>
                     <Col md={2}>

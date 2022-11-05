@@ -51,6 +51,24 @@ function ProductScreen() {
     return true;
   };
 
+  const calcularCantidad = (item) => {
+    //const { data: producto } = await axios.get(`api/productos/${item._id}`);
+    let cantidad = 0;
+    for (let i = 0; i < item.ingredientes.length; i++) {
+      if (i === 0) {
+        cantidad = Math.floor(
+          item.ingredientes[i].ingrediente.stockActualIngrediente /
+          item.ingredientes[i].cantidad);
+          
+      }
+      if (Math.floor(item.ingredientes[i].ingrediente.stockActualIngrediente/item.ingredientes[i].cantidad) < cantidad) {
+        cantidad = Math.floor(item.ingredientes[i].ingrediente.stockActualIngrediente/item.ingredientes[i].cantidad);
+      }
+    }
+    //console.log(cantidad);
+    return cantidad;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       dispatch({ type: 'FETCH_REQUEST' });
@@ -72,6 +90,15 @@ function ProductScreen() {
   //Antes de agregar algo al carrito, vemos que no esté ya agregado
   //Traemos 'cart' desde state y la usamos en addCartToHandler
   const { cart } = state;
+  
+  const comprobarDisponibilidad = (prod) => {
+    const existItem = cart.cartItems.find((x) => x._id === producto._id);
+    if(existItem.cantidad===calcularCantidad(prod)){
+      return false;
+    }
+    return true;
+  }
+  
   //Esta será la función que se ejecuta al hacer clic en "Agregar al carrito"
   const addToCartHandler = async () => {
     //Comprobamos si ya existe en el carrito el item que queremos agregar
@@ -82,17 +109,19 @@ function ProductScreen() {
     const { data } = await axios.get(`/api/productos/${producto._id}`);
     //y verificamos si hay stock
     /* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */
-    if (data.stock < cantidad) {
+    //console.log(calcularCantidad(data))
+    if (calcularCantidad(data) < cantidad) {
       window.alert('No hay stock del producto');
       return;
     }
+    
     ctxDispatch({
       type: 'CART_ADD_ITEM',
       payload: { ...producto, cantidad },
     });
     //Después del dispatch del producto lo redirigimos al carrito
     //usaremos el hook navigate de react-router-dom (definimos esta lógica al inicio de 'ProductScreen' -arriba-)
-    navigate('/cart');
+    //navigate('/cart');
   };
 
   return loading ? (
