@@ -24,22 +24,29 @@ const reducer = (state, action) => {
       return { ...state, productos: action.payload, loading: false };
     case 'FETCH_FAIL':
       return { ...state, loading: false, error: action.payload };
+      case 'FETCH_CATEGORIES_REQUEST':
+      return { ...state, loading: true };
+    case 'FETCH_CATEGORIES_SUCCESS':
+      return { ...state, categorias: action.payload, loading: false };
+    case 'FETCH_CATEGORIES_FAIL':
+      return { ...state, loading: false, error: action.payload };
     default:
       return state;
   }
 };
 
 function HomeScreen() {
-  const [{ loading, error, productos }, dispatch] = useReducer(
+  const [{ loading, error, productos, categorias }, dispatch] = useReducer(
     logger(reducer),
     {
       productos: [],
+      categorias: [],
       loading: true,
       error: '',
     }
   );
 
-  const [categories, setCategories] = useState([]);
+  //const [categories, setCategories] = useState([]);
   //const [productos, setProductos] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -58,6 +65,23 @@ function HomeScreen() {
 
   useEffect(() => {
     const fetchData = async () => {
+      dispatch({ type: 'FETCH_CATEGORIES_REQUEST' });
+      try {
+        const result = await axios.get('/api/productos/categories');
+        dispatch({ type: 'FETCH_CATEGORIES_SUCCESS', payload: result.data });
+      } catch (err) {
+        dispatch({ type: 'FETCH_CATEGORIES_FAIL', payload: err.message });
+      }
+
+      //setProductos(result.data);
+    };
+    fetchData();
+  }, []);
+
+  
+
+  /* useEffect(() => {
+    const fetchData = async () => {
       try {
         const { data } = await axios.get('/api/productos/categories');
         setCategories(data);
@@ -69,7 +93,7 @@ function HomeScreen() {
       //setProductos(result.data);
     };
     fetchData();
-  }, []);
+  }, []); */
 
   const breakPoints = [
     { width: 1, itemsToShow: 1, pagination: false },
@@ -87,8 +111,8 @@ function HomeScreen() {
 
       {/* OPCIÓN 3 --> MOSTRAR DE FORMA AUTOMÁTICA Y POR SEPARADO LAS CATEGORÍAS QUE TIENEN AL MENOS UN PRODUCTO 
         (CADA VEZ QUE SE AGREGUE UN NUEVO RUBRO Y UN NUEVO PRODUCTO A ESE RUBRO, SE MOSTRARÁ AUTOMÁTICAMENTE*/}
-      {categories.map((cat) => (
-        <div className="productos">
+      {categorias.map((cat) => (
+        <div key={cat} className="productos">
           <h1>{cat}</h1>
           <Carousel breakPoints={breakPoints} itemPadding={[0, 0]}>
             {productos

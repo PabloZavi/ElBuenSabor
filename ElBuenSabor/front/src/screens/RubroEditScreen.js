@@ -101,6 +101,7 @@ export default function RubroEditScreen() {
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
         <Form onSubmit={submitHandler}>
+          
           <Form.Group className="mb-3" controlId="nombreRubro">
             <Form.Label>Nombre</Form.Label>
             <Form.Control

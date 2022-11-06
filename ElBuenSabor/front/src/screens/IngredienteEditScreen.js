@@ -204,7 +204,8 @@ export default function IngredienteEditScreen() {
       dispatch({ type: 'UPDATE_SUCCESS' });
       toast.success('Ingrediente actualizado!');
       deleteLocalStorage();
-      navigate('/admin/ingredientes');
+      //navigate('/admin/ingredientes');
+      navigate(-1);
     } catch (err) {
       toast.error(getError(err));
       dispatch({ type: 'UPDATE_FAIL' });
@@ -352,15 +353,18 @@ export default function IngredienteEditScreen() {
         ></Form.Check>
 
         <div className="mb-3">
+          
           <Button disabled={loadingUpdate || loadingUpload} type="submit">
             Actualizar
           </Button>
           {loadingUpdate && <LoadingBox></LoadingBox>}{' '}
+
           <Button
             type="button"
             onClick={() => {
               deleteLocalStorage();
-              navigate(`/admin/ingredientes`);
+              /* navigate(`/admin/ingredientes`); */
+              navigate(-1);
             }}
           >
             Cancelar

@@ -41,7 +41,14 @@ export default function SigninScreen() {
       //Ahora guardamos la info del usuario (que está en el local Store) en el store del navegador
       //Ojo, 'userInfo' es lo que vuelve desde el store
       localStorage.setItem('userInfo', JSON.stringify(data));
-      navigate(redirect || '/');
+      if(data.isAdmin){
+        navigate('/admin/config')
+      }
+      else{
+        navigate(redirect || '/')
+      }
+      
+      
     } catch (err) {
       //Ver en App.js lo relacionado con toastify
       //Traemos desde el back el error

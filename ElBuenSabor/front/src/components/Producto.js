@@ -13,9 +13,7 @@ function Producto(props) {
   const { producto } = props;
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const {
-    cart: { cartItems },
-  } = state;
+  const { cart } = state;
 
   /* const stock = async (prod)=>{
     for(const ing in prod.ingredientes){
@@ -24,7 +22,7 @@ function Producto(props) {
     }
   } */
 
-  function stock (prod)  {
+  function stock(prod) {
     for (let ing = 0; ing < prod.ingredientes.length; ing++) {
       if (
         prod.ingredientes[ing].cantidad >
@@ -34,19 +32,77 @@ function Producto(props) {
       }
     }
     return true;
+  }
+
+  // const comprobarDisponibilidad = (prod) => {
+  //   const existItem = cart.cartItems.find((x) => x._id === producto._id);
+  //   if (existItem.cantidad === calcularCantidad(prod)) {
+  //     return false;
+  //   }
+  //   return true;
+  // };
+
+  // const comp = async (item) => {
+  //   //Comprobamos si ya existe en el carrito el item que queremos agregar
+  //   const existItem = cart.cartItems.find((x) => x._id === producto._id);
+  //   //si existe le agregamos 1 a la cantidad, si no la ponemos en 1
+  //   const cantidad = existItem ? existItem.cantidad + 1 : 1;
+  //   const { data } = await axios.get(`api/productos/${item._id}`);
+  //   //OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES!
+  //   /* if (data.stockProducto < cantidad) {
+  //     toast.error('No hay stock del producto');
+  //     return;
+  //   } */
+
+  //   if (calcularCantidad(data) < cantidad) {
+      
+  //     return false;
+  //   }
+  //   return true;
+  // }
+
+  const calcularCantidad = (item) => {
+    //const { data: producto } = await axios.get(`api/productos/${item._id}`);
+    let cantidad = 0;
+    for (let i = 0; i < item.ingredientes.length; i++) {
+      if (i === 0) {
+        cantidad = Math.floor(
+          item.ingredientes[i].ingrediente.stockActualIngrediente /
+            item.ingredientes[i].cantidad
+        );
+      }
+      if (
+        Math.floor(
+          item.ingredientes[i].ingrediente.stockActualIngrediente /
+            item.ingredientes[i].cantidad
+        ) < cantidad
+      ) {
+        cantidad = Math.floor(
+          item.ingredientes[i].ingrediente.stockActualIngrediente /
+            item.ingredientes[i].cantidad
+        );
+      }
+    }
+    //console.log(cantidad);
+    return cantidad;
   };
 
   const addToCartHandler = async (item) => {
     //Comprobamos si ya existe en el carrito el item que queremos agregar
-    const existItem = cartItems.find((x) => x._id === producto._id);
+    const existItem = cart.cartItems.find((x) => x._id === producto._id);
     //si existe le agregamos 1 a la cantidad, si no la ponemos en 1
     const cantidad = existItem ? existItem.cantidad + 1 : 1;
-    const { prod } = await axios.get(`api/productos/${item._id}`);
+    const { data } = await axios.get(`api/productos/${item._id}`);
     //OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES!
     /* if (data.stockProducto < cantidad) {
       toast.error('No hay stock del producto');
       return;
     } */
+
+    if (calcularCantidad(data) < cantidad) {
+      window.alert('No hay stock del producto');
+      return;
+    }
     ctxDispatch({
       type: 'CART_ADD_ITEM',
       payload: { ...item, cantidad },
@@ -87,7 +143,7 @@ function Producto(props) {
           </Card.Text>
           {/* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */}
           {/* {producto.stockProducto === 0 ? ( */}
-          {stock(producto) === false ? (
+          {!stock(producto) ? (
             <Button variant="light" disabled>
               Sin stock
             </Button>

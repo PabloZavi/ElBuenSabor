@@ -47,6 +47,13 @@ import IngredienteNewScreen from './screens/IngredienteNewScreen';
 
 import { DateTime } from 'luxon';
 import Swal from 'sweetalert2';
+import ConfigScreen from './screens/ConfigScreen';
+
+import FastfoodRoundedIcon from '@mui/icons-material/FastfoodRounded';
+import EggAltRoundedIcon from '@mui/icons-material/EggAltRounded';
+import ReceiptRoundedIcon from '@mui/icons-material/ReceiptRounded';
+import AccountBoxRoundedIcon from '@mui/icons-material/AccountBoxRounded';
+import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 
 function App() {
   //Traemos el estado de la app desde el store
@@ -183,7 +190,10 @@ function App() {
                       id="basic-nav-dropdown"
                     >
                       <LinkContainer to="/profile">
-                        <NavDropdown.Item>Perfil</NavDropdown.Item>
+                        <NavDropdown.Item>
+                          Perfil
+                          <AccountBoxRoundedIcon className="align-right" />
+                        </NavDropdown.Item>
                       </LinkContainer>
                       <LinkContainer to="/orderhistory">
                         <NavDropdown.Item>
@@ -196,7 +206,8 @@ function App() {
                         to="#signout"
                         onClick={signoutHandler}
                       >
-                        Desconectarse
+                        Desconectarse{' '}
+                        <ExitToAppRoundedIcon className="align-right" />
                       </Link>
                     </NavDropdown>
                   ) : (
@@ -216,19 +227,32 @@ function App() {
                         title="Administración"
                         id="admin-nav-dropdown"
                       >
+                        <LinkContainer to="/admin/config">
+                          <NavDropdown.Item>
+                            Configuración
+                            <i className="bi bi-gear-fill align-right"></i>
+                          </NavDropdown.Item>
+                        </LinkContainer>
+
                         <LinkContainer to="/admin/dashboard">
                           <NavDropdown.Item>
-                            Estadísticas{' '}
-                            <i className="bi bi-bar-chart-fill align-right"></i>{' '}
+                            Estadísticas
+                            <i className="bi bi-bar-chart-fill align-right"></i>
                           </NavDropdown.Item>
                           {/* <NavDropdown.Item>Estadísticas <i className="bi bi-graph-up-arrow align-right"></i> </NavDropdown.Item> */}
                         </LinkContainer>
                         <LinkContainer to="/admin/products">
-                          <NavDropdown.Item>Productos</NavDropdown.Item>
+                          <NavDropdown.Item>
+                            Productos
+                            <FastfoodRoundedIcon className="align-right" />
+                          </NavDropdown.Item>
                         </LinkContainer>
 
                         <LinkContainer to="/admin/ingredientes">
-                          <NavDropdown.Item>Ingredientes</NavDropdown.Item>
+                          <NavDropdown.Item>
+                            Ingredientes
+                            <EggAltRoundedIcon className="align-right" />
+                          </NavDropdown.Item>
                         </LinkContainer>
 
                         <NavDropdown
@@ -244,15 +268,17 @@ function App() {
                           </NavDropdown.Item>
                         </NavDropdown>
 
-                        {/* <LinkContainer to="/admin/rubros">
-      <NavDropdown.Item>Rubros</NavDropdown.Item>
-    </LinkContainer> */}
-
                         <LinkContainer to="/admin/orders">
-                          <NavDropdown.Item>Pedidos</NavDropdown.Item>
+                          <NavDropdown.Item>
+                            Pedidos
+                            <ReceiptRoundedIcon className="align-right" />
+                          </NavDropdown.Item>
                         </LinkContainer>
                         <LinkContainer to="/admin/users">
-                          <NavDropdown.Item>Usuarios</NavDropdown.Item>
+                          <NavDropdown.Item>
+                            Usuarios
+                            <i className="bi bi-people-fill align-right"></i>
+                          </NavDropdown.Item>
                         </LinkContainer>
                       </NavDropdown>
                     </>
@@ -326,6 +352,16 @@ function App() {
               <Route path="/search" element={<SearchScreen />} />
 
               {/* Admin routes */}
+
+              <Route
+                path="/admin/config"
+                element={
+                  <AdminRoute>
+                    <ConfigScreen></ConfigScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
               <Route
                 path="/admin/dashboard"
                 element={
