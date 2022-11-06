@@ -34,6 +34,26 @@ import ProductEditScreen from './screens/ProductEditScreen';
 import OrderListScreen from './screens/OrderListScreen';
 import UserListScreen from './screens/UserListScreen';
 import UserEditScreen from './screens/UserEditScreen';
+import ProductNewScreen from './screens/ProductNewScreen';
+import RubroListScreen from './screens/RubroListScreen';
+import RubroNewScreen from './screens/RubroNewScreen';
+import RubroEditScreen from './screens/RubroEditScreen';
+import RubroIngredienteListScreen from './screens/RubroIngredienteListScreen';
+import RubroIngredienteNewScreen from './screens/RubroIngredienteNewScreen';
+import RubroIngredienteEditScreen from './screens/RubroIngredienteEditScreen';
+import IngredienteListScreen from './screens/IngredienteListScreen';
+import IngredienteEditScreen from './screens/IngredienteEditScreen';
+import IngredienteNewScreen from './screens/IngredienteNewScreen';
+
+import { DateTime } from 'luxon';
+import Swal from 'sweetalert2';
+import ConfigScreen from './screens/ConfigScreen';
+
+import FastfoodRoundedIcon from '@mui/icons-material/FastfoodRounded';
+import EggAltRoundedIcon from '@mui/icons-material/EggAltRounded';
+import ReceiptRoundedIcon from '@mui/icons-material/ReceiptRounded';
+import AccountBoxRoundedIcon from '@mui/icons-material/AccountBoxRounded';
+import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 
 function App() {
   //Traemos el estado de la app desde el store
@@ -44,9 +64,11 @@ function App() {
   //Signout de un usuario. Limpiamos el Store y también el de navegador
   const signoutHandler = () => {
     ctxDispatch({ type: 'USER_SIGNOUT' });
-    localStorage.removeItem('userInfo');
-    localStorage.removeItem('shippingAddress');
-    localStorage.removeItem('paymentMethod');
+    //localStorage.removeItem('userInfo');
+    //localStorage.removeItem('shippingAddress');
+    //localStorage.removeItem('paymentMethod');
+    //localStorage.removeItem('cartItems');
+    localStorage.clear();
     window.location.href = '/signin';
   };
 
@@ -65,6 +87,63 @@ function App() {
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    isOpen();
+    const interval = setInterval(() => {
+      isOpen();
+    }, 60000); //60000 es 1 minuto - 300000 son 5 minutos
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    localStorage.getItem('localAbierto') === 'false' && closeMessage();
+  }, []);
+
+  function closeMessage() {
+    Swal.fire({
+      title: '¡El local se encuentra cerrado!',
+      html: '<br> Nuestro horario de atención es: <br> Todos los días de 20 a 00 <br> Sábados y Domingos de 11 a 15 <br><br> Igual podrás ver todos nuestros productos hasta que abramos',
+      //icon: 'info',
+      confirmButtonText: 'OK',
+      imageUrl:
+        'https://www.albawaba.com/sites/default/files/im/English_Slideshows_/SS_Ramadan_problems_/image02.gif',
+      imageWidth: 300,
+      imageHeight: 200,
+    });
+  }
+
+  function isOpen() {
+    let dt = DateTime;
+    dt.toLocaleString(DateTime.DATE_SHORT);
+    //console.log(dt.now())
+    let diaSemanaActual = dt
+      .now()
+      .setZone('America/Argentina/Mendoza')
+      .setLocale('es').weekdayLong;
+
+    let horaActual = dt
+      .now()
+      .setZone('America/Argentina/Mendoza')
+      .setLocale('es').hour; //-3
+    //let horaActual = dt.now().setZone('America/Toronto').setLocale('es').hour; //-4
+    //let horaActual = dt.now().setZone('Pacific/Gambier').setLocale('es').hour; //-9
+    //let horaActual = dt.now().setZone('Europe/Madrid').setLocale('es').hour; //+1
+    //VER TIME ZONES EN: https://momentjs.com/timezone/
+
+    let minutoActual = dt
+      .now()
+      .setZone('America/Argentina/Mendoza')
+      .setLocale('es').minute;
+
+    let localAbierto =
+      (horaActual >= 20 && horaActual <= 23 && minutoActual <= 59) ||
+      ((diaSemanaActual === 'sábado' || diaSemanaActual === 'domingo') &&
+        horaActual > 11 &&
+        horaActual < 15);
+    //localStorage.setItem('localAbierto', localAbierto);
+    //console.log("Esta abierto: " + localAbierto)
+  }
+
   return (
     <BrowserRouter>
       <div
@@ -76,7 +155,7 @@ function App() {
       >
         <ToastContainer position="top-center" limit={1}></ToastContainer>
         <header>
-          <NavBar bg="dark" variant="dark" expand="lg">
+          <NavBar bg="dark" variant="dark" expand="lg" fixed="top">
             <Container>
               <Button
                 variant="dark"
@@ -93,7 +172,7 @@ function App() {
                 <SearchBox></SearchBox>
                 <Nav className="me-auto w-100 justify-content-end">
                   <Link to="/cart" className="nav-link">
-                    Carrito
+                    <i className="bi bi-cart"> Carrito</i>
                     {cart.cartItems.length > 0 && (
                       <Badge pill bg="danger">
                         {cart.cartItems.reduce((a, c) => a + c.cantidad, 0)}
@@ -102,11 +181,19 @@ function App() {
                   </Link>
                   {userInfo ? (
                     <NavDropdown
-                      title={userInfo.nombreUsuario}
+                      title={
+                        <i className="bi bi-person" width="50" height="50">
+                          {' '}
+                          {userInfo.nombreUsuario}
+                        </i>
+                      }
                       id="basic-nav-dropdown"
                     >
                       <LinkContainer to="/profile">
-                        <NavDropdown.Item>Perfil</NavDropdown.Item>
+                        <NavDropdown.Item>
+                          Perfil
+                          <AccountBoxRoundedIcon className="align-right" />
+                        </NavDropdown.Item>
                       </LinkContainer>
                       <LinkContainer to="/orderhistory">
                         <NavDropdown.Item>
@@ -119,7 +206,8 @@ function App() {
                         to="#signout"
                         onClick={signoutHandler}
                       >
-                        Desconectarse
+                        Desconectarse{' '}
+                        <ExitToAppRoundedIcon className="align-right" />
                       </Link>
                     </NavDropdown>
                   ) : (
@@ -128,21 +216,72 @@ function App() {
                     </Link>
                   )}
                   {/* Ojo acá el condicional que verifica si isAdmin para mostrar la sección Admin */}
+
                   {userInfo && userInfo.isAdmin && (
-                    <NavDropdown title="Administrador" id="admin-nav-dropdown">
-                      <LinkContainer to="/admin/dashboard">
-                        <NavDropdown.Item>Tablero</NavDropdown.Item>
-                      </LinkContainer>
-                      <LinkContainer to="/admin/products">
-                        <NavDropdown.Item>Productos</NavDropdown.Item>
-                      </LinkContainer>
-                      <LinkContainer to="/admin/orders">
-                        <NavDropdown.Item>Pedidos</NavDropdown.Item>
-                      </LinkContainer>
-                      <LinkContainer to="/admin/users">
-                        <NavDropdown.Item>Usuarios</NavDropdown.Item>
-                      </LinkContainer>
-                    </NavDropdown>
+                    <>
+                      <Nav className="navbar">
+                        <i className="vr invert-color large-margin-left"></i>
+                      </Nav>
+
+                      <NavDropdown
+                        title="Administración"
+                        id="admin-nav-dropdown"
+                      >
+                        <LinkContainer to="/admin/config">
+                          <NavDropdown.Item>
+                            Configuración
+                            <i className="bi bi-gear-fill align-right"></i>
+                          </NavDropdown.Item>
+                        </LinkContainer>
+
+                        <LinkContainer to="/admin/dashboard">
+                          <NavDropdown.Item>
+                            Estadísticas
+                            <i className="bi bi-bar-chart-fill align-right"></i>
+                          </NavDropdown.Item>
+                          {/* <NavDropdown.Item>Estadísticas <i className="bi bi-graph-up-arrow align-right"></i> </NavDropdown.Item> */}
+                        </LinkContainer>
+                        <LinkContainer to="/admin/products">
+                          <NavDropdown.Item>
+                            Productos
+                            <FastfoodRoundedIcon className="align-right" />
+                          </NavDropdown.Item>
+                        </LinkContainer>
+
+                        <LinkContainer to="/admin/ingredientes">
+                          <NavDropdown.Item>
+                            Ingredientes
+                            <EggAltRoundedIcon className="align-right" />
+                          </NavDropdown.Item>
+                        </LinkContainer>
+
+                        <NavDropdown
+                          drop="end"
+                          id="nav-dropdown2"
+                          title="Rubros"
+                        >
+                          <NavDropdown.Item href="/admin/rubros">
+                            Productos
+                          </NavDropdown.Item>
+                          <NavDropdown.Item href="/admin/rubrosingredientes">
+                            Ingredientes
+                          </NavDropdown.Item>
+                        </NavDropdown>
+
+                        <LinkContainer to="/admin/orders">
+                          <NavDropdown.Item>
+                            Pedidos
+                            <ReceiptRoundedIcon className="align-right" />
+                          </NavDropdown.Item>
+                        </LinkContainer>
+                        <LinkContainer to="/admin/users">
+                          <NavDropdown.Item>
+                            Usuarios
+                            <i className="bi bi-people-fill align-right"></i>
+                          </NavDropdown.Item>
+                        </LinkContainer>
+                      </NavDropdown>
+                    </>
                   )}
                 </Nav>
               </NavBar.Collapse>
@@ -213,6 +352,16 @@ function App() {
               <Route path="/search" element={<SearchScreen />} />
 
               {/* Admin routes */}
+
+              <Route
+                path="/admin/config"
+                element={
+                  <AdminRoute>
+                    <ConfigScreen></ConfigScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
               <Route
                 path="/admin/dashboard"
                 element={
@@ -250,6 +399,15 @@ function App() {
               ></Route>
 
               <Route
+                path="/admin/product/new"
+                element={
+                  <AdminRoute>
+                    <ProductNewScreen></ProductNewScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
                 path="/admin/product/:id"
                 element={
                   <AdminRoute>
@@ -259,10 +417,91 @@ function App() {
               ></Route>
 
               <Route
+                path="/admin/ingredientes"
+                element={
+                  <AdminRoute>
+                    <IngredienteListScreen></IngredienteListScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
+                path="/admin/ingrediente/new"
+                element={
+                  <AdminRoute>
+                    <IngredienteNewScreen></IngredienteNewScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
+                path="/admin/ingrediente/:id"
+                element={
+                  <AdminRoute>
+                    <IngredienteEditScreen></IngredienteEditScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
                 path="/admin/user/:id"
                 element={
                   <AdminRoute>
                     <UserEditScreen></UserEditScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
+                path="/admin/rubros"
+                element={
+                  <AdminRoute>
+                    <RubroListScreen></RubroListScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
+                path="/admin/rubro/new"
+                element={
+                  <AdminRoute>
+                    <RubroNewScreen></RubroNewScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
+                path="/admin/rubro/:id"
+                element={
+                  <AdminRoute>
+                    <RubroEditScreen></RubroEditScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
+                path="/admin/rubrosingredientes"
+                element={
+                  <AdminRoute>
+                    <RubroIngredienteListScreen></RubroIngredienteListScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
+                path="/admin/rubroingrediente/new"
+                element={
+                  <AdminRoute>
+                    <RubroIngredienteNewScreen></RubroIngredienteNewScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
+              <Route
+                path="/admin/rubroingrediente/:id"
+                element={
+                  <AdminRoute>
+                    <RubroIngredienteEditScreen></RubroIngredienteEditScreen>
                   </AdminRoute>
                 }
               ></Route>

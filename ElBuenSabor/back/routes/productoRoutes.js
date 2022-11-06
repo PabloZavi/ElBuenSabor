@@ -6,11 +6,11 @@ import { isAdmin, isAuth } from '../utils.js';
 const productoRouter = express.Router();
 
 productoRouter.get('/', async (req, res) => {
-  const productos = await Producto.find();
+  const productos = await Producto.find().populate({path: 'ingredientes.ingrediente'});
   res.send(productos);
 });
 
-productoRouter.post(
+/* productoRouter.post(
   '/',
   isAuth,
   isAdmin,
@@ -26,9 +26,44 @@ productoRouter.post(
       rubroProducto: 'rubro prueba 1',
       //Atributo a eliminar:
       stockProducto: 2,
+      isCeliaco: false,
+      isVegetariano: false,
     });
     const producto = await newProducto.save();
     res.send({ message: 'Producto creado', producto });
+  })
+); */
+
+/* productoRouter.get(
+  '/prueba',
+  expressAsyncHandler(async (req, res) => {
+    const productos = await Producto.find().populate({path: 'ingredientes.ingrediente'});
+    res.send(productos);
+  })
+); */
+
+productoRouter.post(
+  '/',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const newProducto = new Producto({
+      nombreProducto: req.body.nombreProducto,
+      tiempoCocinaProducto: req.body.tiempoCocinaProducto,
+      recetaProducto: req.body.recetaProducto,
+      descripcionProducto: req.body.descripcionProducto,
+      imagenProducto: req.body.imagenProducto,
+      precioVentaProducto: req.body.precioVentaProducto,
+      altaProducto: req.body.altaProducto,
+      rubroProducto: req.body.rubroProducto,
+      //Atributo a eliminar:
+      //stockProducto: req.body.stockProducto,
+      isCeliaco: req.body.isCeliaco,
+      isVegetariano: req.body.isVegetariano,
+      ingredientes: req.body.ingredientesProducto,
+    });
+    const producto = await newProducto.save();
+    res.send({ message: 'Producto creado' });
   })
 );
 
@@ -48,7 +83,10 @@ productoRouter.put(
       product.precioVentaProducto = req.body.precioVentaProducto;
       product.altaProducto = req.body.altaProducto;
       product.rubroProducto = req.body.rubroProducto;
-      product.stockProducto = req.body.stockProducto;
+      //product.stockProducto = req.body.stockProducto;
+      product.isCeliaco = req.body.isCeliaco;
+      product.isVegetariano = req.body.isVegetariano;
+      product.ingredientes = req.body.ingredientesProducto;
       await product.save();
       res.send({ message: 'Producto actualizado' });
     } else {
@@ -82,8 +120,9 @@ productoRouter.get(
   expressAsyncHandler(async (req, res) => {
     const { query } = req;
     const page = query.page || 1;
-    const pageSize = query.pageSize || 10; //Elegir cuántos productos mostrar por pantalla
+    const pageSize = query.pageSize || 15; //Elegir cuántos productos mostrar por pantalla
     const productos = await Producto.find()
+      //.populate('rubroProducto', 'nombreRubro')
       .skip(pageSize * (page - 1))
       .limit(pageSize);
     const countProductos = await Producto.countDocuments();
@@ -147,20 +186,6 @@ productoRouter.get(
   })
 );
 
-//Busco un producto por su id
-productoRouter.get('/:id', async (req, res) => {
-  try {
-    const producto = await Producto.findById(req.params.id);
-    if (producto) {
-      res.send(producto);
-    } else {
-      res.status(404).send({ message: 'Producto no encontrado' });
-    }
-  } catch (error) {
-    res.status(500).send({ message: error });
-  }
-});
-
 //Busco productos por nombre
 productoRouter.get('/nombre/:nombre', async (req, res) => {
   const productos = await Producto.find({ nombreProducto: req.params.nombre });
@@ -170,6 +195,22 @@ productoRouter.get('/nombre/:nombre', async (req, res) => {
     res
       .status(404)
       .send({ message: 'No existen productos con ese parámetro de búsqueda' });
+  }
+});
+
+//Busco un producto por su id
+productoRouter.get('/:id', async (req, res) => {
+  try {
+    const producto = await Producto.findById(req.params.id).populate({path: 'ingredientes.ingrediente'});
+    //Con el select() puedo decir qué campos enviar (por ejemplo se excluye el _id de cada ingrediente)
+    //const producto = await Producto.findById(req.params.id).populate({path: 'ingredientes.ingrediente'}).select({'ingredientes.ingrediente':1, 'ingredientes.cantidad':1});
+    if (producto) {
+      res.send(producto);
+    } else {
+      res.status(404).send({ message: 'Producto no encontrado' });
+    }
+  } catch (error) {
+    res.status(500).send({ message: error });
   }
 });
 

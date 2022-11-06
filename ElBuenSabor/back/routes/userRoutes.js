@@ -37,11 +37,43 @@ userRouter.put(
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
     if (user) {
-      user.nombreUsuario = req.body.nombreUsuario || user.nombreUsuario;
-      user.emailUsuario = req.body.emailUsuario || user.emailUsuario;
+      user.nombreUsuario = req.body.nombreUsuario/*  || user.nombreUsuario */;
+      user.emailUsuario = req.body.emailUsuario/*  || user.emailUsuario */;
       user.isAdmin = Boolean(req.body.isAdmin);
-      const updatedUser = await user.save();
+      /* const updatedUser =  */await user.save();
       res.send({ message: 'Usuario actualizado!' });
+    } else {
+      res.status(404).send({ message: 'Usuario no encontrado' });
+    }
+  })
+);
+
+userRouter.put(
+  '/profile',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+    if (user) {
+      user.nombreUsuario = req.body.nombreUsuario/*  || user.nombreUsuario */;
+      user.emailUsuario = req.body.emailUsuario/*  || user.emailUsuario */;
+      if (req.body.passwordUsuario) {
+        user.passwordUsuario = bcrypt.hashSync(req.body.passwordUsuario, 8);
+      }
+      user.address = req.body.address;
+      user.location = req.body.location;
+      user.phone = req.body.phone;
+
+      const updatedUser = await user.save();
+      res.send({
+        _id: updatedUser._id,
+        nombreUsuario: updatedUser.nombreUsuario,
+        emailUsuario: updatedUser.emailUsuario,
+        isAdmin: updatedUser.isAdmin,
+        token: generateToken(updatedUser),
+        address: updatedUser.address,
+        location: updatedUser.location,
+        phone: updatedUser.phone,
+      });
     } else {
       res.status(404).send({ message: 'Usuario no encontrado' });
     }
@@ -81,6 +113,9 @@ userRouter.post(
           emailUsuario: user.emailUsuario,
           isAdmin: user.isAdmin,
           token: generateToken(user),
+          address: user.address,
+          location: user.location,
+          phone: user.phone,
         });
         return;
       }
@@ -97,6 +132,9 @@ userRouter.post(
       nombreUsuario: req.body.nombreUsuario,
       emailUsuario: req.body.emailUsuario,
       passwordUsuario: bcrypt.hashSync(req.body.passwordUsuario),
+      address: req.body.address,
+      location: req.body.location,
+      phone: req.body.phone,
     });
     //Se guarda el nuevo usuario en la DB
     const user = await newUser.save();
@@ -106,34 +144,13 @@ userRouter.post(
       emailUsuario: user.emailUsuario,
       isAdmin: user.isAdmin,
       token: generateToken(user),
+      address: user.address,
+      location: user.location,
+      phone: user.phone,
     });
   })
 );
 
-userRouter.put(
-  '/profile',
-  isAuth,
-  expressAsyncHandler(async (req, res) => {
-    const user = await User.findById(req.user._id);
-    if (user) {
-      user.nombreUsuario = req.body.nombreUsuario || user.nombreUsuario;
-      user.emailUsuario = req.body.emailUsuario || user.emailUsuario;
-      if (req.body.passwordUsuario) {
-        user.passwordUsuario = bcrypt.hashSync(req.body.passwordUsuario, 8);
-      }
 
-      const updatedUser = await user.save();
-      res.send({
-        _id: updatedUser._id,
-        nombreUsuario: updatedUser.nombreUsuario,
-        emailUsuario: updatedUser.emailUsuario,
-        isAdmin: updatedUser.isAdmin,
-        token: generateToken(updatedUser),
-      });
-    } else {
-      res.status(404).send({ message: 'Usuario no encontrado' });
-    }
-  })
-);
 
 export default userRouter;

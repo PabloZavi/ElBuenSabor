@@ -56,7 +56,7 @@ export default function DashboardScreen() {
       }
     };
     fetchData();
-  }, [userInfo.token]);
+  }, [userInfo]);
 
   return (
     <div>

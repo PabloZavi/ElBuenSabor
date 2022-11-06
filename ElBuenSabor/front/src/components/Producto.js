@@ -5,23 +5,102 @@ import axios from 'axios';
 import { useContext } from 'react';
 import { Store } from '../Store';
 import { toast } from 'react-toastify';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Badge from 'react-bootstrap/Badge';
 
 function Producto(props) {
   const { producto } = props;
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const {
-    cart: { cartItems },
-  } = state;
+  const { cart } = state;
+
+  /* const stock = async (prod)=>{
+    for(const ing in prod.ingredientes){
+      const ingDB = await axios.get(`api/ingredientes/${ing.ingrediente._id}`)
+
+    }
+  } */
+
+  function stock(prod) {
+    for (let ing = 0; ing < prod.ingredientes.length; ing++) {
+      if (
+        prod.ingredientes[ing].cantidad >
+        prod.ingredientes[ing].ingrediente.stockActualIngrediente
+      ) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  // const comprobarDisponibilidad = (prod) => {
+  //   const existItem = cart.cartItems.find((x) => x._id === producto._id);
+  //   if (existItem.cantidad === calcularCantidad(prod)) {
+  //     return false;
+  //   }
+  //   return true;
+  // };
+
+  // const comp = async (item) => {
+  //   //Comprobamos si ya existe en el carrito el item que queremos agregar
+  //   const existItem = cart.cartItems.find((x) => x._id === producto._id);
+  //   //si existe le agregamos 1 a la cantidad, si no la ponemos en 1
+  //   const cantidad = existItem ? existItem.cantidad + 1 : 1;
+  //   const { data } = await axios.get(`api/productos/${item._id}`);
+  //   //OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES!
+  //   /* if (data.stockProducto < cantidad) {
+  //     toast.error('No hay stock del producto');
+  //     return;
+  //   } */
+
+  //   if (calcularCantidad(data) < cantidad) {
+      
+  //     return false;
+  //   }
+  //   return true;
+  // }
+
+  const calcularCantidad = (item) => {
+    //const { data: producto } = await axios.get(`api/productos/${item._id}`);
+    let cantidad = 0;
+    for (let i = 0; i < item.ingredientes.length; i++) {
+      if (i === 0) {
+        cantidad = Math.floor(
+          item.ingredientes[i].ingrediente.stockActualIngrediente /
+            item.ingredientes[i].cantidad
+        );
+      }
+      if (
+        Math.floor(
+          item.ingredientes[i].ingrediente.stockActualIngrediente /
+            item.ingredientes[i].cantidad
+        ) < cantidad
+      ) {
+        cantidad = Math.floor(
+          item.ingredientes[i].ingrediente.stockActualIngrediente /
+            item.ingredientes[i].cantidad
+        );
+      }
+    }
+    //console.log(cantidad);
+    return cantidad;
+  };
 
   const addToCartHandler = async (item) => {
     //Comprobamos si ya existe en el carrito el item que queremos agregar
-    const existItem = cartItems.find((x) => x._id === producto._id);
+    const existItem = cart.cartItems.find((x) => x._id === producto._id);
     //si existe le agregamos 1 a la cantidad, si no la ponemos en 1
     const cantidad = existItem ? existItem.cantidad + 1 : 1;
     const { data } = await axios.get(`api/productos/${item._id}`);
-    if (data.stockProducto < cantidad) {
+    //OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES!
+    /* if (data.stockProducto < cantidad) {
       toast.error('No hay stock del producto');
+      return;
+    } */
+
+    if (calcularCantidad(data) < cantidad) {
+      window.alert('No hay stock del producto');
       return;
     }
     ctxDispatch({
@@ -30,37 +109,57 @@ function Producto(props) {
     });
   };
   return (
-    <Card style={{ width: '18rem' }}>
-      <Link to={`/producto/${producto._id}`}>
-        <img
-          src={producto.imagenProducto}
-          className="card-img-top producto-img3"
-          alt={producto.nombreProducto}
-        />
-      </Link>
-      <Card.Body>
+    <div className="text-center">
+      <Card style={{ width: '18rem', height: '24rem' }}>
         <Link to={`/producto/${producto._id}`}>
-          <Card.Title>{producto.nombreProducto}</Card.Title>
+          <img
+            src={producto.imagenProducto}
+            className="card-img-top producto-img3"
+            alt={producto.nombreProducto}
+          />
         </Link>
-        <Card.Text>${producto.precioVentaProducto}</Card.Text>
-        {producto.stockProducto === 0 ? (
-          <Button variant="light" disabled>
-            Sin stock
-          </Button>
-        ) : (
-          <Button onClick={() => addToCartHandler(producto)}>
-            Agregar al carrito
-          </Button>
-        )}
-      </Card.Body>
-      {/* <div className="producto-info">
-        
-        <p>
-          <strong>{producto.precioVenta}</strong>
-        </p>
-        <button>Agregar al carrito</button>
-      </div> */}
-    </Card>
+        <Card.Body>
+          <Link to={`/producto/${producto._id}`}>
+            <Card.Title>{producto.nombreProducto}</Card.Title>
+          </Link>
+          <Card.Text>${producto.precioVentaProducto}</Card.Text>
+          <Card.Text>
+            <Row>
+              <Col>
+                {producto.isCeliaco && (
+                  <h6>
+                    <Badge bg="success"> Apto celíacos </Badge>
+                  </h6>
+                )}
+              </Col>
+              <Col>
+                {producto.isVegetariano && (
+                  <h6>
+                    <Badge bg="success"> Apto vegetarianos </Badge>
+                  </h6>
+                )}
+              </Col>
+            </Row>
+          </Card.Text>
+          {/* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */}
+          {/* {producto.stockProducto === 0 ? ( */}
+          {!stock(producto) ? (
+            <Button variant="light" disabled>
+              Sin stock
+            </Button>
+          ) : (
+            <Button
+              disabled={localStorage.getItem('localAbierto') === 'false'}
+              onClick={() => addToCartHandler(producto)}
+            >
+              {localStorage.getItem('localAbierto') !== 'false'
+                ? 'Agregar al carrito'
+                : 'Local cerrado'}
+            </Button>
+          )}
+        </Card.Body>
+      </Card>
+    </div>
   );
 }
 

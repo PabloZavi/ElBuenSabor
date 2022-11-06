@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import axios from 'axios';
 import logger from 'use-reducer-logger';
 import Row from 'react-bootstrap/Row';
@@ -7,6 +7,11 @@ import Producto from '../components/Producto';
 import { Helmet } from 'react-helmet-async';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
+import Carousel from 'react-elastic-carousel';
+import Item from '../components/Item';
+import { toast } from 'react-toastify';
+import { getError } from '../utils';
+
 //import data from '../data';
 
 //reducer acepta dos parámetros, el primero es el estado actual y el segundo es la acción que cambia
@@ -19,20 +24,29 @@ const reducer = (state, action) => {
       return { ...state, productos: action.payload, loading: false };
     case 'FETCH_FAIL':
       return { ...state, loading: false, error: action.payload };
+      case 'FETCH_CATEGORIES_REQUEST':
+      return { ...state, loading: true };
+    case 'FETCH_CATEGORIES_SUCCESS':
+      return { ...state, categorias: action.payload, loading: false };
+    case 'FETCH_CATEGORIES_FAIL':
+      return { ...state, loading: false, error: action.payload };
     default:
       return state;
   }
 };
 
 function HomeScreen() {
-  const [{ loading, error, productos }, dispatch] = useReducer(
+  const [{ loading, error, productos, categorias }, dispatch] = useReducer(
     logger(reducer),
     {
       productos: [],
+      categorias: [],
       loading: true,
       error: '',
     }
   );
+
+  //const [categories, setCategories] = useState([]);
   //const [productos, setProductos] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -49,13 +63,99 @@ function HomeScreen() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      dispatch({ type: 'FETCH_CATEGORIES_REQUEST' });
+      try {
+        const result = await axios.get('/api/productos/categories');
+        dispatch({ type: 'FETCH_CATEGORIES_SUCCESS', payload: result.data });
+      } catch (err) {
+        dispatch({ type: 'FETCH_CATEGORIES_FAIL', payload: err.message });
+      }
+
+      //setProductos(result.data);
+    };
+    fetchData();
+  }, []);
+
+  
+
+  /* useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get('/api/productos/categories');
+        setCategories(data);
+        //console.log(categories);
+      } catch (err) {
+        toast.error(getError(err));
+      }
+
+      //setProductos(result.data);
+    };
+    fetchData();
+  }, []); */
+
+  const breakPoints = [
+    { width: 1, itemsToShow: 1, pagination: false },
+    { width: 550, itemsToShow: 2, pagination: false },
+    { width: 768, itemsToShow: 4, pagination: false },
+    { width: 1200, itemsToShow: 4, pagination: false },
+  ];
+
   //Se le agrega un mensaje mientras carga y si hay un error lo muestra, si no muestra los productos.
   return (
     <div>
       <Helmet>
         <title>El Buen Sabor</title>
       </Helmet>
-      <h1> ¡Nuestros Productos! </h1>
+
+      {/* OPCIÓN 3 --> MOSTRAR DE FORMA AUTOMÁTICA Y POR SEPARADO LAS CATEGORÍAS QUE TIENEN AL MENOS UN PRODUCTO 
+        (CADA VEZ QUE SE AGREGUE UN NUEVO RUBRO Y UN NUEVO PRODUCTO A ESE RUBRO, SE MOSTRARÁ AUTOMÁTICAMENTE*/}
+      {categorias.map((cat) => (
+        <div key={cat} className="productos">
+          <h1>{cat}</h1>
+          <Carousel breakPoints={breakPoints} itemPadding={[0, 0]}>
+            {productos
+              .filter((prod) => prod.rubroProducto === cat && prod.altaProducto===true)
+              .map((producto) => (
+                <Item key={producto._id} sm={6} md={4} lg={3} className="mb-3">
+                  <Producto producto={producto}></Producto>
+                </Item>
+              ))}
+          </Carousel>
+        </div>
+      ))}
+
+      {/* OPCIÓN 1 --> HACER MANUALMENTE CADA RUBRO Y MOSTRAR LOS PRODUCTOS AGRUPADOS POR RUBRO */}
+      {/*
+      <div className="productos">
+        <h1>Nuestras Hamburguesas</h1>
+        <Carousel breakPoints={breakPoints} itemPadding={[0, 0]}>
+          {productos
+            .filter((prod) => prod.rubroProducto === 'Hamburguesas')
+            .map((producto) => (
+              <Item key={producto._id} sm={6} md={4} lg={3} className="mb-3">
+                <Producto producto={producto}></Producto>
+              </Item>
+            ))}
+        </Carousel>
+      </div>
+      
+      <div className="productos">
+        <h1>Nuestras Pizzas</h1>
+        <Carousel breakPoints={breakPoints} itemPadding={[0, 0]}>
+          {productos
+            .filter((prod) => prod.rubroProducto === 'Pizzas')
+            .map((producto) => (
+              <Item key={producto._id} sm={6} md={4} lg={3} className="mb-3">
+                <Producto producto={producto}></Producto>
+              </Item>
+            ))}
+        </Carousel>
+      </div> */}
+
+      {/* OPCIÓN 2 --> MOSTRAR DIRECTAMENTE TODOS LOS PRODUCTOS SIN DIFERENCIARLOS POR CATEGORIA */}
+      {/* <h1> ¡Nuestros Productos! </h1>
       <div className="productos">
         {loading ? (
           //<div>Cargando...</div>
@@ -72,7 +172,8 @@ function HomeScreen() {
             ))}
           </Row>
         )}
-      </div>
+      </div> */}
+
     </div>
   );
 }

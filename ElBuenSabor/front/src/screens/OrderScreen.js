@@ -122,15 +122,15 @@ export default function OrderScreen() {
     //dispatch({ type: 'PAY_REQUEST' });
     try {
       //Mando a pagoMercadoPagoRoutes el número de pedido y el total
-      console.log(order.totalPrice);
-      console.log(orderId);
+      //console.log(order.totalPrice);
+      //console.log(orderId);
       //guardo en 'data' la respuesta de MP
       const { data } = await axios.post('/pago', {
         orderId,
         totalPrice,
       });
       //data.message contiene la dirección!
-      console.log(data.message);
+      //console.log(data.message);
       //order.isPaid = true;
       //Extraigo la dirección de MP para pagar y redirecciono
       //Abre en la misma ventana
@@ -209,9 +209,10 @@ export default function OrderScreen() {
   
     loadScript('https://sdk.mercadopago.com/js/v2', handleScriptLoad);
   }; */
-
   useEffect(() => {
-    setPaid(urlParams.get('paid'));
+    if (urlParams.get('paid')) {
+      setPaid(urlParams.get('paid'));
+    }
 
     if (paid !== undefined) {
       if (paid === 'false' || paid === 'pending') {
@@ -219,7 +220,10 @@ export default function OrderScreen() {
         setPaid('');
       }
     }
+    setTotalPrice(order.totalPrice);
+  }, [order.totalPrice, paid, urlParams]);
 
+  useEffect(() => {
     const fetchOrder = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
@@ -235,8 +239,6 @@ export default function OrderScreen() {
     if (!userInfo) {
       return navigate('/login');
     }
-
-    setTotalPrice(order.totalPrice);
 
     if (
       !order._id ||
@@ -261,7 +263,7 @@ export default function OrderScreen() {
       };
       loadMercadoPagoScript();
     } */
-  }, [order, userInfo, orderId, navigate, paid, urlParams, successDeliver]);
+  }, [navigate, order._id, orderId, successDeliver, userInfo]);
 
   async function deliverOrderHandler() {
     try {
@@ -293,16 +295,34 @@ export default function OrderScreen() {
         <Col md={8}>
           <Card className="mb-3">
             <Card.Body>
-              <Card.Title>Dirección de entrega</Card.Title>
-              <Card.Text>
-                <strong>Nombre: </strong> {order.shippingAddress.fullName}{' '}
-                <br />
-                <strong>Dirección: </strong> {order.shippingAddress.address},
-                {order.shippingAddress.location}, {order.shippingAddress.phone}
-              </Card.Text>
+              <Card.Title>Opción de entrega</Card.Title>
+              {order.shippingOption === 'local' ? (
+                <Card.Text>
+                  Retira en local <br />
+                  <strong>Nombre: </strong> {order.user.nombreUsuario}{' '}
+                </Card.Text>
+              ) : (
+                <Card.Text>
+                  Entrega a domicilio <br />
+                  <strong>Nombre: </strong> {order.shippingAddress.fullName}{' '}
+                  <br />
+                  <strong>Dirección: </strong> {order.shippingAddress.address},
+                  {order.shippingAddress.location},{' '}
+                  {order.shippingAddress.phone}
+                </Card.Text>
+              )}
+
               {order.isDelivered ? (
                 <MessageBox variant="success">
-                  Entregado {order.deliveredAt}
+                  Entregado{' '}
+                  {
+                    /* order.deliveredAt */
+                    order.deliveredAt.substring(8, 10) +
+                      '/' +
+                      order.deliveredAt.substring(5, 7) +
+                      '/' +
+                      order.deliveredAt.substring(0, 4)
+                  }
                 </MessageBox>
               ) : (
                 <MessageBox variant="danger">No entregado</MessageBox>
@@ -317,7 +337,17 @@ export default function OrderScreen() {
                 <strong>Método: </strong> {order.paymentMethod} <br />
               </Card.Text>
               {order.isPaid ? (
-                <MessageBox variant="success">Pagado {order.paidAt}</MessageBox>
+                <MessageBox variant="success">
+                  Pagado{' '}
+                  {
+                    /* order.paidAt */
+                    order.paidAt.substring(8, 10) +
+                      '/' +
+                      order.paidAt.substring(5, 7) +
+                      '/' +
+                      order.paidAt.substring(0, 4)
+                  }
+                </MessageBox>
               ) : (
                 <MessageBox variant="danger">No pagado</MessageBox>
               )}
