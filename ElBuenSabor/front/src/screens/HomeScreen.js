@@ -112,7 +112,7 @@ function HomeScreen() {
       {/* OPCIÓN 3 --> MOSTRAR DE FORMA AUTOMÁTICA Y POR SEPARADO LAS CATEGORÍAS QUE TIENEN AL MENOS UN PRODUCTO 
         (CADA VEZ QUE SE AGREGUE UN NUEVO RUBRO Y UN NUEVO PRODUCTO A ESE RUBRO, SE MOSTRARÁ AUTOMÁTICAMENTE*/}
       {categorias.map((cat) => (
-        <div className="productos">
+        <div key={cat} className="productos">
           <h1>{cat}</h1>
           <Carousel breakPoints={breakPoints} itemPadding={[0, 0]}>
             {productos
