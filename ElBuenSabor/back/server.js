@@ -13,6 +13,7 @@ import rubroRouter from './routes/rubroRoutes.js';
 import rubroIngredienteRouter from './routes/rubroIngredienteRoutes.js';
 import ingredienteRouter from './routes/ingredienteRoutes.js';
 import unidadRouter from './routes/unidadRoutes.js';
+import configRouter from './routes/configRoutes.js';
 
 //fetch con las variables
 dotenv.config();
@@ -53,6 +54,7 @@ app.use('/pago', pagoMercadoPagoRouter);
 app.use('/api/rubros', rubroRouter);
 app.use('/api/rubrosingredientes', rubroIngredienteRouter);
 app.use('/api/unidades', unidadRouter);
+app.use('/api/config', configRouter);
 /* app.get('/api/productos', (req, res) => {
   res.send(data.productos);
 }); */

@@ -47,6 +47,7 @@ import IngredienteNewScreen from './screens/IngredienteNewScreen';
 
 import { DateTime } from 'luxon';
 import Swal from 'sweetalert2';
+import ConfigScreen from './screens/ConfigScreen';
 
 function App() {
   //Traemos el estado de la app desde el store
@@ -216,6 +217,10 @@ function App() {
                         title="Administración"
                         id="admin-nav-dropdown"
                       >
+                        <LinkContainer to="/admin/config">
+                          <NavDropdown.Item>Configuración</NavDropdown.Item>
+                        </LinkContainer>
+
                         <LinkContainer to="/admin/dashboard">
                           <NavDropdown.Item>
                             Estadísticas{' '}
@@ -326,6 +331,16 @@ function App() {
               <Route path="/search" element={<SearchScreen />} />
 
               {/* Admin routes */}
+
+              <Route
+                path="/admin/config"
+                element={
+                  <AdminRoute>
+                    <ConfigScreen></ConfigScreen>
+                  </AdminRoute>
+                }
+              ></Route>
+
               <Route
                 path="/admin/dashboard"
                 element={
