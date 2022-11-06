@@ -186,12 +186,14 @@ function App() {
                           {' '}
                           {userInfo.nombreUsuario}
                         </i>
-                        
                       }
                       id="basic-nav-dropdown"
                     >
                       <LinkContainer to="/profile">
-                        <NavDropdown.Item>Perfil<AccountBoxRoundedIcon className="align-right"/></NavDropdown.Item>
+                        <NavDropdown.Item>
+                          Perfil
+                          <AccountBoxRoundedIcon className="align-right" />
+                        </NavDropdown.Item>
                       </LinkContainer>
                       <LinkContainer to="/orderhistory">
                         <NavDropdown.Item>
@@ -204,7 +206,8 @@ function App() {
                         to="#signout"
                         onClick={signoutHandler}
                       >
-                        Desconectarse <ExitToAppRoundedIcon className="align-right"/>
+                        Desconectarse{' '}
+                        <ExitToAppRoundedIcon className="align-right" />
                       </Link>
                     </NavDropdown>
                   ) : (
@@ -225,8 +228,9 @@ function App() {
                         id="admin-nav-dropdown"
                       >
                         <LinkContainer to="/admin/config">
-                          <NavDropdown.Item>Configuración
-                          <i className="bi bi-gear-fill align-right"></i>
+                          <NavDropdown.Item>
+                            Configuración
+                            <i className="bi bi-gear-fill align-right"></i>
                           </NavDropdown.Item>
                         </LinkContainer>
 
@@ -238,19 +242,24 @@ function App() {
                           {/* <NavDropdown.Item>Estadísticas <i className="bi bi-graph-up-arrow align-right"></i> </NavDropdown.Item> */}
                         </LinkContainer>
                         <LinkContainer to="/admin/products">
-                          <NavDropdown.Item>Productos<FastfoodRoundedIcon className="align-right"/></NavDropdown.Item>
+                          <NavDropdown.Item>
+                            Productos
+                            <FastfoodRoundedIcon className="align-right" />
+                          </NavDropdown.Item>
                         </LinkContainer>
 
                         <LinkContainer to="/admin/ingredientes">
-                          <NavDropdown.Item>Ingredientes<EggAltRoundedIcon className="align-right"/></NavDropdown.Item>
+                          <NavDropdown.Item>
+                            Ingredientes
+                            <EggAltRoundedIcon className="align-right" />
+                          </NavDropdown.Item>
                         </LinkContainer>
 
                         <NavDropdown
                           drop="end"
                           id="nav-dropdown2"
-                          title="Rubros" 
+                          title="Rubros"
                         >
-                          
                           <NavDropdown.Item href="/admin/rubros">
                             Productos
                           </NavDropdown.Item>
@@ -259,15 +268,17 @@ function App() {
                           </NavDropdown.Item>
                         </NavDropdown>
 
-                        {/* <LinkContainer to="/admin/rubros">
-      <NavDropdown.Item>Rubros</NavDropdown.Item>
-    </LinkContainer> */}
-
                         <LinkContainer to="/admin/orders">
-                          <NavDropdown.Item>Pedidos<ReceiptRoundedIcon className="align-right"/></NavDropdown.Item>
+                          <NavDropdown.Item>
+                            Pedidos
+                            <ReceiptRoundedIcon className="align-right" />
+                          </NavDropdown.Item>
                         </LinkContainer>
                         <LinkContainer to="/admin/users">
-                          <NavDropdown.Item>Usuarios<i className="bi bi-people-fill align-right"></i></NavDropdown.Item>
+                          <NavDropdown.Item>
+                            Usuarios
+                            <i className="bi bi-people-fill align-right"></i>
+                          </NavDropdown.Item>
                         </LinkContainer>
                       </NavDropdown>
                     </>
