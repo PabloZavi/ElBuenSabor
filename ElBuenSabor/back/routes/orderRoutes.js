@@ -108,8 +108,8 @@ orderRouter.get(
     //Buscamos el pedido en la base de datos
     const order = await Order.findById(req.params.id).populate(
       'user',
-      'nombreUsuario'
-    );
+      'nombreUsuario' 
+    ).populate('orderItems.producto');
     if (order) {
       res.send(order);
     } else {
@@ -128,6 +128,26 @@ orderRouter.put(
       order.deliveredAt = Date.now();
       await order.save();
       res.send({ message: 'Pedido entregado!' });
+    } else {
+      res.status(404).send({ message: 'Pedido no encontrado' });
+    }
+  })
+);
+
+orderRouter.put(
+  '/:id/state',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const order = await Order.findById(req.params.id);
+    const state = req.body.estado;
+    if (order) {
+      order.estadoPedido = state;
+      if(state==='Entregado') {
+        order.isDelivered = true;
+      order.deliveredAt = Date.now();
+      }
+      await order.save();
+      res.send({ message: 'Estado actualizado! : ' + req.body.estado});
     } else {
       res.status(404).send({ message: 'Pedido no encontrado' });
     }

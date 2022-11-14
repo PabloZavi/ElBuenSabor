@@ -96,7 +96,9 @@ export default function OrderListScreen() {
               <th>Fecha</th>
               <th>Total</th>
               <th>Pagado?</th>
-              <th>Entregado?</th>
+              {/* <th>Entregado?</th> */}
+              <th>Entrega</th>
+              <th>Estado</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -123,17 +125,28 @@ export default function OrderListScreen() {
                       order.paidAt.substring(5, 7) +
                       '/' +
                       order.paidAt.substring(0, 4)
-                    : 'No'}
+                    : <p className="red">No</p>}
                 </td>
-                <td>
+                {/* <td>
                   {order.isDelivered
-                    ? /* order.deliveredAt.substring(0, 10) */
+                    ? 
                       order.deliveredAt.substring(8, 10) +
                       '/' +
                       order.deliveredAt.substring(5, 7) +
                       '/' +
                       order.deliveredAt.substring(0, 4)
                     : 'No'}
+                </td> */}
+
+<td>
+                  {order.shippingOption === 'local'
+                    ? 
+                      'Retira en local'
+                    : 'Delivery'}
+                </td>
+
+                <td>
+                  {order.estadoPedido}
                 </td>
                 <td>
                   <Button
