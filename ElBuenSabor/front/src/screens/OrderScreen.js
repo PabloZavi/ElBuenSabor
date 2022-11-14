@@ -559,7 +559,7 @@ export default function OrderScreen() {
             </Card.Body>
           </Card>
 
-          {userInfo.isAdmin && (
+          {userInfo.isAdmin ? (
             <Card className="mb-3">
               <Card.Body>
                 <Card.Title>Estado del pedido</Card.Title>
@@ -594,9 +594,10 @@ export default function OrderScreen() {
                     <MenuItem
                       disabled={
                         (order.estadoPedido !== 'A confirmar' &&
-                          order.estadoPedido !== 'En cocina') || (!order.isPaid &&
-                            (order.shippingOption === 'domicilio' ||
-                              order.paymentMethod === 'MercadoPago'))
+                          order.estadoPedido !== 'En cocina') ||
+                        (!order.isPaid &&
+                          (order.shippingOption === 'domicilio' ||
+                            order.paymentMethod === 'MercadoPago'))
                         /* (order.shippingOption === 'domicilio' && !order.isPaid) */
                       }
                       value={'Listo'}
@@ -607,7 +608,8 @@ export default function OrderScreen() {
                     <MenuItem
                       disabled={
                         order.estadoPedido !== 'Listo' ||
-                        order.shippingOption === 'local' || (!order.isPaid &&
+                        order.shippingOption === 'local' ||
+                        (!order.isPaid &&
                           (order.shippingOption === 'domicilio' ||
                             order.paymentMethod === 'MercadoPago'))
                       }
@@ -621,7 +623,10 @@ export default function OrderScreen() {
                         /* (order.estadoPedido !== 'En delivery' &&
                           order.estadoPedido !== 'Listo') ||
                         !order.isPaid || order.shippingOption!=='local' */
-                        !order.isPaid || order.estadoPedido==='Entregado' || (order.estadoPedido!=='Listo' && order.estadoPedido!=='En delivery')/*||
+                        !order.isPaid ||
+                        order.estadoPedido === 'Entregado' ||
+                        (order.estadoPedido !== 'Listo' &&
+                          order.estadoPedido !== 'En delivery') /*||
                          (order.estadoPedido !== 'En delivery' &&
                           order.shippingOption !== 'local' &&
                           order.estadoPedido !== 'Listo') ||  (!order.isPaid &&
@@ -634,8 +639,15 @@ export default function OrderScreen() {
                     </MenuItem>
                   </TextField>
 
-                  <Button type="submit">OK</Button>
+                  {order.estadoPedido!=='Entregado' && <Button type="submit">OK</Button>}
                 </Form>
+              </Card.Body>
+            </Card>
+          ) : (
+            <Card className="mb-3">
+              <Card.Body>
+                <Card.Title>Estado del pedido</Card.Title>
+                {order.estadoPedido}
               </Card.Body>
             </Card>
           )}
@@ -646,19 +658,21 @@ export default function OrderScreen() {
                 <Card.Title>Aclaraciones</Card.Title>
                 {order.shippingOption === 'domicilio' &&
                   !order.isPaid &&
-                  'El pedido ha sido pedido a domicilio pero no ha sido pagado, por lo que no se podrá cambiar de estado momentáneamente.'}
-                <br />
+                  'El pedido ha sido pedido a domicilio pero no ha sido pagado, por lo que no se podrá cambiar de estado momentáneamente.\n'}
+
                 {order.shippingOption === 'local' &&
-                  !order.isPaid && order.paymentMethod !== 'Efectivo' &&
-                  'El pedido será retirado en el local pero el cliente ha decidido pagar por Mercado Pago y todavía no está pagado, por lo que no se podrá cambiar de estado momentáneamente.'}
-                <br />
+                  !order.isPaid &&
+                  order.paymentMethod !== 'Efectivo' &&
+                  'El pedido será retirado en el local pero el cliente ha decidido pagar por Mercado Pago y todavía no está pagado, por lo que no se podrá cambiar de estado momentáneamente.\n'}
+
                 {order.estadoPedido === 'Listo' &&
                   !order.isPaid &&
-                  order.shippingOption === 'local' && order.paymentMethod === 'Efectivo' &&
-                  'El pedido está listo pero no se puede entregar ya que todavía no está pagado.'}
-                  {order.estadoPedido === 'Entregado' &&
-                  
-                  'El pedido ya está entregado, por lo que no se podrá cambiar el estado.'}
+                  order.shippingOption === 'local' &&
+                  order.paymentMethod === 'Efectivo' &&
+                  'El pedido está listo pero no se puede entregar ya que todavía no está pagado.\n'}
+
+                {order.estadoPedido === 'Entregado' &&
+                  'El pedido ya está entregado, por lo que no se podrá cambiar el estado.\n'}
               </Card.Body>
             </Card>
           )}

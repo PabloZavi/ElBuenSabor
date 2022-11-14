@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +8,11 @@ import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { Store } from '../Store';
 import { getError } from '../utils';
+import Row from 'react-bootstrap/Row';
+import Box from '@mui/material/Box';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -39,6 +44,12 @@ export default function OrderListScreen() {
       loading: true,
       error: '',
     });
+
+  const [filter, setFilter] = useState('A confirmar');
+
+  const handleChange = (event) => {
+    setFilter(event.target.value);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,7 +92,32 @@ export default function OrderListScreen() {
       <Helmet>
         <title>Pedidos</title>
       </Helmet>
-      <h1>Pedidos</h1>
+      <Row>
+        <h1>Pedidos</h1>
+
+        <Box sx={{ minWidth: 120 }}>
+          <FormControl fullWidth>
+            {/* <InputLabel id="demo-simple-select-label">Age</InputLabel> */}
+            <Select
+              className="medium-large-input mb-3"
+              /* labelId="demo-simple-select-label"*/
+              id="vistaPedidos"
+              value={filter}
+              /* label="Age" */
+              onChange={handleChange}
+            >
+              {/* <MenuItem value={''}>Todos</MenuItem>
+          <MenuItem value={'!Entregado'}>Todos menos entregados</MenuItem> */}
+              <MenuItem value={'A confirmar'}>A confirmar</MenuItem>
+              <MenuItem value={'En cocina'}>En cocina</MenuItem>
+              <MenuItem value={'Listo'}>Listos</MenuItem>
+              <MenuItem value={'En delivery'}>En delivery</MenuItem>
+              <MenuItem value={'Entregado'}>Entregados</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+      </Row>
+
       {loadingDelete && <LoadingBox></LoadingBox>}
       {loading ? (
         <LoadingBox></LoadingBox>
@@ -104,30 +140,36 @@ export default function OrderListScreen() {
           </thead>
 
           <tbody>
-            {orders.map((order) => (
-              <tr key={order._id}>
-                <td>{order._id}</td>
-                <td>
-                  {order.user ? order.user.nombreUsuario : 'Usuario eliminado'}
-                </td>
-                {/* <td>{order.createdAt.substring(0, 10)} </td> */}
-                <td>
-                  {order.createdAt.substring(8, 10)}/
-                  {order.createdAt.substring(5, 7)}/
-                  {order.createdAt.substring(0, 4)}{' '}
-                </td>
-                <td>{order.totalPrice.toFixed(2)}</td>
-                <td>
-                  {order.isPaid
-                    ? /* order.paidAt.substring(0, 10) */
+            {orders
+              .filter((ord) => ord.estadoPedido === filter)
+              .map((order) => (
+                <tr key={order._id}>
+                  <td>{order._id}</td>
+                  <td>
+                    {order.user
+                      ? order.user.nombreUsuario
+                      : 'Usuario eliminado'}
+                  </td>
+                  {/* <td>{order.createdAt.substring(0, 10)} </td> */}
+                  <td>
+                    {order.createdAt.substring(8, 10)}/
+                    {order.createdAt.substring(5, 7)}/
+                    {order.createdAt.substring(0, 4)}{' '}
+                  </td>
+                  <td>{order.totalPrice.toFixed(2)}</td>
+                  <td>
+                    {order.isPaid ? (
+                      /* order.paidAt.substring(0, 10) */
                       order.paidAt.substring(8, 10) +
                       '/' +
                       order.paidAt.substring(5, 7) +
                       '/' +
                       order.paidAt.substring(0, 4)
-                    : <p className="red">No</p>}
-                </td>
-                {/* <td>
+                    ) : (
+                      <p className="red">No</p>
+                    )}
+                  </td>
+                  {/* <td>
                   {order.isDelivered
                     ? 
                       order.deliveredAt.substring(8, 10) +
@@ -138,37 +180,34 @@ export default function OrderListScreen() {
                     : 'No'}
                 </td> */}
 
-<td>
-                  {order.shippingOption === 'local'
-                    ? 
-                      'Retira en local'
-                    : 'Delivery'}
-                </td>
+                  <td>
+                    {order.shippingOption === 'local'
+                      ? 'Retira en local'
+                      : 'Delivery'}
+                  </td>
 
-                <td>
-                  {order.estadoPedido}
-                </td>
-                <td>
-                  <Button
-                    type="Button"
-                    variant="light"
-                    onClick={() => {
-                      navigate(`/order/${order._id}`);
-                    }}
-                  >
-                    Detalle
-                  </Button>
-                  &nbsp;
-                  <Button
-                    type="button"
-                    variant="light"
-                    onClick={() => deleteHandler(order)}
-                  >
-                    Eliminar
-                  </Button>
-                </td>
-              </tr>
-            ))}
+                  <td>{order.estadoPedido}</td>
+                  <td>
+                    <Button
+                      type="Button"
+                      variant="light"
+                      onClick={() => {
+                        navigate(`/order/${order._id}`);
+                      }}
+                    >
+                      Detalle
+                    </Button>
+                    &nbsp;
+                    <Button
+                      type="button"
+                      variant="light"
+                      onClick={() => deleteHandler(order)}
+                    >
+                      Eliminar
+                    </Button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       )}
