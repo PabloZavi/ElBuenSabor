@@ -9,10 +9,12 @@ import MessageBox from '../components/MessageBox';
 import { Store } from '../Store';
 import { getError } from '../utils';
 import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -46,6 +48,7 @@ export default function OrderListScreen() {
     });
 
   const [filter, setFilter] = useState('A confirmar');
+  const [busqueda, setBusqueda] = useState('');
 
   const handleChange = (event) => {
     setFilter(event.target.value);
@@ -93,29 +96,44 @@ export default function OrderListScreen() {
         <title>Pedidos</title>
       </Helmet>
       <Row>
-        <h1>Pedidos</h1>
-
-        <Box sx={{ minWidth: 120 }}>
-          <FormControl fullWidth>
-            {/* <InputLabel id="demo-simple-select-label">Age</InputLabel> */}
-            <Select
-              className="medium-large-input mb-3"
-              /* labelId="demo-simple-select-label"*/
-              id="vistaPedidos"
-              value={filter}
-              /* label="Age" */
-              onChange={handleChange}
-            >
-              {/* <MenuItem value={''}>Todos</MenuItem>
-          <MenuItem value={'!Entregado'}>Todos menos entregados</MenuItem> */}
-              <MenuItem value={'A confirmar'}>A confirmar</MenuItem>
-              <MenuItem value={'En cocina'}>En cocina</MenuItem>
-              <MenuItem value={'Listo'}>Listos</MenuItem>
-              <MenuItem value={'En delivery'}>En delivery</MenuItem>
-              <MenuItem value={'Entregado'}>Entregados</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
+        <Col>
+          <h1>Pedidos</h1>
+          <br />
+        </Col>
+      </Row>
+      <Row>
+        <Col md={3}>
+          <Box>
+            <FormControl fullWidth>
+              <Select
+                className="medium-large-input mb-3"
+                id="Estado"
+                value={filter}
+                onChange={handleChange}
+                label="Estado"
+              >
+                <MenuItem value={'Todos'}>Todos</MenuItem>
+                <MenuItem value={'A confirmar'}>A confirmar</MenuItem>
+                <MenuItem value={'En cocina'}>En cocina</MenuItem>
+                <MenuItem value={'Listo'}>Listos</MenuItem>
+                <MenuItem value={'En delivery'}>En delivery</MenuItem>
+                <MenuItem value={'Entregado'}>Entregados</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </Col>
+        <Col>
+          <Box
+            component="form"
+            className="medium-large-input mb-3"
+            noValidate
+            autoComplete="off"
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+          >
+            <TextField id="busqueda" label="Búsqueda" variant="outlined" />
+          </Box>
+        </Col>
       </Row>
 
       {loadingDelete && <LoadingBox></LoadingBox>}
@@ -141,7 +159,15 @@ export default function OrderListScreen() {
 
           <tbody>
             {orders
-              .filter((ord) => ord.estadoPedido === filter)
+              .filter(
+                (ord) =>
+                  ord._id.toString().toLowerCase().includes(busqueda) ||
+                  ord.user.nombreUsuario.toLowerCase().includes(busqueda)
+              )
+              //.filter((ord) => ord.estadoPedido === filter)
+              .filter((ord) =>
+                ord.estadoPedido.includes(filter === 'Todos' ? '' : filter)
+              )
               .map((order) => (
                 <tr key={order._id}>
                   <td>{order._id}</td>
