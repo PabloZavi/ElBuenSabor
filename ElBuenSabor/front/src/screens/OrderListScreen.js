@@ -104,22 +104,21 @@ export default function OrderListScreen() {
       <Row>
         <Col md={3}>
           <Box>
-            <FormControl fullWidth>
-              <Select
-                className="medium-large-input mb-3"
-                id="Estado"
-                value={filter}
-                onChange={handleChange}
-                label="Estado"
-              >
-                <MenuItem value={'Todos'}>Todos</MenuItem>
-                <MenuItem value={'A confirmar'}>A confirmar</MenuItem>
-                <MenuItem value={'En cocina'}>En cocina</MenuItem>
-                <MenuItem value={'Listo'}>Listos</MenuItem>
-                <MenuItem value={'En delivery'}>En delivery</MenuItem>
-                <MenuItem value={'Entregado'}>Entregados</MenuItem>
-              </Select>
-            </FormControl>
+            <TextField
+              className="medium-large-input mb-3"
+              select
+              id="Estado"
+              value={filter}
+              onChange={handleChange}
+              label="Estado"
+            >
+              <MenuItem value={'Todos'}>Todos</MenuItem>
+              <MenuItem value={'A confirmar'}>A confirmar</MenuItem>
+              <MenuItem value={'En cocina'}>En cocina</MenuItem>
+              <MenuItem value={'Listo'}>Listos</MenuItem>
+              <MenuItem value={'En delivery'}>En delivery</MenuItem>
+              <MenuItem value={'Entregado'}>Entregados</MenuItem>
+            </TextField>
           </Box>
         </Col>
         <Col>
