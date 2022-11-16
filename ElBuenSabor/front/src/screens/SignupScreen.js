@@ -33,7 +33,7 @@ export default function SignupScreen() {
 
   //const googleAuth = process.env.ID_GOOGLE_AUTH;
   const clientId =
-    '957228051934-4gaplgi14rns68ae1a8jo8fjor1ribdl.apps.googleusercontent.com';
+    '147686912643-ltnii4fb12jf91mhvgfdmk6qp520s3j8.apps.googleusercontent.com';
 
   //Guardamos el usuario en el store si el login es exitoso
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -237,7 +237,7 @@ export default function SignupScreen() {
         <div className="mb-3">
           <GoogleLogin
             //clientId={googleAuth}
-            clientId="957228051934-4gaplgi14rns68ae1a8jo8fjor1ribdl.apps.googleusercontent.com"
+            clientId="147686912643-ltnii4fb12jf91mhvgfdmk6qp520s3j8.apps.googleusercontent.com"
             buttonText="Registrate con Google"
             onSuccess={responseGoogle}
             onFailure={responseGoogle}

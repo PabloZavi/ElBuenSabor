@@ -25,7 +25,7 @@ export default function SigninScreen() {
   const [passwordUsuario, setPasswordUsuario] = useState('');
 
   const clientId =
-    '957228051934-4gaplgi14rns68ae1a8jo8fjor1ribdl.apps.googleusercontent.com';
+    '147686912643-ltnii4fb12jf91mhvgfdmk6qp520s3j8.apps.googleusercontent.com';
 
   //Guardamos el usuario en el store si el login es exitoso
 
@@ -137,7 +137,7 @@ export default function SigninScreen() {
 <div className="mb-3">
   <GoogleLogin
     //clientId={googleAuth}
-    clientId="957228051934-4gaplgi14rns68ae1a8jo8fjor1ribdl.apps.googleusercontent.com"
+    clientId="147686912643-ltnii4fb12jf91mhvgfdmk6qp520s3j8.apps.googleusercontent.com"
     buttonText="Ingresá con Google"
     onSuccess={responseGoogle}
     onFailure={responseGoogle}
