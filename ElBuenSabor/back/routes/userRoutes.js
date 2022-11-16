@@ -37,10 +37,10 @@ userRouter.put(
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
     if (user) {
-      user.nombreUsuario = req.body.nombreUsuario/*  || user.nombreUsuario */;
-      user.emailUsuario = req.body.emailUsuario/*  || user.emailUsuario */;
+      user.nombreUsuario = req.body.nombreUsuario /*  || user.nombreUsuario */;
+      user.emailUsuario = req.body.emailUsuario /*  || user.emailUsuario */;
       user.isAdmin = Boolean(req.body.isAdmin);
-      /* const updatedUser =  */await user.save();
+      /* const updatedUser =  */ await user.save();
       res.send({ message: 'Usuario actualizado!' });
     } else {
       res.status(404).send({ message: 'Usuario no encontrado' });
@@ -54,8 +54,8 @@ userRouter.put(
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     if (user) {
-      user.nombreUsuario = req.body.nombreUsuario/*  || user.nombreUsuario */;
-      user.emailUsuario = req.body.emailUsuario/*  || user.emailUsuario */;
+      user.nombreUsuario = req.body.nombreUsuario /*  || user.nombreUsuario */;
+      user.emailUsuario = req.body.emailUsuario /*  || user.emailUsuario */;
       if (req.body.passwordUsuario) {
         user.passwordUsuario = bcrypt.hashSync(req.body.passwordUsuario, 8);
       }
@@ -125,6 +125,29 @@ userRouter.post(
 );
 
 userRouter.post(
+  '/signingoogle',
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findOne({ emailUsuario: req.body.emailUsuario });
+    if (user) {
+      
+        res.send({
+          _id: user._id,
+          nombreUsuario: user.nombreUsuario,
+          emailUsuario: user.emailUsuario,
+          isAdmin: user.isAdmin,
+          token: generateToken(user),
+          address: user.address,
+          location: user.location,
+          phone: user.phone,
+        });
+        return;
+      
+    }
+    res.status(401).send({ message: 'No hay un cliente registrado con la cuenta de Google que deseas ingresar, por favor registrate' });
+  })
+);
+
+userRouter.post(
   '/signup',
   expressAsyncHandler(async (req, res) => {
     //Creamos un nuevo usuario
@@ -151,6 +174,37 @@ userRouter.post(
   })
 );
 
+userRouter.post(
+  '/signupgoogle',
+  expressAsyncHandler(async (req, res) => {
+    //Verificamos que el usuario no exista
+    const userExist = await User.findOne({
+      emailUsuario: req.body.emailUsuario,
+    });
+    if (!userExist) {
+      //Creamos un nuevo usuario
+      const newUser = new User({
+        nombreUsuario: req.body.nombreUsuario,
+        emailUsuario: req.body.emailUsuario,
+      });
 
+      //Se guarda el nuevo usuario en la DB
+      const user = await newUser.save();
+      res.send({
+        _id: user._id,
+        nombreUsuario: user.nombreUsuario,
+        emailUsuario: user.emailUsuario,
+        isAdmin: user.isAdmin,
+        token: generateToken(user),
+      });
+    } else {
+      res
+        .status(401)
+        .send({
+          message: 'Ya hay registrado un usuario con el mail ingresado',
+        });
+    }
+  })
+);
 
 export default userRouter;
