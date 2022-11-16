@@ -253,7 +253,7 @@ export default function ProductNewScreen() {
     //localStorage.setItem('ingredientesProducto', JSON.stringify(list));
     //console.log(list)
     //console.log(typeof(list))
-    console.log(ingredientesProducto);
+    //console.log(ingredientesProducto);
   };
 
   function deleteLocalStorage() {
@@ -271,7 +271,7 @@ export default function ProductNewScreen() {
     localStorage.removeItem('stockProducto') */
     localStorage.clear();
     localStorage.setItem('userInfo', userInfo);
-  }
+  } 
 
   const submitHandler = async (e) => {
     e.preventDefault();

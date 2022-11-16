@@ -54,6 +54,7 @@ import EggAltRoundedIcon from '@mui/icons-material/EggAltRounded';
 import ReceiptRoundedIcon from '@mui/icons-material/ReceiptRounded';
 import AccountBoxRoundedIcon from '@mui/icons-material/AccountBoxRounded';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
+import NotFoundScreen from './screens/NotFoundScreen';
 
 function App() {
   //Traemos el estado de la app desde el store
@@ -329,6 +330,7 @@ function App() {
                 }
               />
               <Route path="/" element={<HomeScreen />} />
+              <Route path="*" element={<NotFoundScreen />} />
               <Route path="/shipping" element={<ShippingAddressScreen />} />
               <Route path="/payment" element={<PaymentMethodScreen />} />
               <Route path="/placeorder" element={<PlaceOrderScreen />} />

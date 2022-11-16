@@ -9,6 +9,8 @@ import { Store } from '../Store';
 import { toast } from 'react-toastify';
 import { getError } from '../utils';
 import TextField from '@mui/material/TextField';
+import GoogleLogin from 'react-google-login';
+import { gapi } from 'gapi-script';
 
 export default function SignupScreen() {
   const navigate = useNavigate();
@@ -28,8 +30,12 @@ export default function SignupScreen() {
   const [location, setLocation] = useState('');
   const [phone, setPhone] = useState('');
 
-  //Guardamos el usuario en el store si el login es exitoso
 
+  //const googleAuth = process.env.ID_GOOGLE_AUTH;
+  const clientId =
+    '147686912643-ltnii4fb12jf91mhvgfdmk6qp520s3j8.apps.googleusercontent.com';
+
+  //Guardamos el usuario en el store si el login es exitoso
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
 
@@ -59,6 +65,28 @@ export default function SignupScreen() {
     } catch (err) {
       //Ver en App.js lo relacionado con toastify
       //Traemos desde el back el error
+      toast.error(getError(err));
+    }
+  };
+
+  //Importante, ya que se actualizaron los métodos de Google
+  useEffect(() => {
+    gapi.load('client:auth2', () => {
+      gapi.auth2.init({ clientId: clientId });
+    });
+  }, []);
+
+  //Si el usuario no se regitra en el formulario, sino con Google, se usará esta función
+  const responseGoogle = async (response) => {
+    try {
+      const { data } = await Axios.post('/api/users/signupgoogle', {
+        nombreUsuario: response.profileObj.name,
+        emailUsuario: response.profileObj.email,
+      });
+      ctxDispatch({ type: 'USER_SIGNIN', payload: data });
+      localStorage.setItem('userInfo', JSON.stringify(data));
+      navigate(redirect || '/');
+    } catch (err) {
       toast.error(getError(err));
     }
   };
@@ -203,6 +231,22 @@ export default function SignupScreen() {
         <div className="mb-3">
           <Button type="submit">Registrate</Button>
         </div>
+
+        <hr />
+
+        <div className="mb-3">
+          <GoogleLogin
+            //clientId={googleAuth}
+            clientId="147686912643-ltnii4fb12jf91mhvgfdmk6qp520s3j8.apps.googleusercontent.com"
+            buttonText="Registrate con Google"
+            onSuccess={responseGoogle}
+            onFailure={responseGoogle}
+            cookiePolicy={'single_host_origin'}
+            //isSignedIn={true}
+          />
+        </div>
+
+        <hr />
         <div className="mb-3">
           ¿Ya tenés una cuenta?{' '}
           {/* Se dirigirá al usuario a la pantalla de Sign In y después a la dirección
