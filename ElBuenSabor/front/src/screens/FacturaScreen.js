@@ -1,5 +1,5 @@
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import React, { useContext, useEffect, useReducer, useState, useRef } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import React, { useContext, useEffect, useReducer, useRef } from 'react';
 import { Store } from '../Store';
 import axios from 'axios';
 import { getError, numeroALetras } from '../utils';

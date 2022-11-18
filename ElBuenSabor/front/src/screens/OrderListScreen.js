@@ -12,8 +12,6 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 
 function reducer(state, action) {
@@ -230,6 +228,13 @@ export default function OrderListScreen() {
                     >
                       Eliminar
                     </Button>
+                    {order.isPaid && (
+                    <Button
+                      onClick={() => navigate(`/order/factura/${order._id}`)}
+                    >
+                      Ver factura
+                    </Button>
+                  )}
                   </td>
                 </tr>
               ))}

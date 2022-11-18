@@ -45,6 +45,8 @@ const orderSchema = new mongoose.Schema(
     deliveredAt: { type: Date },
     estadoPedido: { type: String, required: true, default: 'A confirmar' },
     numeroFactura: { type: Number, required: true, default: Math.floor(Math.random()*99999999+1) },
+    horaEstimada: { type: Date },
+    tiempoPreparacion: { type: Number },
   },
   {
     timestamps: true,

@@ -36,6 +36,8 @@ orderRouter.post(
       totalCost: req.body.totalCost,
       //Esta info la tengo después de que el middleware 'isAuth' verifica el token
       user: req.user._id,
+      tiempoPreparacion: req.body.tiempoPreparacion,
+      horaEstimada: new Date(req.body.horaEstimada)
     });
 
     const order = await newOrder.save();
@@ -102,14 +104,49 @@ orderRouter.get(
 
 orderRouter.get(
   //Uso el middleware 'isAuth' que filtrará el user request _id de abajo
+  '/tiempo',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    //Buscamos el pedido en la base de datos
+    const orders = await Order.find().populate('orderItems.producto');
+    //console.log("La cantidad de órdenes es: " + orders.length)
+    
+    if (orders) {
+      let tiempo = 0;
+      
+      //res.send(order);
+      for (let i = 0; i < orders.length; i++) {
+        
+        if (orders[i].estadoPedido === 'En cocina') {
+          
+          //console.log(orders[i])
+         //console.log(orders[i].orderItems)
+          //console.log(tiempo)
+          //console.log("**************************************************")
+          for (let j = 0; j < orders[i].orderItems.length; j++) {
+            //console.log(orders[i].orderItems[j].producto.tiempoCocinaProducto)
+            tiempo += orders[i].orderItems[j].producto.tiempoCocinaProducto;
+          }
+        }
+      }
+      //console.log(tiempo)
+      res.send({message: tiempo});
+    } else {
+      res.status(404).send({ message: 'No hay órdenes' });
+      //res.send("tiempo");
+    }
+  })
+);
+
+orderRouter.get(
+  //Uso el middleware 'isAuth' que filtrará el user request _id de abajo
   '/:id',
   isAuth,
   expressAsyncHandler(async (req, res) => {
     //Buscamos el pedido en la base de datos
-    const order = await Order.findById(req.params.id).populate(
-      'user',
-      'nombreUsuario' 
-    ).populate('orderItems.producto');
+    const order = await Order.findById(req.params.id)
+      .populate('user', 'nombreUsuario')
+      .populate('orderItems.producto');
     if (order) {
       res.send(order);
     } else {
@@ -142,12 +179,12 @@ orderRouter.put(
     const state = req.body.estado;
     if (order) {
       order.estadoPedido = state;
-      if(state==='Entregado') {
+      if (state === 'Entregado') {
         order.isDelivered = true;
-      order.deliveredAt = Date.now();
+        order.deliveredAt = Date.now();
       }
       await order.save();
-      res.send({ message: 'Estado actualizado! : ' + req.body.estado});
+      res.send({ message: 'Estado actualizado! : ' + req.body.estado });
     } else {
       res.status(404).send({ message: 'Pedido no encontrado' });
     }
