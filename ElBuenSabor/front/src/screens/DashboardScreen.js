@@ -63,59 +63,145 @@ export default function DashboardScreen() {
       <Helmet>
         <title>Tablero</title>
       </Helmet>
-      <h1>Tablero</h1>
+      <h1 className="align-center">Tablero</h1>
       {loading ? (
         <LoadingBox></LoadingBox>
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
         <>
-          <Row>
-            <Col md={4}>
+          <Row className="align-center">
+            <Col md={2}>
               <Card>
                 <Card.Body>
                   {/* summary viene del back, extraemos el primer elemento de users y el numUsers de ese primer elemento */}
-                  <Card.Title>
+                  <Card.Text className="align-center">Usuarios</Card.Text>
+                  <Card.Title className="align-center">
                     {/* Si existe summary.users y summary.users[0] mostrar la cantidad
                     si no mostrar 0 */}
                     {summary.users && summary.users[0]
                       ? summary.users[0].numUsers
                       : 0}
                   </Card.Title>
-                  <Card.Text>Usuarios</Card.Text>
                 </Card.Body>
               </Card>
             </Col>
 
-            <Col md={4}>
+            <Col md={2}>
               <Card>
                 <Card.Body>
-                  <Card.Title>
+                  <Card.Text className="align-center">Pedidos</Card.Text>
+                  <Card.Title className="align-center">
                     {summary.orders && summary.orders[0]
                       ? summary.orders[0].numOrders
                       : 0}
                   </Card.Title>
-                  <Card.Text>Pedidos</Card.Text>
                 </Card.Body>
               </Card>
             </Col>
 
-            <Col md={4}>
+            <Col md={2}>
               <Card>
                 <Card.Body>
-                  <Card.Title>
+                  <Card.Text className="align-center">
+                    Total de ventas
+                  </Card.Text>
+                  <Card.Title className="align-center">
                     ${' '}
                     {summary.orders && summary.orders[0]
                       ? summary.orders[0].totalSales.toFixed(2)
                       : 0}
                   </Card.Title>
-                  <Card.Text>Total de ventas</Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+
+            <Col md={2}>
+              <Card>
+                <Card.Body>
+                  <Card.Text className="align-center">
+                    Total de costos
+                  </Card.Text>
+                  <Card.Title className="align-center">
+                    ${' '}
+                    {summary.orders && summary.orders[0]
+                      ? summary.orders[0].totalCosts.toFixed(2)
+                      : 0}
+                  </Card.Title>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col md={2}>
+              <Card>
+                <Card.Body>
+                  <Card.Text className="align-center">Ganancia</Card.Text>
+                  <Card.Title className="align-center">
+                    ${' '}
+                    {summary.orders && summary.orders[0]
+                      ? (
+                          summary.orders[0].totalSales -
+                          summary.orders[0].totalCosts
+                        ).toFixed(2)
+                      : 0}
+                  </Card.Title>
                 </Card.Body>
               </Card>
             </Col>
           </Row>
+
+          <Row className="align-center">
+            {summary.paymentMethod && summary.paymentMethod[0]
+              ? summary.paymentMethod.map((x) => (
+                  <Col md={3}>
+                    <Card>
+                      <Card.Body>
+                        <Card.Text className="align-center">
+                          Pagado con {x._id}
+                        </Card.Text>
+                        <Card.Title className="align-center">
+                          $ {x.total.toFixed(2)}
+                        </Card.Title>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))
+              : 0}
+
+            {/*
+            
+            <Col md={3}>
+              <Card>
+                <Card.Body>
+                  <Card.Title>
+                    {summary.paymentMethod && summary.paymentMethod[1]
+                      ? summary.paymentMethod[1].total.toFixed(2)
+                      : 0}
+                  </Card.Title>
+                  <Card.Text className="align-center">Pagado en efectivo</Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+
+            
+
+            <Col md={3}>
+              <Card>
+                <Card.Body>
+                  <Card.Title>
+                    ${' '}
+                    {summary.orders && summary.orders[0]
+                      ? summary.orders[0].totalCosts.toFixed(2)
+                      : 0}
+                  </Card.Title>
+                  <Card.Text>Total de costos</Card.Text>
+                </Card.Body>
+              </Card>
+            </Col> */}
+          </Row>
+          <br />
+
           <div className="my-3">
-            <h2>Ventas</h2>
+            <h2 className="align-center">Ventas por día</h2>
             {summary.dailyOrders.length === 0 ? (
               <MessageBox>No hay ventas</MessageBox>
             ) : (
@@ -124,26 +210,54 @@ export default function DashboardScreen() {
                 height="400px"
                 chartType="AreaChart"
                 loader={<div>Cargando gráfico...</div>}
-                data={[['Fecha', 'Ventas'],
-              ...summary.dailyOrders.map((x)=>[x._id, x.sales])]}
+                data={[
+                  ['Fecha', 'Ventas'],
+                  ...summary.dailyOrders.map((x) => [x._id, x.sales]),
+                ]}
               ></Chart>
             )}
           </div>
-          <div className="my-3">
-            <h2>Rubros</h2>
-            {summary.productCategories.length === 0 ? (
-              <MessageBox>No hay rubros</MessageBox>
-            ) : (
-              <Chart
-                width="100%"
-                height="400px"
-                chartType="PieChart"
-                loader={<div>Cargando gráfico...</div>}
-                data={[['Rubros', 'Productos'],
-              ...summary.productCategories.map((x)=>[x._id, x.count])]}
-              ></Chart>
-            )}
-          </div>
+
+          <Row>
+            <Col md={6}>
+              <div className="my-3">
+                <h2 className="align-center">Rubros</h2>
+                {summary.productCategories.length === 0 ? (
+                  <MessageBox>No hay rubros</MessageBox>
+                ) : (
+                  <Chart
+                    width="100%"
+                    height="400px"
+                    chartType="PieChart"
+                    loader={<div>Cargando gráfico...</div>}
+                    data={[
+                      ['Rubros', 'Productos'],
+                      ...summary.productCategories.map((x) => [x._id, x.count]),
+                    ]}
+                  ></Chart>
+                )}
+              </div>
+            </Col>
+            <Col md={6}>
+              <div className="my-3">
+                <h2 className="align-center">Forma de pago</h2>
+                {summary.paymentMethod.length === 0 ? (
+                  <MessageBox>No hay ventas</MessageBox>
+                ) : (
+                  <Chart
+                    width="100%"
+                    height="400px"
+                    chartType="PieChart"
+                    loader={<div>Cargando gráfico...</div>}
+                    data={[
+                      ['Forma de pago', 'Total'],
+                      ...summary.paymentMethod.map((x) => [x._id, x.total]),
+                    ]}
+                  ></Chart>
+                )}
+              </div>
+            </Col>
+          </Row>
         </>
       )}
     </div>

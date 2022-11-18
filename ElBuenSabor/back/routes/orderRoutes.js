@@ -51,24 +51,31 @@ orderRouter.get(
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
+
+    
     const orders = await Order.aggregate([
       //pipeline
       {
         $group: {
           _id: null, //null=todos
-          numOrders: { $sum: 1 }, //suma todos los ítems
-          totalSales: { $sum: '$totalPrice' },
+          numOrders: { $sum: 1 }, //Cantidad total de pedidos
+          totalSales: { $sum: '$totalPrice' }, //Total de ingresos
+          totalCosts: { $sum: '$totalCost' }, //Total de costos
         },
       },
     ]);
+
+    //Cantidad total de usuarios
     const users = await User.aggregate([
       {
         $group: {
-          _id: null,
+          _id: null, //Todos
           numUsers: { $sum: 1 },
         },
       },
     ]);
+
+    //Cantidad de pedidos y total de ingresos por día
     const dailyOrders = await Order.aggregate([
       {
         $group: {
@@ -79,6 +86,8 @@ orderRouter.get(
       },
       { $sort: { _id: 1 } },
     ]);
+
+    //Cantidad de productos por rubro
     const productCategories = await Producto.aggregate([
       {
         $group: {
@@ -87,7 +96,18 @@ orderRouter.get(
         },
       },
     ]);
-    res.send({ users, orders, dailyOrders, productCategories });
+
+    //Para agrupar cuánto se pago con MP y cuánto con Efectivo
+    const paymentMethod = await Order.aggregate([
+      {
+        $group: {
+          _id: '$paymentMethod',
+          total: { $sum: '$totalPrice' },
+        },
+      },
+    ]);
+
+    res.send({ users, orders, dailyOrders, productCategories, paymentMethod });
   })
 );
 
