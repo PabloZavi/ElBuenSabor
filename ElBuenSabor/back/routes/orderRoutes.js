@@ -30,7 +30,7 @@ orderRouter.post(
       paymentMethod: req.body.paymentMethod,
       itemsPrice: req.body.itemsPrice,
       discount: req.body.discount,
-      taxPrice: req.body.taxPrice,
+      //taxPrice: req.body.taxPrice,
       totalPrice: req.body.totalPrice,
       shippingOption: req.body.shippingOption,
       totalCost: req.body.totalCost,

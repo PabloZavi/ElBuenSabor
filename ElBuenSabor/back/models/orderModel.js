@@ -34,7 +34,7 @@ const orderSchema = new mongoose.Schema(
     },
     itemsPrice: { type: Number, required: true },
     discount: { type: Number, required: true },
-    taxPrice: { type: Number, required: true },
+    //taxPrice: { type: Number, required: true },
     totalPrice: { type: Number, required: true },
     totalCost: { type: Number },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -44,7 +44,7 @@ const orderSchema = new mongoose.Schema(
     isDelivered: { type: Boolean, default: false },
     deliveredAt: { type: Date },
     estadoPedido: { type: String, required: true, default: 'A confirmar' },
-    numeroFactura: { type: Number },
+    numeroFactura: { type: Number, required: true, default: Math.floor(Math.random()*99999999+1) },
   },
   {
     timestamps: true,

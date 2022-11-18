@@ -107,7 +107,7 @@ export default function OrderHistoryScreen() {
                       navigate(`/order/${order._id}`);
                     }}
                   >
-                    Details
+                    Detalle
                   </Button>
                 </td>
               </tr>

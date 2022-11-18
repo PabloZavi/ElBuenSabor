@@ -41,14 +41,14 @@ export default function PlaceOrderScreen() {
     cart.cartItems.reduce((a, c) => a + c.cantidad * c.precioVentaProducto, 0)
   );
 
-  cart.taxPrice = round2(0.21 * cart.itemsPrice);
+  //cart.taxPrice = round2(0.21 * cart.itemsPrice);
 
   cart.discount =
     cart.shippingOption === 'local'
-      ? -round2((cart.itemsPrice + cart.taxPrice) * 0.1)
+      ? -round2((cart.itemsPrice/*  + cart.taxPrice */) * 0.1)
       : round2(0);
 
-  cart.totalPrice = cart.itemsPrice + cart.discount + cart.taxPrice;
+  cart.totalPrice = cart.itemsPrice + cart.discount/*  + cart.taxPrice */;
 
   cart.totalCost = calcularCosto();
 
@@ -64,7 +64,7 @@ export default function PlaceOrderScreen() {
           paymentMethod: cart.paymentMethod,
           itemsPrice: cart.itemsPrice,
           discount: cart.discount,
-          taxPrice: cart.taxPrice,
+          //taxPrice: cart.taxPrice,
           totalPrice: cart.totalPrice,
           totalCost: cart.totalCost,
           shippingOption: cart.shippingOption,
@@ -239,12 +239,12 @@ export default function PlaceOrderScreen() {
                   </Row>
                 </ListGroup.Item>
 
-                <ListGroup.Item>
+                {/* <ListGroup.Item>
                   <Row>
                     <Col>IVA</Col>
                     <Col>$ {cart.taxPrice.toFixed(2)}</Col>
                   </Row>
-                </ListGroup.Item>
+                </ListGroup.Item> */}
                 <ListGroup.Item>
                   <Row>
                     <Col>Descuento</Col>
