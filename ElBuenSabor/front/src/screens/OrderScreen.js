@@ -136,6 +136,11 @@ export default function OrderScreen() {
     setEstado(event.target.value);
   };
 
+  const verFacturaHandler = () => {
+    //window.open(`/order/factura/${order._id}`, '', 'fullscreen=yes, toolbar=yes,scrollbars=yes,resizable=yes, menubar=yes', 'status=yes', 'titlebar=yes');
+    window.open(`/order/factura/${order._id}`);
+  };
+
   const pagoMercadoPagoHandler = async (e) => {
     e.preventDefault();
     //dispatch({ type: 'PAY_REQUEST' });
@@ -500,12 +505,12 @@ export default function OrderScreen() {
                   </Row>
                 </ListGroup.Item>
 
-                <ListGroup.Item>
+                {/* <ListGroup.Item>
                   <Row>
                     <Col>IVA</Col>
                     <Col>${order.taxPrice.toFixed(2)}</Col>
                   </Row>
-                </ListGroup.Item>
+                </ListGroup.Item> */}
 
                 <ListGroup.Item>
                   <Row>
@@ -639,7 +644,9 @@ export default function OrderScreen() {
                     </MenuItem>
                   </TextField>
 
-                  {order.estadoPedido!=='Entregado' && <Button type="submit">OK</Button>}
+                  {order.estadoPedido !== 'Entregado' && (
+                    <Button type="submit">OK</Button>
+                  )}
                 </Form>
               </Card.Body>
             </Card>
@@ -673,6 +680,14 @@ export default function OrderScreen() {
 
                 {order.estadoPedido === 'Entregado' &&
                   'El pedido ya está entregado, por lo que no se podrá cambiar el estado.\n'}
+              </Card.Body>
+            </Card>
+          )}
+
+          {order.isPaid && (
+            <Card className="mb-3 align-center">
+              <Card.Body>
+                <Button onClick={verFacturaHandler}>Ver factura</Button>
               </Card.Body>
             </Card>
           )}
