@@ -101,14 +101,19 @@ export default function OrderHistoryScreen() {
                 </td>
                 <td>
                   <Button
-                    type="button"
-                    variant="light"
                     onClick={() => {
                       navigate(`/order/${order._id}`);
                     }}
                   >
                     Detalle
                   </Button>
+                  {order.isPaid && (
+                    <Button
+                      onClick={() => navigate(`/order/factura/${order._id}`)}
+                    >
+                      Ver factura
+                    </Button>
+                  )}
                 </td>
               </tr>
             ))}

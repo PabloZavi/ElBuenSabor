@@ -228,6 +228,13 @@ export default function OrderListScreen() {
                     >
                       Eliminar
                     </Button>
+                    {order.isPaid && (
+                    <Button
+                      onClick={() => navigate(`/order/factura/${order._id}`)}
+                    >
+                      Ver factura
+                    </Button>
+                  )}
                   </td>
                 </tr>
               ))}
