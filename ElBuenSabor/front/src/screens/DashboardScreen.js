@@ -258,6 +258,26 @@ export default function DashboardScreen() {
               </div>
             </Col>
           </Row>
+
+          {/* <Col md={6}>
+              <div className="my-3">
+                <h2 className="align-center">Ranking Productos</h2>
+                {summary.rankingProductos.length === 0 ? (
+                  <MessageBox>No hay ventas</MessageBox>
+                ) : (
+                  <Chart
+                    width="100%"
+                    height="400px"
+                    chartType="PieChart"
+                    loader={<div>Cargando gráfico...</div>}
+                    data={[
+                      ['Producto', 'Total unidades'],
+                      ...summary.rankingProductos.map((x) =>  [x._id, x.total]),
+                    ]}
+                  ></Chart>
+                )}
+              </div>
+            </Col> */}
         </>
       )}
     </div>

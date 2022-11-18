@@ -107,7 +107,21 @@ orderRouter.get(
       },
     ]);
 
-    res.send({ users, orders, dailyOrders, productCategories, paymentMethod });
+    //Para agrupar cuánto se pidió por productos
+    const rankingProductos = await Order.aggregate([
+      
+      {
+        $group: {
+          
+          _id: '$paymentMethod',
+          total: { $sum: '$orderItems.cantidad' },
+          //OJO VER ESTO PARA MULTIPLICAR CANTIDAD
+          //totalSaleAmount: { $sum: { "$quantity" } }
+        },
+      },
+    ]);
+
+    res.send({ users, orders, dailyOrders, productCategories, paymentMethod, rankingProductos });
   })
 );
 

@@ -92,7 +92,7 @@ export default function UserEditScreen() {
       );
       toast.success('Usuario actualizado');
       dispatch({ type: 'UPDATE_SUCCESS' });
-      navigate('/admin/users');
+      navigate(-1);
     } catch (err) {
       toast.error(getError(err));
       dispatch({ type: 'UPDATE_FAIL' });

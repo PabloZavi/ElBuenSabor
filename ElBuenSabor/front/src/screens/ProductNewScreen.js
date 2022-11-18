@@ -298,7 +298,7 @@ export default function ProductNewScreen() {
       dispatch({ type: 'CREATE_SUCCESS' });
       toast.success('Producto creado!');
       deleteLocalStorage();
-      navigate('/admin/products');
+      navigate(-1);
     } catch (err) {
       toast.error(getError(err));
       dispatch({ type: 'CREATE_FAIL' });
@@ -827,7 +827,7 @@ export default function ProductNewScreen() {
             type="button"
             onClick={() => {
               deleteLocalStorage();
-              navigate(`/admin/products`);
+              navigate(-1);
             }}
           >
             Cancelar
