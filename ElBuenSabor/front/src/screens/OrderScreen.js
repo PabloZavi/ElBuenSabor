@@ -19,6 +19,7 @@ import RecetaItem from '../components/RecetaItem';
 import Form from 'react-bootstrap/Form';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
+import Countdown from 'react-countdown';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -77,6 +78,8 @@ export default function OrderScreen() {
 
   const [paid, setPaid] = useState('');
   const [estado, setEstado] = useState('');
+
+  //const [tiempoDemora, setTiempoDemora] = useState('');
 
   //const payment_id = urlParams.get('payment_id');
 
@@ -291,6 +294,21 @@ export default function OrderScreen() {
     } */
   }, [navigate, order._id, orderId, successDeliver, successPay, userInfo]);
 
+  /*   useEffect(() => {
+    const fetchTiempo = async () => {
+      try {
+        const { data } = await axios.get(`/api/orders/tiempo`, {
+          headers: { authorization: `Bearer ${userInfo.token}` },
+        });
+        //console.log("DATA" + data.message)
+        setTiempoDemora(data.message);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchTiempo();
+  }, [userInfo]); */
+
   /* async function deliverOrderHandler() {
     try {
       dispatch({ type: 'DELIVER_REQUEST' });
@@ -368,6 +386,24 @@ export default function OrderScreen() {
       dispatch({ type: 'CREATE_FAIL' });
       deleteLocalStorage();
     } */
+  };
+
+  // Random component
+  const Completionist = () => <span>¡Ya está listo tu pedido!</span>;
+
+  // Renderer callback with condition
+  const renderer = ({ hours, minutes, seconds, completed }) => {
+    if (completed) {
+      // Render a completed state
+      return <Completionist />;
+    } else {
+      // Render a countdown
+      return (
+        <span>
+          {hours}:{minutes}:{seconds}
+        </span>
+      );
+    }
   };
 
   return loading ? (
@@ -688,6 +724,19 @@ export default function OrderScreen() {
             <Card className="mb-3 align-center">
               <Card.Body>
                 <Button onClick={verFacturaHandler}>Ver factura</Button>
+                Tiempo: {order.horaEstimada && order.horaEstimada}
+              </Card.Body>
+            </Card>
+          )}
+
+          {order.horaEstimada && (
+            <Card className="mb-3 align-center">
+              <Card.Body>
+                El pedido estará listo en aproximadamente :{' '}
+                <Countdown
+                  date={Date.now() + Date.parse(order.horaEstimada)}
+                  renderer={renderer}
+                />
               </Card.Body>
             </Card>
           )}

@@ -41,21 +41,24 @@ export default function PlaceOrderScreen() {
     cart.cartItems.reduce((a, c) => a + c.cantidad * c.precioVentaProducto, 0)
   );
 
+  cart.tiempoPreparacion = calcularTiempoPreparacion();
+
   //cart.taxPrice = round2(0.21 * cart.itemsPrice);
 
   cart.discount =
     cart.shippingOption === 'local'
-      ? -round2((cart.itemsPrice/*  + cart.taxPrice */) * 0.1)
+      ? -round2(cart.itemsPrice /*  + cart.taxPrice */ * 0.1)
       : round2(0);
 
-  cart.totalPrice = cart.itemsPrice + cart.discount/*  + cart.taxPrice */;
+  cart.totalPrice = cart.itemsPrice + cart.discount /*  + cart.taxPrice */;
 
   cart.totalCost = calcularCosto();
+
+  cart.horaEstimada = calcularEntregaEstimada();
 
   const placeOrderHandler = async () => {
     try {
       dispatch({ type: 'CREATE_REQUEST' });
-      //console.log(cart.totalCost)
       const { data } = await axios.post(
         '/api/orders',
         {
@@ -68,6 +71,9 @@ export default function PlaceOrderScreen() {
           totalPrice: cart.totalPrice,
           totalCost: cart.totalCost,
           shippingOption: cart.shippingOption,
+          estadoPedido: 'A confirmar',
+          tiempoPreparacion: cart.tiempoPreparacion,
+          horaEstimada: await cart.horaEstimada,
         },
         {
           headers: {
@@ -96,7 +102,7 @@ export default function PlaceOrderScreen() {
     try {
       for (let i = 0; i < cart.cartItems.length; i++) {
         for (let j = 0; j < cart.cartItems[i].ingredientes.length; j++) {
-          console.log(
+          /* console.log(
             'nombre ingrediente: ' +
               cart.cartItems[i].ingredientes[j].ingrediente.nombreIngrediente
           );
@@ -108,9 +114,9 @@ export default function PlaceOrderScreen() {
             'cantidad a descontar: ' +
               cart.cartItems[i].cantidad *
                 cart.cartItems[i].ingredientes[j].cantidad
-          );
+          ); */
 
-          const resp = await axios.put(
+          /* const resp =  */ await axios.put(
             `/api/ingredientes/${cart.cartItems[i].ingredientes[j].ingrediente._id}/discount`,
             {
               _id: cart.cartItems[i].ingredientes[j].ingrediente._id,
@@ -120,7 +126,7 @@ export default function PlaceOrderScreen() {
             },
             { headers: { Authorization: `Bearer ${userInfo.token}` } }
           );
-          console.log(resp);
+          //console.log(resp);
         }
       }
     } catch (err) {
@@ -146,6 +152,45 @@ export default function PlaceOrderScreen() {
     }
 
     return round2(costo);
+  }
+
+  function calcularTiempoPreparacion() {
+    let tiempo = 0;
+    for (let i = 0; i < cart.cartItems.length; i++) {
+      tiempo +=
+        cart.cartItems[i].cantidad * cart.cartItems[i].tiempoCocinaProducto;
+    }
+
+    return round2(tiempo);
+  }
+
+  async function calcularEntregaEstimada() {
+    const { data } = await axios.get(`/api/orders/tiempo`, {
+      headers: { authorization: `Bearer ${userInfo.token}` },
+    });
+
+    let tiempoDemoraCocina = Date.now() + data.message * 60000;
+    //console.log("tiempo demora cocina " + tiempoDemoraCocina)
+
+    let cantidadCocineros = await getCantidadCocineros();
+    //console.log("cantidad cocineros " + cantidadCocineros)
+    let tiempoPreparacion = calcularTiempoPreparacion();
+
+    let retorno = tiempoPreparacion + tiempoDemoraCocina / cantidadCocineros;
+
+    if (cart.shippingOption === 'domicilio') {
+      retorno += 10;
+    }
+    //console.log(Math.round(retorno))
+    return Math.round(retorno);
+  }
+
+  async function getCantidadCocineros() {
+    const { data } = await axios.get(`/api/config/cocineros`, {
+      headers: { Authorization: `Bearer ${userInfo.token}` },
+    });
+
+    return data.cantidadCocineros;
   }
 
   return (
