@@ -87,6 +87,16 @@ orderRouter.get(
       { $sort: { _id: 1 } },
     ]);
 
+    const fechas = await Order.aggregate([
+      {
+        $group: {
+          _id: { $dateToString: { date: '$createdAt' } },
+          
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+
     //Cantidad de pedidos y total de ingresos por mes y año
     const monthOrders = await Order.aggregate([
       {
@@ -132,6 +142,7 @@ orderRouter.get(
       paymentMethod,
       allProducts,
       allOrders,
+      fechas
     });
   })
 );
