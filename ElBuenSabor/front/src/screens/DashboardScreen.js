@@ -199,25 +199,62 @@ export default function DashboardScreen() {
                 ))
               : 0}
           </Row>
+
           <br />
 
-          <div className="my-3">
-            <h2 className="align-center">Ventas por día</h2>
-            {summary.dailyOrders.length === 0 ? (
-              <MessageBox>No hay ventas</MessageBox>
-            ) : (
-              <Chart
-                width="100%"
-                height="400px"
-                chartType="AreaChart"
-                loader={<div>Cargando gráfico...</div>}
-                data={[
-                  ['Fecha', 'Ventas'],
-                  ...summary.dailyOrders.map((x) => [x._id, x.sales]),
-                ]}
-              ></Chart>
-            )}
-          </div>
+          <Row>
+            <Col md={12}>
+              <div className="my-3">
+                <h2 className="align-center">Ventas por día</h2>
+                {summary.dailyOrders.length === 0 ? (
+                  <MessageBox>No hay ventas</MessageBox>
+                ) : (
+                  <Chart
+                    width="100%"
+                    height="400px"
+                    chartType="AreaChart"
+                    loader={<div>Cargando gráfico...</div>}
+                    data={[
+                      ['Fecha', 'Ventas', 'Costos', 'Ganancia'],
+                      ...summary.dailyOrders.map((x) => [
+                        x._id,
+                        x.sales,
+                        x.costs,
+                        x.sales - x.costs,
+                      ]),
+                    ]}
+                  ></Chart>
+                )}
+              </div>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col md={12}>
+              <div className="my-3">
+                <h2 className="align-center">Ventas por mes</h2>
+                {summary.monthOrders.length === 0 ? (
+                  <MessageBox>No hay ventas</MessageBox>
+                ) : (
+                  <Chart
+                    width="100%"
+                    height="400px"
+                    chartType="AreaChart"
+                    loader={<div>Cargando gráfico...</div>}
+                    data={[
+                      ['Fecha', 'Ventas', 'Costos', 'Ganancia'],
+                      ...summary.monthOrders.map((x) => [
+                        x._id,
+                        x.sales,
+                        x.costs,
+                        x.sales - x.costs,
+                      ]),
+                    ]}
+                  ></Chart>
+                )}
+              </div>
+            </Col>
+          </Row>
 
           <Row>
             <Col md={6}>

@@ -51,6 +51,7 @@ orderRouter.get(
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
+
     const orders = await Order.aggregate([
       //pipeline
       {
@@ -80,6 +81,20 @@ orderRouter.get(
           _id: { $dateToString: { format: '%d-%m-%Y', date: '$createdAt' } },
           orders: { $sum: 1 },
           sales: { $sum: '$totalPrice' },
+          costs: {$sum: '$totalCost'},
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+
+    //Cantidad de pedidos y total de ingresos por mes y año
+    const monthOrders = await Order.aggregate([
+      {
+        $group: {
+          _id: { $dateToString: { format: '%m-%Y', date: '$createdAt' } },
+          orders: { $sum: 1 },
+          sales: { $sum: '$totalPrice' },
+          costs: {$sum: '$totalCost'}
         },
       },
       { $sort: { _id: 1 } },
@@ -112,6 +127,7 @@ orderRouter.get(
       users,
       orders,
       dailyOrders,
+      monthOrders,
       productCategories,
       paymentMethod,
       allProducts,
