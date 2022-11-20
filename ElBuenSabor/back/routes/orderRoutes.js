@@ -37,7 +37,7 @@ orderRouter.post(
       //Esta info la tengo después de que el middleware 'isAuth' verifica el token
       user: req.user._id,
       tiempoPreparacion: req.body.tiempoPreparacion,
-      horaEstimada: new Date(req.body.horaEstimada)
+      horaEstimada: new Date(req.body.horaEstimada),
     });
 
     const order = await newOrder.save();
@@ -51,34 +51,66 @@ orderRouter.get(
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
+
     const orders = await Order.aggregate([
       //pipeline
       {
         $group: {
           _id: null, //null=todos
-          numOrders: { $sum: 1 }, //suma todos los ítems
-          totalSales: { $sum: '$totalPrice' },
+          numOrders: { $sum: 1 }, //Cantidad total de pedidos
+          totalSales: { $sum: '$totalPrice' }, //Total de ingresos
+          totalCosts: { $sum: '$totalCost' }, //Total de costos
         },
       },
     ]);
+
+    //Cantidad total de usuarios
     const users = await User.aggregate([
       {
         $group: {
-          _id: null,
+          _id: null, //Todos
           numUsers: { $sum: 1 },
         },
       },
     ]);
+
+    //Cantidad de pedidos y total de ingresos por día
     const dailyOrders = await Order.aggregate([
       {
         $group: {
           _id: { $dateToString: { format: '%d-%m-%Y', date: '$createdAt' } },
           orders: { $sum: 1 },
           sales: { $sum: '$totalPrice' },
+          costs: {$sum: '$totalCost'},
         },
       },
       { $sort: { _id: 1 } },
     ]);
+
+    const fechas = await Order.aggregate([
+      {
+        $group: {
+          _id: { $dateToString: { date: '$createdAt' } },
+          
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+
+    //Cantidad de pedidos y total de ingresos por mes y año
+    const monthOrders = await Order.aggregate([
+      {
+        $group: {
+          _id: { $dateToString: { format: '%m-%Y', date: '$createdAt' } },
+          orders: { $sum: 1 },
+          sales: { $sum: '$totalPrice' },
+          costs: {$sum: '$totalCost'}
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+
+    //Cantidad de productos por rubro
     const productCategories = await Producto.aggregate([
       {
         $group: {
@@ -87,7 +119,31 @@ orderRouter.get(
         },
       },
     ]);
-    res.send({ users, orders, dailyOrders, productCategories });
+
+    //Para agrupar cuánto se pago con MP y cuánto con Efectivo
+    const paymentMethod = await Order.aggregate([
+      {
+        $group: {
+          _id: '$paymentMethod',
+          total: { $sum: '$totalPrice' },
+        },
+      },
+    ]);
+
+    const allProducts = await Producto.find();
+    const allOrders = await Order.find();
+
+    res.send({
+      users,
+      orders,
+      dailyOrders,
+      monthOrders,
+      productCategories,
+      paymentMethod,
+      allProducts,
+      allOrders,
+      fechas
+    });
   })
 );
 
@@ -110,17 +166,15 @@ orderRouter.get(
     //Buscamos el pedido en la base de datos
     const orders = await Order.find().populate('orderItems.producto');
     //console.log("La cantidad de órdenes es: " + orders.length)
-    
+
     if (orders) {
       let tiempo = 0;
-      
+
       //res.send(order);
       for (let i = 0; i < orders.length; i++) {
-        
         if (orders[i].estadoPedido === 'En cocina') {
-          
           //console.log(orders[i])
-         //console.log(orders[i].orderItems)
+          //console.log(orders[i].orderItems)
           //console.log(tiempo)
           //console.log("**************************************************")
           for (let j = 0; j < orders[i].orderItems.length; j++) {
@@ -130,7 +184,7 @@ orderRouter.get(
         }
       }
       //console.log(tiempo)
-      res.send({message: tiempo});
+      res.send({ message: tiempo });
     } else {
       res.status(404).send({ message: 'No hay órdenes' });
       //res.send("tiempo");

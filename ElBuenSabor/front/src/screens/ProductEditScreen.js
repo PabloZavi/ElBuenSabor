@@ -363,7 +363,7 @@ export default function ProductEditScreen() {
       dispatch({ type: 'UPDATE_SUCCESS' });
       toast.success('Producto actualizado!');
       deleteLocalStorage();
-      navigate('/admin/products');
+      navigate(-1);
     } catch (err) {
       toast.error(getError(err));
       dispatch({ type: 'UPDATE_FAIL' });
@@ -801,7 +801,7 @@ export default function ProductEditScreen() {
               type="button"
               onClick={() => {
                 deleteLocalStorage();
-                navigate(`/admin/products`);
+                navigate(-1);
               }}
             >
               Cancelar

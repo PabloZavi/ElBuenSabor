@@ -225,6 +225,13 @@ main {
   border-width: 1px;
 }
 
+.div-cuadro {
+  border-style: solid;
+  border-color: #d5d8dc;
+  border-width: 2px;
+  margin: 1em;
+}
+
 .div-factura-bottom-left {
   border-style: solid;
   border-color: black;

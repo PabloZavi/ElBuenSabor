@@ -152,7 +152,6 @@ export default function ConfigScreen() {
                     <th>Stock Mínimo</th>
                     <th>Stock Actual</th>
                     <th>Diferencia</th>
-
                     <th>Acciones</th>
                   </tr>
                 </thead>
@@ -169,11 +168,27 @@ export default function ConfigScreen() {
                         <td>{ingrediente._id}</td>
                         <td>{ingrediente.nombreIngrediente}</td>
                         <td>$ {ingrediente.precioCostoIngrediente}</td>
-                        <td>{ingrediente.stockMinimoIngrediente}</td>
-                        <td>{ingrediente.stockActualIngrediente}</td>
+                        <td>
+                          {Number.isInteger(ingrediente.stockMinimoIngrediente)
+                            ? ingrediente.stockMinimoIngrediente
+                            : ingrediente.stockMinimoIngrediente.toFixed(2)}
+                        </td>
+                        <td>
+                          {Number.isInteger(ingrediente.stockActualIngrediente)
+                            ? ingrediente.stockActualIngrediente
+                            : ingrediente.stockActualIngrediente.toFixed(2)}
+                        </td>
                         <td className="red">
-                          {ingrediente.stockActualIngrediente -
-                            ingrediente.stockMinimoIngrediente}
+                          {Number.isInteger(
+                            ingrediente.stockActualIngrediente -
+                              ingrediente.stockMinimoIngrediente
+                          )
+                            ? ingrediente.stockActualIngrediente -
+                              ingrediente.stockMinimoIngrediente
+                            : (
+                                ingrediente.stockActualIngrediente -
+                                ingrediente.stockMinimoIngrediente
+                              ).toFixed(2)}
                         </td>
 
                         <td>
