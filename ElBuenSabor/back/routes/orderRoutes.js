@@ -37,7 +37,7 @@ orderRouter.post(
       //Esta info la tengo después de que el middleware 'isAuth' verifica el token
       user: req.user._id,
       tiempoPreparacion: req.body.tiempoPreparacion,
-      horaEstimada: new Date(req.body.horaEstimada)
+      horaEstimada: new Date(req.body.horaEstimada),
     });
 
     const order = await newOrder.save();
@@ -51,8 +51,6 @@ orderRouter.get(
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
-
-    
     const orders = await Order.aggregate([
       //pipeline
       {
@@ -107,21 +105,18 @@ orderRouter.get(
       },
     ]);
 
-    //Para agrupar cuánto se pidió por productos
-    const rankingProductos = await Order.aggregate([
-      
-      {
-        $group: {
-          
-          _id: '$paymentMethod',
-          total: { $sum: '$orderItems.cantidad' },
-          //OJO VER ESTO PARA MULTIPLICAR CANTIDAD
-          //totalSaleAmount: { $sum: { "$quantity" } }
-        },
-      },
-    ]);
+    const allProducts = await Producto.find();
+    const allOrders = await Order.find();
 
-    res.send({ users, orders, dailyOrders, productCategories, paymentMethod, rankingProductos });
+    res.send({
+      users,
+      orders,
+      dailyOrders,
+      productCategories,
+      paymentMethod,
+      allProducts,
+      allOrders,
+    });
   })
 );
 
@@ -144,17 +139,15 @@ orderRouter.get(
     //Buscamos el pedido en la base de datos
     const orders = await Order.find().populate('orderItems.producto');
     //console.log("La cantidad de órdenes es: " + orders.length)
-    
+
     if (orders) {
       let tiempo = 0;
-      
+
       //res.send(order);
       for (let i = 0; i < orders.length; i++) {
-        
         if (orders[i].estadoPedido === 'En cocina') {
-          
           //console.log(orders[i])
-         //console.log(orders[i].orderItems)
+          //console.log(orders[i].orderItems)
           //console.log(tiempo)
           //console.log("**************************************************")
           for (let j = 0; j < orders[i].orderItems.length; j++) {
@@ -164,7 +157,7 @@ orderRouter.get(
         }
       }
       //console.log(tiempo)
-      res.send({message: tiempo});
+      res.send({ message: tiempo });
     } else {
       res.status(404).send({ message: 'No hay órdenes' });
       //res.send("tiempo");

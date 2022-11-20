@@ -58,6 +58,38 @@ export default function DashboardScreen() {
     fetchData();
   }, [userInfo]);
 
+  const getRanking = () => {
+    let ranking = [];
+
+    for (let i = 0; i < summary.allProducts.length; i++) {
+      ranking.push({});
+      ranking[i].nombreProducto = summary.allProducts[i].nombreProducto;
+      ranking[i].cantidad = 0;
+      ranking[i].rubroProducto = summary.allProducts[i].rubroProducto;
+      for (let j = 0; j < summary.allOrders.length; j++) {
+        for (let k = 0; k < summary.allOrders[j].orderItems.length; k++) {
+          if (
+            summary.allOrders[j].orderItems[k].nombreProducto ===
+            ranking[i].nombreProducto
+          ) {
+            ranking[i].cantidad += summary.allOrders[j].orderItems[k].cantidad;
+          }
+        }
+      }
+    }
+    //}
+    ranking.sort(function (a, b) {
+      if (a.cantidad < b.cantidad) {
+        return 1;
+      }
+      if (a.cantidad > b.cantidad) {
+        return -1;
+      }
+      return 0;
+    });
+    return ranking;
+  };
+
   return (
     <div>
       <Helmet>
@@ -152,7 +184,7 @@ export default function DashboardScreen() {
           <Row className="align-center">
             {summary.paymentMethod && summary.paymentMethod[0]
               ? summary.paymentMethod.map((x) => (
-                  <Col md={3}>
+                  <Col md={3} key={x._id}>
                     <Card>
                       <Card.Body>
                         <Card.Text className="align-center">
@@ -166,37 +198,6 @@ export default function DashboardScreen() {
                   </Col>
                 ))
               : 0}
-
-            {/*
-            
-            <Col md={3}>
-              <Card>
-                <Card.Body>
-                  <Card.Title>
-                    {summary.paymentMethod && summary.paymentMethod[1]
-                      ? summary.paymentMethod[1].total.toFixed(2)
-                      : 0}
-                  </Card.Title>
-                  <Card.Text className="align-center">Pagado en efectivo</Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-
-            
-
-            <Col md={3}>
-              <Card>
-                <Card.Body>
-                  <Card.Title>
-                    ${' '}
-                    {summary.orders && summary.orders[0]
-                      ? summary.orders[0].totalCosts.toFixed(2)
-                      : 0}
-                  </Card.Title>
-                  <Card.Text>Total de costos</Card.Text>
-                </Card.Body>
-              </Card>
-            </Col> */}
           </Row>
           <br />
 
@@ -238,6 +239,7 @@ export default function DashboardScreen() {
                 )}
               </div>
             </Col>
+
             <Col md={6}>
               <div className="my-3">
                 <h2 className="align-center">Forma de pago</h2>
@@ -259,25 +261,74 @@ export default function DashboardScreen() {
             </Col>
           </Row>
 
-          {/* <Col md={6}>
+          <Row>
+            <Col md={6}>
               <div className="my-3">
-                <h2 className="align-center">Ranking Productos</h2>
-                {summary.rankingProductos.length === 0 ? (
-                  <MessageBox>No hay ventas</MessageBox>
+                <h2 className="align-center">Productos más vendidos</h2>
+                {getRanking().length === 0 ? (
+                  <MessageBox>No hay productos vendidos</MessageBox>
                 ) : (
                   <Chart
+                    className="align-center"
+                    loader={<div>Cargando gráfico...</div>}
+                    chartType="Table"
                     width="100%"
                     height="400px"
-                    chartType="PieChart"
-                    loader={<div>Cargando gráfico...</div>}
+                    options={{ pageSize: 10 }}
                     data={[
-                      ['Producto', 'Total unidades'],
-                      ...summary.rankingProductos.map((x) =>  [x._id, x.total]),
+                      [' ', 'Producto', 'Total unidades'],
+                      ...getRanking()
+                        .filter((x) => x.cantidad > 0)
+                        .filter(
+                          (x) =>
+                            x.rubroProducto !== 'Gaseosas' &&
+                            x.rubroProducto !== 'Bebidas con alcohol' &&
+                            x.rubroProducto !== 'Bebidas sin alcohol'
+                        )
+                        .map((x, index) => [
+                          index + 1,
+                          x.nombreProducto,
+                          x.cantidad,
+                        ]),
                     ]}
-                  ></Chart>
+                  />
                 )}
               </div>
-            </Col> */}
+            </Col>
+            <Col md={6}>
+              <div className="my-3">
+                <h2 className="align-center">Bebidas más vendidas</h2>
+                {getRanking().length === 0 ? (
+                  <MessageBox>No hay bebidas vendidos</MessageBox>
+                ) : (
+                  <Chart
+                    className="align-center"
+                    loader={<div>Cargando gráfico...</div>}
+                    chartType="Table"
+                    width="100%"
+                    height="400px"
+                    options={{ pageSize: 10 }}
+                    data={[
+                      [' ', 'Producto', 'Total unidades'],
+                      ...getRanking()
+                        .filter((x) => x.cantidad > 0)
+                        .filter(
+                          (x) =>
+                            x.rubroProducto === 'Gaseosas' ||
+                            x.rubroProducto === 'Bebidas con alcohol' ||
+                            x.rubroProducto === 'Bebidas sin alcohol'
+                        )
+                        .map((x, index) => [
+                          index + 1,
+                          x.nombreProducto,
+                          x.cantidad,
+                        ]),
+                    ]}
+                  />
+                )}
+              </div>
+            </Col>
+          </Row>
         </>
       )}
     </div>

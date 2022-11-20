@@ -67,9 +67,12 @@ export default function IngredienteListScreen() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get(`/api/ingredientes/admin?page=${page}`, {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        });
+        const { data } = await axios.get(
+          `/api/ingredientes/admin?page=${page}`,
+          {
+            headers: { Authorization: `Bearer ${userInfo.token}` },
+          }
+        );
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
       } catch (err) {
         dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
@@ -152,17 +155,27 @@ export default function IngredienteListScreen() {
                   <td>{ingrediente.nombreIngrediente}</td>
                   <td>$ {ingrediente.precioCostoIngrediente}</td>
                   <td>{ingrediente.stockMinimoIngrediente}</td>
-                  <td>{ingrediente.stockActualIngrediente}</td>
-                  
+                  <td>
+                    {Number.isInteger(ingrediente.stockActualIngrediente)
+                      ? ingrediente.stockActualIngrediente
+                      : ingrediente.stockActualIngrediente.toFixed(2)}
+                  </td>
+
                   <td>{ingrediente.rubroIngrediente}</td>
                   <td>
-                    {ingrediente.altaIngrediente ? 'Sí' : <p className="red">No</p>}
+                    {ingrediente.altaIngrediente ? (
+                      'Sí'
+                    ) : (
+                      <p className="red">No</p>
+                    )}
                   </td>
                   <td>
                     <Button
                       type="button"
                       variant="light"
-                      onClick={() => navigate(`/admin/ingrediente/${ingrediente._id}`)}
+                      onClick={() =>
+                        navigate(`/admin/ingrediente/${ingrediente._id}`)
+                      }
                     >
                       <i className="bi bi-pencil-fill"></i>
                       {/* Editar */}
