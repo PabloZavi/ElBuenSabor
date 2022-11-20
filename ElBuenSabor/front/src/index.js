@@ -4,6 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import 'bootstrap/dist/css/bootstrap.min.css';
 //import 'bootstrap-icons@1.9.1/font/bootstrap-icons.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import "react-datepicker/dist/react-datepicker.css";
 
 import './index.css';
 import App from './App';

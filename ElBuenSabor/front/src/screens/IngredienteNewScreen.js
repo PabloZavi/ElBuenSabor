@@ -146,7 +146,7 @@ export default function IngredienteNewScreen() {
       dispatch({ type: 'CREATE_SUCCESS' });
       toast.success('Ingrediente creado!');
       deleteLocalStorage();
-      navigate('/admin/ingredientes');
+      navigate(-1);
     } catch (err) {
       toast.error(getError(err));
       dispatch({ type: 'CREATE_FAIL' });
@@ -293,7 +293,7 @@ export default function IngredienteNewScreen() {
             type="button"
             onClick={() => {
               deleteLocalStorage();
-              navigate(`/admin/ingredientes`);
+              navigate(-1);
             }}
           >
             Cancelar

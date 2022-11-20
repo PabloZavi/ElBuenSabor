@@ -33,7 +33,7 @@ configRouter.post(
 configRouter.get(
   '/cocineros',
   isAuth,
-  isAdmin,
+  //isAdmin,
   expressAsyncHandler(async (req, res) => {
     const data = await Config.findOne({}, {}, { sort: { 'createdAt' : -1 }});
     res.send(data);

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +8,11 @@ import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { Store } from '../Store';
 import { getError } from '../utils';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Box from '@mui/material/Box';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -39,6 +44,13 @@ export default function OrderListScreen() {
       loading: true,
       error: '',
     });
+
+  const [filter, setFilter] = useState('A confirmar');
+  const [busqueda, setBusqueda] = useState('');
+
+  const handleChange = (event) => {
+    setFilter(event.target.value);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,7 +93,46 @@ export default function OrderListScreen() {
       <Helmet>
         <title>Pedidos</title>
       </Helmet>
-      <h1>Pedidos</h1>
+      <Row>
+        <Col>
+          <h1>Pedidos</h1>
+          <br />
+        </Col>
+      </Row>
+      <Row>
+        <Col md={3}>
+          <Box>
+            <TextField
+              className="medium-large-input mb-3"
+              select
+              id="Estado"
+              value={filter}
+              onChange={handleChange}
+              label="Estado"
+            >
+              <MenuItem value={'Todos'}>Todos</MenuItem>
+              <MenuItem value={'A confirmar'}>A confirmar</MenuItem>
+              <MenuItem value={'En cocina'}>En cocina</MenuItem>
+              <MenuItem value={'Listo'}>Listos</MenuItem>
+              <MenuItem value={'En delivery'}>En delivery</MenuItem>
+              <MenuItem value={'Entregado'}>Entregados</MenuItem>
+            </TextField>
+          </Box>
+        </Col>
+        <Col>
+          <Box
+            component="form"
+            className="medium-large-input mb-3"
+            noValidate
+            autoComplete="off"
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+          >
+            <TextField id="busqueda" label="Búsqueda" variant="outlined" />
+          </Box>
+        </Col>
+      </Row>
+
       {loadingDelete && <LoadingBox></LoadingBox>}
       {loading ? (
         <LoadingBox></LoadingBox>
@@ -96,66 +147,97 @@ export default function OrderListScreen() {
               <th>Fecha</th>
               <th>Total</th>
               <th>Pagado?</th>
-              <th>Entregado?</th>
+              {/* <th>Entregado?</th> */}
+              <th>Entrega</th>
+              <th>Estado</th>
               <th>Acciones</th>
             </tr>
           </thead>
 
           <tbody>
-            {orders.map((order) => (
-              <tr key={order._id}>
-                <td>{order._id}</td>
-                <td>
-                  {order.user ? order.user.nombreUsuario : 'Usuario eliminado'}
-                </td>
-                {/* <td>{order.createdAt.substring(0, 10)} </td> */}
-                <td>
-                  {order.createdAt.substring(8, 10)}/
-                  {order.createdAt.substring(5, 7)}/
-                  {order.createdAt.substring(0, 4)}{' '}
-                </td>
-                <td>{order.totalPrice.toFixed(2)}</td>
-                <td>
-                  {order.isPaid
-                    ? /* order.paidAt.substring(0, 10) */
+            {orders
+              .filter(
+                (ord) =>
+                  ord._id.toString().toLowerCase().includes(busqueda) ||
+                  ord.user.nombreUsuario.toLowerCase().includes(busqueda)
+              )
+              //.filter((ord) => ord.estadoPedido === filter)
+              .filter((ord) =>
+                ord.estadoPedido.includes(filter === 'Todos' ? '' : filter)
+              )
+              .map((order) => (
+                <tr key={order._id}>
+                  <td>{order._id}</td>
+                  <td>
+                    {order.user
+                      ? order.user.nombreUsuario
+                      : 'Usuario eliminado'}
+                  </td>
+                  {/* <td>{order.createdAt.substring(0, 10)} </td> */}
+                  <td>
+                    {order.createdAt.substring(8, 10)}/
+                    {order.createdAt.substring(5, 7)}/
+                    {order.createdAt.substring(0, 4)}{' '}
+                  </td>
+                  <td>{order.totalPrice.toFixed(2)}</td>
+                  <td>
+                    {order.isPaid ? (
+                      /* order.paidAt.substring(0, 10) */
                       order.paidAt.substring(8, 10) +
                       '/' +
                       order.paidAt.substring(5, 7) +
                       '/' +
                       order.paidAt.substring(0, 4)
-                    : 'No'}
-                </td>
-                <td>
+                    ) : (
+                      <p className="red">No</p>
+                    )}
+                  </td>
+                  {/* <td>
                   {order.isDelivered
-                    ? /* order.deliveredAt.substring(0, 10) */
+                    ? 
                       order.deliveredAt.substring(8, 10) +
                       '/' +
                       order.deliveredAt.substring(5, 7) +
                       '/' +
                       order.deliveredAt.substring(0, 4)
                     : 'No'}
-                </td>
-                <td>
-                  <Button
-                    type="Button"
-                    variant="light"
-                    onClick={() => {
-                      navigate(`/order/${order._id}`);
-                    }}
-                  >
-                    Detalle
-                  </Button>
-                  &nbsp;
-                  <Button
-                    type="button"
-                    variant="light"
-                    onClick={() => deleteHandler(order)}
-                  >
-                    Eliminar
-                  </Button>
-                </td>
-              </tr>
-            ))}
+                </td> */}
+
+                  <td>
+                    {order.shippingOption === 'local'
+                      ? 'Retira en local'
+                      : 'Delivery'}
+                  </td>
+
+                  <td>{order.estadoPedido}</td>
+                  <td>
+                    <Button
+                      type="Button"
+                      variant="light"
+                      onClick={() => {
+                        navigate(`/order/${order._id}`);
+                      }}
+                    >
+                      Detalle
+                    </Button>
+                    &nbsp;
+                    <Button
+                      type="button"
+                      variant="light"
+                      onClick={() => deleteHandler(order)}
+                    >
+                      Eliminar
+                    </Button>
+                    {order.isPaid && (
+                    <Button
+                      onClick={() => navigate(`/order/factura/${order._id}`)}
+                    >
+                      Ver factura
+                    </Button>
+                  )}
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       )}

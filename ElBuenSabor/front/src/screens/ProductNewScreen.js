@@ -253,7 +253,7 @@ export default function ProductNewScreen() {
     //localStorage.setItem('ingredientesProducto', JSON.stringify(list));
     //console.log(list)
     //console.log(typeof(list))
-    console.log(ingredientesProducto);
+    //console.log(ingredientesProducto);
   };
 
   function deleteLocalStorage() {
@@ -271,7 +271,7 @@ export default function ProductNewScreen() {
     localStorage.removeItem('stockProducto') */
     localStorage.clear();
     localStorage.setItem('userInfo', userInfo);
-  }
+  } 
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -298,7 +298,7 @@ export default function ProductNewScreen() {
       dispatch({ type: 'CREATE_SUCCESS' });
       toast.success('Producto creado!');
       deleteLocalStorage();
-      navigate('/admin/products');
+      navigate(-1);
     } catch (err) {
       toast.error(getError(err));
       dispatch({ type: 'CREATE_FAIL' });
@@ -827,7 +827,7 @@ export default function ProductNewScreen() {
             type="button"
             onClick={() => {
               deleteLocalStorage();
-              navigate(`/admin/products`);
+              navigate(-1);
             }}
           >
             Cancelar

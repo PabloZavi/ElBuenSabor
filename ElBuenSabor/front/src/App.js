@@ -54,6 +54,8 @@ import EggAltRoundedIcon from '@mui/icons-material/EggAltRounded';
 import ReceiptRoundedIcon from '@mui/icons-material/ReceiptRounded';
 import AccountBoxRoundedIcon from '@mui/icons-material/AccountBoxRounded';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
+import NotFoundScreen from './screens/NotFoundScreen';
+import FacturaScreen from './screens/FacturaScreen';
 
 function App() {
   //Traemos el estado de la app desde el store
@@ -329,6 +331,7 @@ function App() {
                 }
               />
               <Route path="/" element={<HomeScreen />} />
+              <Route path="*" element={<NotFoundScreen />} />
               <Route path="/shipping" element={<ShippingAddressScreen />} />
               <Route path="/payment" element={<PaymentMethodScreen />} />
               <Route path="/placeorder" element={<PlaceOrderScreen />} />
@@ -339,7 +342,15 @@ function App() {
                     <OrderScreen />
                   </ProtectedRoute>
                 }
-              />
+              /> 
+              <Route
+                path="/order/factura/:id"
+                element={
+                  <ProtectedRoute>
+                    <FacturaScreen />
+                  </ProtectedRoute>
+                }
+              /> 
               <Route path="/paidok" element={<PaidOkScreen />} />
               <Route
                 path="/orderhistory"

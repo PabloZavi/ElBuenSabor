@@ -175,8 +175,23 @@ main {
   float: left;
 }
 
+.align-center {
+  align-items: center;
+  justify-content:center;
+  display:flex;
+}
+
+
 .text-align-center {
   text-align: center;
+}
+
+.text-align-left {
+  text-align: left;
+}
+
+.text-align-right {
+  text-align: right;
 }
 
 .invert-color {
@@ -202,4 +217,33 @@ main {
 
 .medium-margin-up {
   margin-top: 30px;
+}
+
+.div-factura-cuadro {
+  border-style: solid;
+  border-color: #d5d8dc;
+  border-width: 1px;
+}
+
+.div-cuadro {
+  border-style: solid;
+  border-color: #d5d8dc;
+  border-width: 2px;
+  margin: 1em;
+}
+
+.div-factura-bottom-left {
+  border-style: solid;
+  border-color: black;
+  border-width: 2px;
+  border-right: hidden;
+  border-radius: 15px 0px 0px 15px;
+}
+
+.div-factura-bottom-right {
+  border-style: solid;
+  border-color: black;
+  border-width: 2px;
+  border-left: hidden;
+  border-radius: 0px 15px 15px 0px;
 }

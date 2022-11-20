@@ -9,8 +9,8 @@ const pagoMercadoPagoRouter = express.Router();
 pagoMercadoPagoRouter.post(
   '/',
   expressAsyncHandler(async (req, res) => {
-    console.log(req.body.orderId)
-    console.log(req.body.totalPrice)
+    //console.log(req.body.orderId)
+    //console.log(req.body.totalPrice)
     mercadopago.configure({
       access_token: process.env.MP_ACCESS_TOKEN,
     });

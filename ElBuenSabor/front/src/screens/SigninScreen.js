@@ -8,6 +8,8 @@ import { useContext, useEffect, useState } from 'react';
 import { Store } from '../Store';
 import { toast } from 'react-toastify';
 import { getError } from '../utils';
+import GoogleLogin from 'react-google-login';
+import { gapi } from 'gapi-script';
 
 export default function SigninScreen() {
   const navigate = useNavigate();
@@ -22,13 +24,16 @@ export default function SigninScreen() {
   const [emailUsuario, setEmailUsuario] = useState('');
   const [passwordUsuario, setPasswordUsuario] = useState('');
 
+  const clientId =
+    '147686912643-ltnii4fb12jf91mhvgfdmk6qp520s3j8.apps.googleusercontent.com';
+
   //Guardamos el usuario en el store si el login es exitoso
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
 
   //Creamos la función async submitHandler que recibe un evento como parámetro
-  const submitHandler = async (e) => {
+  const submitHandler = async (e) => { 
     e.preventDefault();
     try {
       const { data } = await Axios.post('/api/users/signin', {
@@ -55,6 +60,39 @@ export default function SigninScreen() {
       toast.error(getError(err));
     }
   };
+
+  const responseGoogle = async (response) => { 
+    try {
+      const { data } = await Axios.post('/api/users/signingoogle', {
+        emailUsuario: response.profileObj.email,
+      });
+      //Si el login es exitoso, 'despachamos' la acción USER_SIGNIN y le pasamos data
+      //(actualizamos el store)
+      ctxDispatch({ type: 'USER_SIGNIN', payload: data });
+      //Ahora guardamos la info del usuario (que está en el local Store) en el store del navegador
+      //Ojo, 'userInfo' es lo que vuelve desde el store
+      localStorage.setItem('userInfo', JSON.stringify(data));
+      if(data.isAdmin){
+        navigate('/admin/config')
+      }
+      else{
+        navigate(redirect || '/')
+      }
+      
+      
+    } catch (err) {
+      //Ver en App.js lo relacionado con toastify
+      //Traemos desde el back el error
+      toast.error(getError(err));
+    }
+  };
+
+    //Importante, ya que se actualizaron los métodos de Google
+    useEffect(() => {
+      gapi.load('client:auth2', () => {
+        gapi.auth2.init({ clientId: clientId });
+      });
+    }, []);
 
   //Usaremos useEffect para que si el usuario ya se logueó, si accede a la pantalla de SignIn, no le vuelva
   //a pedir el ingreso
@@ -93,6 +131,24 @@ export default function SigninScreen() {
         <div className="mb-3">
           <Button type="submit">Ingresa</Button>
         </div>
+
+        <hr />
+
+<div className="mb-3">
+  <GoogleLogin
+    //clientId={googleAuth}
+    clientId="147686912643-ltnii4fb12jf91mhvgfdmk6qp520s3j8.apps.googleusercontent.com"
+    buttonText="Ingresá con Google"
+    onSuccess={responseGoogle}
+    onFailure={responseGoogle}
+    cookiePolicy={'single_host_origin'}
+    //isSignedIn={true}
+  />
+</div>
+
+<hr />
+
+
         <div className="mb-3">
           ¿Nuevo usuario?{' '}
           {/* Se dirigirá al usuario a la pantalla de Sign Up y después a la dirección
