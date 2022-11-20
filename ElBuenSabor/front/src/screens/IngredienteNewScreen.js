@@ -15,17 +15,6 @@ import Col from 'react-bootstrap/Col';
 
 const reducer = (state, action) => {
   switch (action.type) {
-    /* case 'FETCH_REQUEST':
-      return { ...state, loading: true };
-    case 'FETCH_SUCCESS':
-      return {
-        ...state,
-        rubros: action.payload.rubros,
-        
-      };
-    case 'FETCH_FAIL':
-      return { ...state, loading: false, error: action.payload }; */
-
     case 'CREATE_REQUEST':
       return { ...state, loadingCreate: true };
     case 'CREATE_SUCCESS':

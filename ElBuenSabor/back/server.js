@@ -33,17 +33,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('tiny'));
-
-//POR AHORA SE SEGUIRÁ OTRA LÓGICA
-/* //Mercado Pago cuando el front pide el access token
-app.get('/api/keys/mercadopago', (req, res) => {
-  
-  res.send(
-    process.env.MP_ACCESS_TOKEN || 'todavía no se configura el token en .env'
-    
-  );
-}); */
-
 app.use('/api/seed', seedRouter);
 app.use('/api/productos', productoRouter);
 app.use('/api/ingredientes', ingredienteRouter);
@@ -55,9 +44,6 @@ app.use('/api/rubros', rubroRouter);
 app.use('/api/rubrosingredientes', rubroIngredienteRouter);
 app.use('/api/unidades', unidadRouter);
 app.use('/api/config', configRouter);
-/* app.get('/api/productos', (req, res) => {
-  res.send(data.productos);
-}); */
 
 const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, '/ElBuenSabor/front/build')));

@@ -78,45 +78,9 @@ export default function ProfileScreen() {
 
       <h1 className="my-3">Perfil de usuario</h1>
       <form onSubmit={submitHandler}>
-        {/* <Form.Group className="mb-3" controlId="nombreUsuario">
-          <Form.Label>Nombre y apellido</Form.Label>
-          <Form.Control
-            value={nombreUsuario}
-            onChange={(e) => setNombreUsuario(e.target.value)}
-            required
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="emailUsuario">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="email"
-            value={emailUsuario}
-            onChange={(e) => setEmailUsuario(e.target.value)}
-            required
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="passwordUsuario">
-          <Form.Label>Contraseña</Form.Label>
-          <Form.Control
-            type="password"
-            onChange={(e) => setPasswordUsuario(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="confirmPasswordUsuario">
-          <Form.Label>Confirmar Contraseña</Form.Label>
-          <Form.Control
-            type="password"
-            onChange={(e) => setConfirmPasswordUsuario(e.target.value)}
-          ></Form.Control>
-        </Form.Group> */}
-
         <br />
         <TextField
           className="mb-3 large-input"
-          //fullWidth
           required
           id="nombreUsuario"
           label="Nombre y apellido"
@@ -130,7 +94,6 @@ export default function ProfileScreen() {
 
         <TextField
           className="mb-3 large-input"
-          //fullWidth
           required
           type="email"
           id="emailUsuario"

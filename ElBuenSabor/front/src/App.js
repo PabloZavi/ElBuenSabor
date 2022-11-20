@@ -44,11 +44,9 @@ import RubroIngredienteEditScreen from './screens/RubroIngredienteEditScreen';
 import IngredienteListScreen from './screens/IngredienteListScreen';
 import IngredienteEditScreen from './screens/IngredienteEditScreen';
 import IngredienteNewScreen from './screens/IngredienteNewScreen';
-
 import { DateTime } from 'luxon';
 import Swal from 'sweetalert2';
 import ConfigScreen from './screens/ConfigScreen';
-
 import FastfoodRoundedIcon from '@mui/icons-material/FastfoodRounded';
 import EggAltRoundedIcon from '@mui/icons-material/EggAltRounded';
 import ReceiptRoundedIcon from '@mui/icons-material/ReceiptRounded';
@@ -66,10 +64,6 @@ function App() {
   //Signout de un usuario. Limpiamos el Store y también el de navegador
   const signoutHandler = () => {
     ctxDispatch({ type: 'USER_SIGNOUT' });
-    //localStorage.removeItem('userInfo');
-    //localStorage.removeItem('shippingAddress');
-    //localStorage.removeItem('paymentMethod');
-    //localStorage.removeItem('cartItems');
     localStorage.clear();
     window.location.href = '/signin';
   };
@@ -117,7 +111,6 @@ function App() {
   function isOpen() {
     let dt = DateTime;
     dt.toLocaleString(DateTime.DATE_SHORT);
-    //console.log(dt.now())
     let diaSemanaActual = dt
       .now()
       .setZone('America/Argentina/Mendoza')
@@ -142,8 +135,6 @@ function App() {
       ((diaSemanaActual === 'sábado' || diaSemanaActual === 'domingo') &&
         horaActual > 11 &&
         horaActual < 15);
-    //localStorage.setItem('localAbierto', localAbierto);
-    //console.log("Esta abierto: " + localAbierto)
   }
 
   return (
@@ -241,7 +232,6 @@ function App() {
                             Estadísticas
                             <i className="bi bi-bar-chart-fill align-right"></i>
                           </NavDropdown.Item>
-                          {/* <NavDropdown.Item>Estadísticas <i className="bi bi-graph-up-arrow align-right"></i> </NavDropdown.Item> */}
                         </LinkContainer>
                         <LinkContainer to="/admin/products">
                           <NavDropdown.Item>
@@ -289,7 +279,6 @@ function App() {
               </NavBar.Collapse>
             </Container>
           </NavBar>
-          {/* <Link to="/">El Buen Sabor</Link> */}
         </header>
         <div
           className={
@@ -342,7 +331,7 @@ function App() {
                     <OrderScreen />
                   </ProtectedRoute>
                 }
-              /> 
+              />
               <Route
                 path="/order/factura/:id"
                 element={
@@ -350,7 +339,7 @@ function App() {
                     <FacturaScreen />
                   </ProtectedRoute>
                 }
-              /> 
+              />
               <Route path="/paidok" element={<PaidOkScreen />} />
               <Route
                 path="/orderhistory"

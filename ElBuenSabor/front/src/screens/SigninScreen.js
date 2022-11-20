@@ -33,7 +33,7 @@ export default function SigninScreen() {
   const { userInfo } = state;
 
   //Creamos la función async submitHandler que recibe un evento como parámetro
-  const submitHandler = async (e) => { 
+  const submitHandler = async (e) => {
     e.preventDefault();
     try {
       const { data } = await Axios.post('/api/users/signin', {
@@ -46,22 +46,18 @@ export default function SigninScreen() {
       //Ahora guardamos la info del usuario (que está en el local Store) en el store del navegador
       //Ojo, 'userInfo' es lo que vuelve desde el store
       localStorage.setItem('userInfo', JSON.stringify(data));
-      if(data.isAdmin){
-        navigate('/admin/config')
+      if (data.isAdmin) {
+        navigate('/admin/config');
+      } else {
+        navigate(redirect || '/');
       }
-      else{
-        navigate(redirect || '/')
-      }
-      
-      
     } catch (err) {
-      //Ver en App.js lo relacionado con toastify
       //Traemos desde el back el error
       toast.error(getError(err));
     }
   };
 
-  const responseGoogle = async (response) => { 
+  const responseGoogle = async (response) => {
     try {
       const { data } = await Axios.post('/api/users/signingoogle', {
         emailUsuario: response.profileObj.email,
@@ -72,14 +68,11 @@ export default function SigninScreen() {
       //Ahora guardamos la info del usuario (que está en el local Store) en el store del navegador
       //Ojo, 'userInfo' es lo que vuelve desde el store
       localStorage.setItem('userInfo', JSON.stringify(data));
-      if(data.isAdmin){
-        navigate('/admin/config')
+      if (data.isAdmin) {
+        navigate('/admin/config');
+      } else {
+        navigate(redirect || '/');
       }
-      else{
-        navigate(redirect || '/')
-      }
-      
-      
     } catch (err) {
       //Ver en App.js lo relacionado con toastify
       //Traemos desde el back el error
@@ -87,12 +80,12 @@ export default function SigninScreen() {
     }
   };
 
-    //Importante, ya que se actualizaron los métodos de Google
-    useEffect(() => {
-      gapi.load('client:auth2', () => {
-        gapi.auth2.init({ clientId: clientId });
-      });
-    }, []);
+  //Importante, ya que se actualizaron los métodos de Google
+  useEffect(() => {
+    gapi.load('client:auth2', () => {
+      gapi.auth2.init({ clientId: clientId });
+    });
+  }, []);
 
   //Usaremos useEffect para que si el usuario ya se logueó, si accede a la pantalla de SignIn, no le vuelva
   //a pedir el ingreso
@@ -107,7 +100,7 @@ export default function SigninScreen() {
       <Helmet>
         <title>Acceso</title>
       </Helmet>
-      
+
       <h1 className="my-3">Acceso</h1>
       <Form onSubmit={submitHandler}>
         <Form.Group className="mb-3" controlId="emailUsuario">
@@ -134,20 +127,17 @@ export default function SigninScreen() {
 
         <hr />
 
-<div className="mb-3">
-  <GoogleLogin
-    //clientId={googleAuth}
-    clientId="147686912643-ltnii4fb12jf91mhvgfdmk6qp520s3j8.apps.googleusercontent.com"
-    buttonText="Ingresá con Google"
-    onSuccess={responseGoogle}
-    onFailure={responseGoogle}
-    cookiePolicy={'single_host_origin'}
-    //isSignedIn={true}
-  />
-</div>
+        <div className="mb-3">
+          <GoogleLogin
+            clientId="147686912643-ltnii4fb12jf91mhvgfdmk6qp520s3j8.apps.googleusercontent.com"
+            buttonText="Ingresá con Google"
+            onSuccess={responseGoogle}
+            onFailure={responseGoogle}
+            cookiePolicy={'single_host_origin'}
+          />
+        </div>
 
-<hr />
-
+        <hr />
 
         <div className="mb-3">
           ¿Nuevo usuario?{' '}

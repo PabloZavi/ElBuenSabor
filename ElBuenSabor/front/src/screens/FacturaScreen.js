@@ -8,7 +8,7 @@ import MessageBox from '../components/MessageBox';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Helmet } from 'react-helmet-async';
-import ReactToPrint from 'react-to-print'
+import ReactToPrint from 'react-to-print';
 import Button from 'react-bootstrap/Button';
 
 function reducer(state, action) {
@@ -65,9 +65,13 @@ export default function FacturaScreen() {
       <Helmet>
         <title>Factura </title>
       </Helmet>
-      <ReactToPrint 
-      trigger={()=><div className="align-center"><Button className="mb-5">Imprimir / Descargar</Button></div>}
-      content = {()=>componentRef.current}
+      <ReactToPrint
+        trigger={() => (
+          <div className="align-center">
+            <Button className="mb-5">Imprimir / Descargar</Button>
+          </div>
+        )}
+        content={() => componentRef.current}
       />
       <div className="container p-2" ref={componentRef}>
         <div className="div-factura-cuadro">
@@ -198,7 +202,10 @@ export default function FacturaScreen() {
           <br />
 
           <Row>
-            <Col md={7} className="text-align-left"><br/><br/><br/>
+            <Col md={7} className="text-align-left">
+              <br />
+              <br />
+              <br />
               SON{' '}
               {numeroALetras(
                 order.taxPrice
@@ -220,8 +227,6 @@ export default function FacturaScreen() {
             <Col md={2} className="text-align-left div-factura-bottom-right">
               <p>$ {order.itemsPrice.toFixed(2)} </p>
 
-              {/* <p>$ {order.discount.toFixed(2)} </p> */}
-
               {order.taxPrice ? (
                 <p>$ {(order.discount + order.taxPrice * 0.1).toFixed(2)} </p>
               ) : (
@@ -240,7 +245,6 @@ export default function FacturaScreen() {
               ) : (
                 <p>$ {order.totalPrice.toFixed(2)} </p>
               )}
-              {/* <p>$ {order.totalPrice.toFixed(2)} </p> */}
             </Col>
 
             <div className="col-md-3"></div>

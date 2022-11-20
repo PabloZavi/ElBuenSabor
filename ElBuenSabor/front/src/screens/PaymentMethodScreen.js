@@ -9,7 +9,6 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 
 export default function PaymentMethodScreen() {
   const navigate = useNavigate();
@@ -84,31 +83,6 @@ export default function PaymentMethodScreen() {
               )}
             </RadioGroup>
           </FormControl>
-
-          {/* <div className="mb-3">
-            <Form.Check
-              type="radio"
-              id="MercadoPago"
-              label="Mercado Pago"
-              value="MercadoPago"
-              checked={shippingOption==='domicilio' || paymentMethodName === 'MercadoPago'}
-              onChange={(e) => setPaymentMethodName(e.target.value)}
-            ></Form.Check>
-          </div>
-
-          
-            <div className="mb-3">
-              <Form.Check
-                type="radio"
-                id="Efectivo"
-                label="Efectivo en local"
-                value="Efectivo"
-                checked={paymentMethodName === 'Efectivo'}
-                onChange={(e) => setPaymentMethodName(e.target.value)}
-              ></Form.Check>
-            </div>
-          )}
- */}
 
           <div className="mb-3 large-margin-up">
             <Button type="submit">Continuar</Button>

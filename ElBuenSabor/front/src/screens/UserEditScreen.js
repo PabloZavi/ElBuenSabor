@@ -39,10 +39,8 @@ export default function UserEditScreen() {
 
   const { state } = useContext(Store);
   const { userInfo } = state;
-
   const params = useParams();
   const { id: userId } = params;
-
   const navigate = useNavigate();
 
   const [nombreUsuario, setNombreUsuario] = useState('');
@@ -102,10 +100,8 @@ export default function UserEditScreen() {
   return (
     <Container className="small-container">
       <Helmet>
-        {/* <title>Editar usuario {userId}</title> */}
         <title>Editar usuario {nombreUsuario}</title>
       </Helmet>
-      {/* <h1>Editar usuario <br/>{userId}</h1> */}
       <h1>
         Editar usuario <br />
         <p style={{ color: 'blue' }}>{nombreUsuario}</p>
@@ -117,17 +113,8 @@ export default function UserEditScreen() {
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
         <Form onSubmit={submitHandler}>
-          {/* <Form.Group className="mb-3" controlId="nombreUsuario">
-            <Form.Label>Nombre y apellido</Form.Label>
-            <Form.Control
-              value={nombreUsuario}
-              onChange={(e) => setNombreUsuario(e.target.value)}
-              required
-            ></Form.Control>
-          </Form.Group> */}
           <TextField
             className="mb-3 large-input"
-            //fullWidth
             required
             id="nombreUsuario"
             label="Nombre y apellido"
@@ -138,17 +125,8 @@ export default function UserEditScreen() {
           />
           <br />
 
-          {/* <Form.Group className="mb-3" controlId="emailUsuario">
-            <Form.Label>Email</Form.Label>
-            <Form.Control
-              value={emailUsuario}
-              onChange={(e) => setEmailUsuario(e.target.value)}
-              required
-            ></Form.Control>
-          </Form.Group> */}
           <TextField
             className="mb-3 large-input"
-            //fullWidth
             required
             type="email"
             id="emailUsuario"
