@@ -163,7 +163,6 @@ orderRouter.get(
   expressAsyncHandler(async (req, res) => {
     //Buscamos el pedido en la base de datos
     const orders = await Order.find().populate('orderItems.producto');
-    //console.log("La cantidad de órdenes es: " + orders.length)
     let tiempo = 0;
     if (orders) {
       for (let i = 0; i < orders.length; i++) {

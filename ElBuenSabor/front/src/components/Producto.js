@@ -59,7 +59,6 @@ function Producto(props) {
     const { data } = await axios.get(`api/productos/${item._id}`);
 
     if (calcularCantidad(data) < cantidad) {
-      //window.alert('No hay stock del producto');
       toast.error('No hay stock del producto');
       return;
     }

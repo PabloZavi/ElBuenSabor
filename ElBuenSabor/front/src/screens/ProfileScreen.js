@@ -1,12 +1,12 @@
 import React, { useContext, useReducer, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import Form from 'react-bootstrap/Form';
 import { Store } from '../Store';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import { getError } from '../utils';
 import axios from 'axios';
 import TextField from '@mui/material/TextField';
+import LoadingBox from '../components/LoadingBox';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -44,6 +44,7 @@ export default function ProfileScreen() {
       return;
     }
     try {
+      dispatch({ type: 'UPDATE_REQUEST' });
       const { data } = await axios.put(
         '/api/users/profile',
         {
@@ -164,7 +165,7 @@ export default function ProfileScreen() {
         />
 
         <div className="mb-3">
-          <Button type="submit">Actualizar</Button>
+          <Button type="submit">Actualizar</Button>{loadingUpdate && <LoadingBox></LoadingBox>}{' '}
         </div>
       </form>
     </div>

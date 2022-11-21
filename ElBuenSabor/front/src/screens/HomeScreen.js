@@ -1,16 +1,12 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer } from 'react';
 import axios from 'axios';
 import logger from 'use-reducer-logger';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Producto from '../components/Producto';
 import { Helmet } from 'react-helmet-async';
-import LoadingBox from '../components/LoadingBox';
-import MessageBox from '../components/MessageBox';
 import Carousel from 'react-elastic-carousel';
 import Item from '../components/Item';
-import { toast } from 'react-toastify';
-import { getError } from '../utils';
+import LoadingBox from '../components/LoadingBox';
+import MessageBox from '../components/MessageBox';
 
 //reducer acepta dos parámetros, el primero es el estado actual y el segundo es la acción que cambia
 //el estado y crea un nuevo estado
@@ -86,23 +82,36 @@ function HomeScreen() {
 
       {/* OPCIÓN 3 --> MOSTRAR DE FORMA AUTOMÁTICA Y POR SEPARADO LAS CATEGORÍAS QUE TIENEN AL MENOS UN PRODUCTO 
         (CADA VEZ QUE SE AGREGUE UN NUEVO RUBRO Y UN NUEVO PRODUCTO A ESE RUBRO, SE MOSTRARÁ AUTOMÁTICAMENTE*/}
-      {categorias.map((cat) => (
-        <div key={cat} className="productos">
-          <h1>{cat}</h1>
-          <Carousel breakPoints={breakPoints} itemPadding={[0, 0]}>
-            {productos
-              .filter(
-                (prod) =>
-                  prod.rubroProducto === cat && prod.altaProducto === true
-              )
-              .map((producto) => (
-                <Item key={producto._id} sm={6} md={4} lg={3} className="mb-3">
-                  <Producto producto={producto}></Producto>
-                </Item>
-              ))}
-          </Carousel>
-        </div>
-      ))}
+      {loading ? (
+        //<div>Cargando...</div>
+        <LoadingBox></LoadingBox>
+      ) : error ? (
+        <MessageBox variant="danger">{error}</MessageBox>
+      ) : (
+        categorias.map((cat) => (
+          <div key={cat} className="productos">
+            <h1>{cat}</h1>
+            <Carousel breakPoints={breakPoints} itemPadding={[0, 0]}>
+              {productos
+                .filter(
+                  (prod) =>
+                    prod.rubroProducto === cat && prod.altaProducto === true
+                )
+                .map((producto) => (
+                  <Item
+                    key={producto._id}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    className="mb-3"
+                  >
+                    <Producto producto={producto}></Producto>
+                  </Item>
+                ))}
+            </Carousel>
+          </div>
+        ))
+      )}
 
       {/* OPCIÓN 1 --> HACER MANUALMENTE CADA RUBRO Y MOSTRAR LOS PRODUCTOS AGRUPADOS POR RUBRO */}
       {/*

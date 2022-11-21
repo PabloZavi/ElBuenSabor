@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useContext, useEffect, useReducer } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
@@ -12,6 +12,7 @@ import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { getError } from '../utils';
 import { Store } from '../Store';
+import { toast } from 'react-toastify';
 
 //reducer acepta dos parámetros, el primero es el estado actual y el segundo es la acción que cambia
 //el estado y crea un nuevo estado
@@ -29,7 +30,7 @@ const reducer = (state, action) => {
 };
 
 function ProductScreen() {
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const params = useParams();
   const { _id } = params;
 
@@ -98,13 +99,13 @@ function ProductScreen() {
   //Traemos 'cart' desde state y la usamos en addCartToHandler
   const { cart } = state;
 
-  const comprobarDisponibilidad = (prod) => {
+  /* const comprobarDisponibilidad = (prod) => {
     const existItem = cart.cartItems.find((x) => x._id === producto._id);
     if (existItem.cantidad === calcularCantidad(prod)) {
       return false;
     }
     return true;
-  };
+  }; */
 
   //Esta será la función que se ejecuta al hacer clic en "Agregar al carrito"
   const addToCartHandler = async () => {
@@ -116,7 +117,7 @@ function ProductScreen() {
     const { data } = await axios.get(`/api/productos/${producto._id}`);
     //y verificamos si hay stock
     if (calcularCantidad(data) < cantidad) {
-      window.alert('No hay stock del producto');
+      toast.error('No hay stock del producto');
       return;
     }
 
@@ -130,7 +131,6 @@ function ProductScreen() {
   };
 
   return loading ? (
-    //<div>Cargando...</div>
     <LoadingBox></LoadingBox>
   ) : error ? (
     <MessageBox variant="danger">{error}</MessageBox>

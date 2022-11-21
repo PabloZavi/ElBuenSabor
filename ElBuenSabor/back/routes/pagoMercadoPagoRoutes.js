@@ -42,7 +42,7 @@ pagoMercadoPagoRouter.post(
     };
 
     const responseMP = await mercadopago.preferences.create(preference);
-    console.log(responseMP.body.init_point);
+    //console.log(responseMP.body.init_point);
     res.status(200).send({ message: responseMP.body.init_point });
   })
 );

@@ -77,7 +77,6 @@ export default function ProductEditScreen() {
   const [isCeliaco, setIsCeliaco] = useState(false);
   const [isVegetariano, setIsVegetariano] = useState(false);
   const [rubros, setRubros] = useState([]);
-
   const [ingredientesDB, setIngredientesDB] = useState([]);
   const [ingredientesProducto, setIngredientesProducto] = useState([]);
   const [costoProducto, setCostoProducto] = useState(0);
@@ -274,7 +273,6 @@ export default function ProductEditScreen() {
       : (list[index][name] = value);
     setIngredientesProducto(list);
 
-    console.log(ingredientesProducto);
   };
 
   function deleteLocalStorage() {
