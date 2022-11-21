@@ -6,41 +6,11 @@ import { isAdmin, isAuth } from '../utils.js';
 const productoRouter = express.Router();
 
 productoRouter.get('/', async (req, res) => {
-  const productos = await Producto.find().populate({path: 'ingredientes.ingrediente'});
+  const productos = await Producto.find().populate({
+    path: 'ingredientes.ingrediente',
+  });
   res.send(productos);
 });
-
-/* productoRouter.post(
-  '/',
-  isAuth,
-  isAdmin,
-  expressAsyncHandler(async (req, res) => {
-    const newProducto = new Producto({
-      nombreProducto: 'prueba1 ' + Date.now(),
-      tiempoCocinaProducto: 15,
-      recetaProducto: 'receta ejemplo prueba 1',
-      descripcionProducto: 'descripción prueba 1',
-      imagenProducto: '/imagenprueba1.jpg',
-      precioVentaProducto: 555,
-      altaProducto: false,
-      rubroProducto: 'rubro prueba 1',
-      //Atributo a eliminar:
-      stockProducto: 2,
-      isCeliaco: false,
-      isVegetariano: false,
-    });
-    const producto = await newProducto.save();
-    res.send({ message: 'Producto creado', producto });
-  })
-); */
-
-/* productoRouter.get(
-  '/prueba',
-  expressAsyncHandler(async (req, res) => {
-    const productos = await Producto.find().populate({path: 'ingredientes.ingrediente'});
-    res.send(productos);
-  })
-); */
 
 productoRouter.post(
   '/',
@@ -56,8 +26,6 @@ productoRouter.post(
       precioVentaProducto: req.body.precioVentaProducto,
       altaProducto: req.body.altaProducto,
       rubroProducto: req.body.rubroProducto,
-      //Atributo a eliminar:
-      //stockProducto: req.body.stockProducto,
       isCeliaco: req.body.isCeliaco,
       isVegetariano: req.body.isVegetariano,
       ingredientes: req.body.ingredientesProducto,
@@ -83,7 +51,6 @@ productoRouter.put(
       product.precioVentaProducto = req.body.precioVentaProducto;
       product.altaProducto = req.body.altaProducto;
       product.rubroProducto = req.body.rubroProducto;
-      //product.stockProducto = req.body.stockProducto;
       product.isCeliaco = req.body.isCeliaco;
       product.isVegetariano = req.body.isVegetariano;
       product.ingredientes = req.body.ingredientesProducto;
@@ -122,7 +89,6 @@ productoRouter.get(
     const page = query.page || 1;
     const pageSize = query.pageSize || 15; //Elegir cuántos productos mostrar por pantalla
     const productos = await Producto.find()
-      //.populate('rubroProducto', 'nombreRubro')
       .skip(pageSize * (page - 1))
       .limit(pageSize);
     const countProductos = await Producto.countDocuments();
@@ -201,7 +167,9 @@ productoRouter.get('/nombre/:nombre', async (req, res) => {
 //Busco un producto por su id
 productoRouter.get('/:id', async (req, res) => {
   try {
-    const producto = await Producto.findById(req.params.id).populate({path: 'ingredientes.ingrediente'});
+    const producto = await Producto.findById(req.params.id).populate({
+      path: 'ingredientes.ingrediente',
+    });
     //Con el select() puedo decir qué campos enviar (por ejemplo se excluye el _id de cada ingrediente)
     //const producto = await Producto.findById(req.params.id).populate({path: 'ingredientes.ingrediente'}).select({'ingredientes.ingrediente':1, 'ingredientes.cantidad':1});
     if (producto) {

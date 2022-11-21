@@ -9,7 +9,6 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 
 export default function ShipingAdressScreen() {
   const navigate = useNavigate();
@@ -37,7 +36,6 @@ export default function ShipingAdressScreen() {
 
   //Si el usuario no está logueado, no podré ingresar a shippingAddress
   useEffect(() => {
-    //console.log(entrega);
     if (!userInfo) {
       navigate('/signin?redirect=/shipping');
     }
@@ -50,9 +48,7 @@ export default function ShipingAdressScreen() {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    ctxDispatch({ type: 'SAVE_SHIPPING_OPTION', payload: entrega,
-      
-    });
+    ctxDispatch({ type: 'SAVE_SHIPPING_OPTION', payload: entrega });
     localStorage.setItem(
       'shippingOption',
 
@@ -118,7 +114,10 @@ export default function ShipingAdressScreen() {
 
           {entrega === 'domicilio' && (
             <>
-              <Form.Group className="mb-3 medium-margin-up" controlId="fullName">
+              <Form.Group
+                className="mb-3 medium-margin-up"
+                controlId="fullName"
+              >
                 <Form.Label>Nombre y apellido</Form.Label>
                 <Form.Control
                   value={fullName}

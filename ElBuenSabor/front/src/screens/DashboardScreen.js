@@ -10,7 +10,6 @@ import { getError } from '../utils';
 import Chart from 'react-google-charts';
 import { Helmet } from 'react-helmet-async';
 import DatePicker from 'react-datepicker';
-//import moment from 'moment'
 
 //Usaremos un reducer para traer la dashboard data desde el backend
 const reducer = (state, action) => {
@@ -81,24 +80,12 @@ export default function DashboardScreen() {
               Date.parse(startDate) &&
             Date.parse(summary.allOrders[j].createdAt) <= Date.parse(endDate)
           ) {
-            //console.log('Start date ' + startDate);
-            //console.log(summary.allOrders[j].createdAt);
-            //console.log('End date ' + endDate);
-            /* console.log(
-              'Producto: ' + summary.allOrders[j].orderItems[k].nombreProducto
-            );
-            console.log(
-              'Cantidad: ' + summary.allOrders[j].orderItems[k].cantidad
-            ); */
-            //console.log(Date.parse(summary.allOrders[j].createdAt) >=Date.parse(startDate));
-            //console.log(typeof(Date.parse(summary.allOrders[j].createdAt)))
-            //console.log(typeof(Date.parse(startDate)))
             ranking[i].cantidad += summary.allOrders[j].orderItems[k].cantidad;
           }
         }
       }
     }
-    //}
+
     ranking.sort(function (a, b) {
       if (a.cantidad < b.cantidad) {
         return 1;
@@ -110,40 +97,6 @@ export default function DashboardScreen() {
     });
     return ranking;
   };
-
-  /*
-  const getRankingPorFechas = (desde, hasta) => {
-    let ranking = [];
-
-    for (let i = 0; i < summary.allProducts.length; i++) {
-      ranking.push({});
-      ranking[i].nombreProducto = summary.allProducts[i].nombreProducto;
-      ranking[i].cantidad = 0;
-      ranking[i].rubroProducto = summary.allProducts[i].rubroProducto;
-      for (let j = 0; j < summary.allOrders.length; j++) {
-        for (let k = 0; k < summary.allOrders[j].orderItems.length; k++) {
-          if (
-            summary.allOrders[j].orderItems[k].nombreProducto ===
-            ranking[i].nombreProducto && desde>=summary.allOrders[j].orderItems[k].createdAt && hasta<=summary.allOrders[j].orderItems[k].createdAt
-          ) {
-            ranking[i].cantidad += summary.allOrders[j].orderItems[k].cantidad;
-          }
-        }
-      }
-    }
-    //}
-    ranking.sort(function (a, b) {
-      if (a.cantidad < b.cantidad) {
-        return 1;
-      }
-      if (a.cantidad > b.cantidad) {
-        return -1;
-      }
-      return 0;
-    });
-    return ranking;
-  };
-  */
 
   return (
     <div>
@@ -367,7 +320,6 @@ export default function DashboardScreen() {
                     startDate={startDate}
                     endDate={endDate}
                     dateFormat="dd/MM/yyyy"
-                    //showMonthYearPicker
                   />
                 </div>
               </Col>
@@ -385,7 +337,6 @@ export default function DashboardScreen() {
                     startDate={startDate}
                     endDate={endDate}
                     dateFormat="dd/MM/yyyy"
-                    //showMonthYearPicker
                   />
                 </div>
               </Col>

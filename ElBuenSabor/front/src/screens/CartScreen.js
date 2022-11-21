@@ -9,6 +9,7 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export default function CartScreen() {
   const navigate = useNavigate();
@@ -18,30 +19,34 @@ export default function CartScreen() {
   } = state;
 
   const calcularCantidad = (item) => {
-    //const { data: producto } = await axios.get(`api/productos/${item._id}`);
     let cantidad = 0;
     for (let i = 0; i < item.ingredientes.length; i++) {
       if (i === 0) {
         cantidad = Math.floor(
           item.ingredientes[i].ingrediente.stockActualIngrediente /
-          item.ingredientes[i].cantidad);
-          
+            item.ingredientes[i].cantidad
+        );
       }
-      if (Math.floor(item.ingredientes[i].ingrediente.stockActualIngrediente/item.ingredientes[i].cantidad) < cantidad) {
-        cantidad = Math.floor(item.ingredientes[i].ingrediente.stockActualIngrediente/item.ingredientes[i].cantidad);
+      if (
+        Math.floor(
+          item.ingredientes[i].ingrediente.stockActualIngrediente /
+            item.ingredientes[i].cantidad
+        ) < cantidad
+      ) {
+        cantidad = Math.floor(
+          item.ingredientes[i].ingrediente.stockActualIngrediente /
+            item.ingredientes[i].cantidad
+        );
       }
     }
-    //console.log(cantidad);
     return cantidad;
   };
 
   const updateCartHandler = async (item, cantidad) => {
     const { data } = await axios.get(`api/productos/${item._id}`);
-    /* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */
-    /* if (producto.stockProducto < cantidad) { */
-    
+
     if (calcularCantidad(data) < cantidad) {
-      window.alert('No hay stock del producto');
+      toast.error('No hay stock del producto');
       return;
     }
     ctxDispatch({
@@ -74,14 +79,6 @@ export default function CartScreen() {
             </MessageBox>
           ) : (
             <ListGroup>
-              {/* <Row>
-                <Col md={2}></Col>
-                <Col md={2}></Col>
-                <Col md={2}><p className='text-center'>Cantidad</p></Col>
-                <Col md={2}><p className='text-center'>Precio</p></Col>
-                <Col md={2}><p className='text-center'>Subtotal</p></Col>
-                <Col md={2}><p className='text-center'>Eliminar</p></Col>
-              </Row> */}
               {cartItems.map((item) => (
                 <ListGroup.Item key={item._id}>
                   <Row className="align-items-center">
@@ -98,7 +95,6 @@ export default function CartScreen() {
                       </Link>
                     </Col>
                     <Col md={2}>
-                      
                       <Button
                         onClick={() =>
                           updateCartHandler(item, item.cantidad - 1)
@@ -108,21 +104,16 @@ export default function CartScreen() {
                       >
                         <i className="bi bi-file-minus-fill"></i>
                       </Button>{' '}
-
                       <span>{item.cantidad}</span>{' '}
-
                       <Button
                         variant="light"
                         onClick={() =>
                           updateCartHandler(item, item.cantidad + 1)
                         }
-                        disabled={
-                          item.cantidad === calcularCantidad(item)
-                        } /* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */
+                        disabled={item.cantidad === calcularCantidad(item)}
                       >
                         <i className="bi bi-file-plus-fill"></i>
                       </Button>
-
                     </Col>
                     <Col md={2}>$ {item.precioVentaProducto}</Col>
                     <Col md={2}>

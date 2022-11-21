@@ -71,7 +71,15 @@ function reducer(state, action) {
     }
     case 'CART_CLEAR':
       //Mantenemos el estado del context, también del cart, pero cambiamos el estado de los cartItems a un array vacío
-      return { ...state, cart: { ...state.cart, cartItems: [], paymentMethod:'', shippingOption: '' } };
+      return {
+        ...state,
+        cart: {
+          ...state.cart,
+          cartItems: [],
+          paymentMethod: '',
+          shippingOption: '',
+        },
+      };
     case 'USER_SIGNIN': {
       //Mantenemos el estado anterior y actualizamos la info del usuario con la info
       //que vino desde el back
@@ -115,7 +123,7 @@ function reducer(state, action) {
         ...state,
         cart: { ...state.cart, paymentMethod: action.payload },
       };
-      
+
     default:
       return state;
   }

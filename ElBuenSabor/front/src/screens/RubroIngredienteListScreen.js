@@ -10,6 +10,7 @@ import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import { getError } from '../utils';
 import { Helmet } from 'react-helmet-async';
+import Swal from 'sweetalert2';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -67,9 +68,12 @@ export default function RubroIngredienteListScreen() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get(`/api/rubrosingredientes/admin?page=${page}`, {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        });
+        const { data } = await axios.get(
+          `/api/rubrosingredientes/admin?page=${page}`,
+          {
+            headers: { Authorization: `Bearer ${userInfo.token}` },
+          }
+        );
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
       } catch (err) {
         dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
@@ -84,22 +88,33 @@ export default function RubroIngredienteListScreen() {
   }, [page, userInfo, successDelete]);
 
   const deleteHandler = async (rubro) => {
-    if (window.confirm('Está seguro de elmininar?')) {
-      try {
-        await axios.delete(`/api/rubrosingredientes/${rubro._id}`, {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        });
-        toast.success('Rubro eliminado');
-        dispatch({
-          type: 'DELETE_SUCCESS',
-        });
-      } catch (err) {
-        toast.error(getError(err));
-        dispatch({
-          type: 'DELETE_FAIL',
-        });
+    Swal.fire({
+      title: 'Está seguro de eliminar?',
+      text: 'Esta acción no se podrá revertir!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí!',
+      cancelButtonText: 'No!',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`/api/rubrosingredientes/${rubro._id}`, {
+            headers: { Authorization: `Bearer ${userInfo.token}` },
+          });
+          toast.success('Rubro eliminado');
+          dispatch({
+            type: 'DELETE_SUCCESS',
+          });
+        } catch (err) {
+          toast.error(getError(err));
+          dispatch({
+            type: 'DELETE_FAIL',
+          });
+        }
       }
-    }
+    });
   };
 
   return (
@@ -113,7 +128,10 @@ export default function RubroIngredienteListScreen() {
         </Col>
         <Col className="col text-end">
           <div>
-            <Button type="button" onClick={() => navigate(`/admin/rubroingrediente/new`)}>
+            <Button
+              type="button"
+              onClick={() => navigate(`/admin/rubroingrediente/new`)}
+            >
               Crear rubro
             </Button>
           </div>
@@ -143,14 +161,14 @@ export default function RubroIngredienteListScreen() {
                 <tr key={rubro._id}>
                   <td>{rubro._id}</td>
                   <td>{rubro.nombreRubro}</td>
-
-                  {/*  <td>{rubro.altaRubro.toString()}</td> */}
                   <td>{rubro.altaRubro ? 'Sí' : <p className="red">No</p>}</td>
                   <td>
                     <Button
                       type="button"
                       variant="light"
-                      onClick={() => navigate(`/admin/rubroingrediente/${rubro._id}`)}
+                      onClick={() =>
+                        navigate(`/admin/rubroingrediente/${rubro._id}`)
+                      }
                     >
                       <i className="bi bi-pencil-fill"></i>
                       {/* Editar */}

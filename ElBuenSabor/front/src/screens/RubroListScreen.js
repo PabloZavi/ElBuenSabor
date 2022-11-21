@@ -10,6 +10,7 @@ import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import { getError } from '../utils';
 import { Helmet } from 'react-helmet-async';
+import Swal from 'sweetalert2';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -84,22 +85,33 @@ export default function RubroListScreen() {
   }, [page, userInfo, successDelete]);
 
   const deleteHandler = async (rubro) => {
-    if (window.confirm('Está seguro de elmininar?')) {
-      try {
-        await axios.delete(`/api/rubros/${rubro._id}`, {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        });
-        toast.success('Rubro eliminado');
-        dispatch({
-          type: 'DELETE_SUCCESS',
-        });
-      } catch (err) {
-        toast.error(getError(err));
-        dispatch({
-          type: 'DELETE_FAIL',
-        });
+    Swal.fire({
+      title: 'Está seguro de eliminar?',
+      text: 'Esta acción no se podrá revertir!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí!',
+      cancelButtonText: 'No!',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`/api/rubros/${rubro._id}`, {
+            headers: { Authorization: `Bearer ${userInfo.token}` },
+          });
+          toast.success('Rubro eliminado');
+          dispatch({
+            type: 'DELETE_SUCCESS',
+          });
+        } catch (err) {
+          toast.error(getError(err));
+          dispatch({
+            type: 'DELETE_FAIL',
+          });
+        }
       }
-    }
+    });
   };
 
   return (
@@ -143,8 +155,6 @@ export default function RubroListScreen() {
                 <tr key={rubro._id}>
                   <td>{rubro._id}</td>
                   <td>{rubro.nombreRubro}</td>
-
-                  {/*  <td>{rubro.altaRubro.toString()}</td> */}
                   <td>{rubro.altaRubro ? 'Sí' : <p className="red">No</p>}</td>
                   <td>
                     <Button

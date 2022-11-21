@@ -13,16 +13,4 @@ unidadRouter.get(
   })
 );
 
-/* unidadRouter.post(
-  '/',
-  expressAsyncHandler(async (req, res) => {
-    const newUnidad = new Unidad({
-      nombreUnidad: req.body.nombreUnidad,
-      
-    });
-    const unidad = await newUnidad.save();
-    res.send(unidad);
-  })
-); */
-
 export default unidadRouter;

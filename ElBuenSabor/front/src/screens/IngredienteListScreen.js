@@ -10,6 +10,7 @@ import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import { getError } from '../utils';
 import { Helmet } from 'react-helmet-async';
+import Swal from 'sweetalert2';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -87,22 +88,31 @@ export default function IngredienteListScreen() {
   }, [page, userInfo, successDelete]);
 
   const deleteHandler = async (ingrediente) => {
-    if (window.confirm('Está seguro de elmininar?')) {
-      try {
-        await axios.delete(`/api/ingredientes/${ingrediente._id}`, {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        });
-        toast.success('Ingrediente eliminado');
-        dispatch({
-          type: 'DELETE_SUCCESS',
-        });
-      } catch (err) {
-        toast.error(getError(err));
-        dispatch({
-          type: 'DELETE_FAIL',
-        });
+    Swal.fire({
+      title: 'Está seguro de eliminar?',
+      text: 'Esta acción no se podrá revertir!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí!',
+      cancelButtonText: 'No!',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`/api/ingredientes/${ingrediente._id}`, {
+            headers: { Authorization: `Bearer ${userInfo.token}` },
+          });
+          toast.success('Ingrediente eliminado');
+          dispatch({
+            type: 'DELETE_SUCCESS',
+          });
+        } catch (err) {
+          toast.error(getError(err));
+          dispatch({ type: 'DELETE_FAIL' });
+        }
       }
-    }
+    });
   };
 
   return (

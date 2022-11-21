@@ -129,21 +129,24 @@ userRouter.post(
   expressAsyncHandler(async (req, res) => {
     const user = await User.findOne({ emailUsuario: req.body.emailUsuario });
     if (user) {
-      
-        res.send({
-          _id: user._id,
-          nombreUsuario: user.nombreUsuario,
-          emailUsuario: user.emailUsuario,
-          isAdmin: user.isAdmin,
-          token: generateToken(user),
-          address: user.address,
-          location: user.location,
-          phone: user.phone,
-        });
-        return;
-      
+      res.send({
+        _id: user._id,
+        nombreUsuario: user.nombreUsuario,
+        emailUsuario: user.emailUsuario,
+        isAdmin: user.isAdmin,
+        token: generateToken(user),
+        address: user.address,
+        location: user.location,
+        phone: user.phone,
+      });
+      return;
     }
-    res.status(401).send({ message: 'No hay un cliente registrado con la cuenta de Google que deseas ingresar, por favor registrate' });
+    res
+      .status(401)
+      .send({
+        message:
+          'No hay un cliente registrado con la cuenta de Google que deseas ingresar, por favor registrate',
+      });
   })
 );
 
@@ -198,11 +201,9 @@ userRouter.post(
         token: generateToken(user),
       });
     } else {
-      res
-        .status(401)
-        .send({
-          message: 'Ya hay registrado un usuario con el mail ingresado',
-        });
+      res.status(401).send({
+        message: 'Ya hay registrado un usuario con el mail ingresado',
+      });
     }
   })
 );

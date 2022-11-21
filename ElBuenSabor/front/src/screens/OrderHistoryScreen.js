@@ -61,15 +61,16 @@ export default function OrderHistoryScreen() {
         <table className="table">
           <thead>
             <tr>
-              <td>ID</td>
-              <td>Fecha</td>
-              <td>Total</td>
-              <td>Forma de pago</td>
-              <td>Pagado?</td>
-              <td>Entregado?</td>
-              <td>Acciones</td>
+              <th>ID</th>
+              <th>Fecha</th>
+              <th>Total</th>
+              <th>Forma de pago</th>
+              <th>Pagado?</th>
+              <th>Entregado?</th>
+              <th>Acciones</th>
             </tr>
           </thead>
+
           <tbody>
             {orders?.map((order) => (
               <tr key={order._id}>

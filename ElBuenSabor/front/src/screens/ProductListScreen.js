@@ -10,6 +10,7 @@ import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import { getError } from '../utils';
 import { Helmet } from 'react-helmet-async';
+import Swal from 'sweetalert2';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -25,13 +26,6 @@ const reducer = (state, action) => {
       };
     case 'FETCH_FAIL':
       return { ...state, loading: false, error: action.payload };
-
-    /* case 'CREATE_REQUEST':
-      return { ...state, loadingCreate: true };
-    case 'CREATE_SUCCESS':
-      return { ...state, loadingCreate: false };
-    case 'CREATE_FAIL':
-      return { ...state, loadingCreate: false }; */
 
     case 'DELETE_REQUEST':
       return { ...state, loadingDelete: true, successDelete: false };
@@ -109,46 +103,34 @@ export default function ProductListScreen() {
     }
   }, [page, userInfo, successDelete]);
 
-  /* const createHandler = async () => {
-    if (window.confirm('Está seguro de crear un nuevo producto?')) {
-      try {
-        dispatch({ type: 'CREATE_REQUEST' });
-        const { data } = await axios.post(
-          '/api/productos',
-          {},
-          {
-            headers: { Authorization: `Bearer ${userInfo.token}` },
-          }
-        );
-        toast.success('Producto creado!');
-        dispatch({ type: 'CREATE_SUCCESS' });
-        navigate(`/admin/product/${data.producto._id}`);
-      } catch (err) {
-        toast.error(getError(err));
-        dispatch({
-          type: 'CREATE_FAIL',
-        });
-      }
-    }
-  }; */
-
   const deleteHandler = async (producto) => {
-    if (window.confirm('Está seguro de elmininar?')) {
-      try {
-        await axios.delete(`/api/productos/${producto._id}`, {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        });
-        toast.success('Producto eliminado');
-        dispatch({
-          type: 'DELETE_SUCCESS',
-        });
-      } catch (err) {
-        toast.error(getError(err));
-        dispatch({
-          type: 'DELETE_FAIL',
-        });
+    Swal.fire({
+      title: 'Está seguro de eliminar?',
+      text: 'Esta acción no se podrá revertir!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí!',
+      cancelButtonText: 'No!',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`/api/productos/${producto._id}`, {
+            headers: { Authorization: `Bearer ${userInfo.token}` },
+          });
+          toast.success('Producto eliminado');
+          dispatch({
+            type: 'DELETE_SUCCESS',
+          });
+        } catch (err) {
+          toast.error(getError(err));
+          dispatch({
+            type: 'DELETE_FAIL',
+          });
+        }
       }
-    }
+    });
   };
 
   return (
@@ -162,7 +144,6 @@ export default function ProductListScreen() {
         </Col>
         <Col className="col text-end">
           <div>
-            {/* <Button type="button" onClick={createHandler}> */}
             <Button
               type="button"
               onClick={() => navigate(`/admin/product/new`)}
@@ -200,7 +181,6 @@ export default function ProductListScreen() {
                   <td>{producto.nombreProducto}</td>
                   <td>$ {producto.precioVentaProducto}</td>
                   <td>{producto.rubroProducto}</td>
-                  {/* <td>{producto.altaProducto.toString()}</td> */}
                   <td>
                     {producto.altaProducto ? 'Sí' : <p className="red">No</p>}
                   </td>

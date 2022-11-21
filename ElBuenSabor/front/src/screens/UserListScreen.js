@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { Store } from '../Store';
@@ -61,19 +62,32 @@ export default function UserListScreen() {
   }, [userInfo, successDelete]);
 
   const deleteHandler = async (user) => {
-    if (window.confirm('Esta seguro de eliminar a este usuario?')) {
-      try {
-        dispatch({ type: 'DELETE_REQUEST' });
-        await axios.delete(`/api/users/${user._id}`, {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        });
-        toast.success('Usuario eliminado');
-        dispatch({ type: 'DELETE_SUCCESS' });
-      } catch (err) {
-        toast.error(getError(err));
-        dispatch({ type: 'DELETE_FAIL' });
+    Swal.fire({
+      title: 'Está seguro de eliminar?',
+      text: 'Esta acción no se podrá revertir!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí!',
+      cancelButtonText: 'No!',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          dispatch({ type: 'DELETE_REQUEST' });
+          await axios.delete(`/api/users/${user._id}`, {
+            headers: { Authorization: `Bearer ${userInfo.token}` },
+          });
+          toast.success('Usuario eliminado');
+          dispatch({ type: 'DELETE_SUCCESS' });
+        } catch (err) {
+          toast.error(getError(err));
+          dispatch({
+            type: 'DELETE_FAIL',
+          });
+        }
       }
-    }
+    });
   };
 
   return (
@@ -110,15 +124,10 @@ export default function UserListScreen() {
                 <td>{user.address}</td>
                 <td>{user.location}</td>
                 <td>{user.phone}</td>
-                {/* <td>{user.isAdmin ? <p className="green">Sí</p> : 'No'}</td> */}
                 <td className="text-align-center">
-                  {user.isAdmin ? (
-                    <h3 className="red ">
+                  {user.isAdmin && (
+                    <h3 className="green">
                       <i className="bi bi-check"></i>
-                    </h3>
-                  ) : (
-                    <h3>
-                      <i className="bi bi-x"></i>
                     </h3>
                   )}
                 </td>

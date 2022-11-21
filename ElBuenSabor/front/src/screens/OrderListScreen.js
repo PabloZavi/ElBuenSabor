@@ -13,6 +13,7 @@ import Col from 'react-bootstrap/Col';
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
+import Swal from 'sweetalert2';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -73,19 +74,30 @@ export default function OrderListScreen() {
   }, [userInfo, successDelete]);
 
   const deleteHandler = async (order) => {
-    if (window.confirm('Está seguro de eliminar?')) {
-      try {
-        dispatch({ type: 'DELETE_REQUEST' });
-        await axios.delete(`/api/orders/${order._id}`, {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        });
-        toast.success('Pedido eliminado');
-        dispatch({ type: 'DELETE_SUCCESS' });
-      } catch (err) {
-        toast.error(getError(err));
-        dispatch({ type: 'DELETE_FAIL' });
+    Swal.fire({
+      title: 'Está seguro de eliminar?',
+      text: 'Esta acción no se podrá revertir!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí!',
+      cancelButtonText: 'No!',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          dispatch({ type: 'DELETE_REQUEST' });
+          await axios.delete(`/api/orders/${order._id}`, {
+            headers: { Authorization: `Bearer ${userInfo.token}` },
+          });
+          toast.success('Pedido eliminado');
+          dispatch({ type: 'DELETE_SUCCESS' });
+        } catch (err) {
+          toast.error(getError(err));
+          dispatch({ type: 'DELETE_FAIL' });
+        }
       }
-    }
+    });
   };
 
   return (
@@ -147,7 +159,6 @@ export default function OrderListScreen() {
               <th>Fecha</th>
               <th>Total</th>
               <th>Pagado?</th>
-              {/* <th>Entregado?</th> */}
               <th>Entrega</th>
               <th>Estado</th>
               <th>Acciones</th>
@@ -161,7 +172,6 @@ export default function OrderListScreen() {
                   ord._id.toString().toLowerCase().includes(busqueda) ||
                   ord.user.nombreUsuario.toLowerCase().includes(busqueda)
               )
-              //.filter((ord) => ord.estadoPedido === filter)
               .filter((ord) =>
                 ord.estadoPedido.includes(filter === 'Todos' ? '' : filter)
               )
@@ -173,7 +183,6 @@ export default function OrderListScreen() {
                       ? order.user.nombreUsuario
                       : 'Usuario eliminado'}
                   </td>
-                  {/* <td>{order.createdAt.substring(0, 10)} </td> */}
                   <td>
                     {order.createdAt.substring(8, 10)}/
                     {order.createdAt.substring(5, 7)}/
@@ -182,7 +191,6 @@ export default function OrderListScreen() {
                   <td>{order.totalPrice.toFixed(2)}</td>
                   <td>
                     {order.isPaid ? (
-                      /* order.paidAt.substring(0, 10) */
                       order.paidAt.substring(8, 10) +
                       '/' +
                       order.paidAt.substring(5, 7) +
@@ -192,16 +200,6 @@ export default function OrderListScreen() {
                       <p className="red">No</p>
                     )}
                   </td>
-                  {/* <td>
-                  {order.isDelivered
-                    ? 
-                      order.deliveredAt.substring(8, 10) +
-                      '/' +
-                      order.deliveredAt.substring(5, 7) +
-                      '/' +
-                      order.deliveredAt.substring(0, 4)
-                    : 'No'}
-                </td> */}
 
                   <td>
                     {order.shippingOption === 'local'
@@ -226,15 +224,16 @@ export default function OrderListScreen() {
                       variant="light"
                       onClick={() => deleteHandler(order)}
                     >
-                      Eliminar
+                      <i className="bi bi-trash"></i>
+                      {/* Eliminar */}
                     </Button>
                     {order.isPaid && (
-                    <Button
-                      onClick={() => navigate(`/order/factura/${order._id}`)}
-                    >
-                      Ver factura
-                    </Button>
-                  )}
+                      <Button
+                        onClick={() => navigate(`/order/factura/${order._id}`)}
+                      >
+                        Ver factura
+                      </Button>
+                    )}
                   </td>
                 </tr>
               ))}

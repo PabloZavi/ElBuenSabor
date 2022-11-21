@@ -25,14 +25,10 @@ const reducer = (state, action) => {
 
 export default function RubroNewScreen() {
   const navigate = useNavigate();
-  const [{ loadingUpload, loadingCreate }, dispatch] = useReducer(reducer, {
-    //loading: true,
-    //error: '',
-  });
+  const [{ loadingUpload, loadingCreate }, dispatch] = useReducer(reducer, {});
 
   const { state } = useContext(Store);
   const { userInfo } = state;
-
   const [nombreRubro, setNombreRubro] = useState('');
   const [altaRubro, setAltaRubro] = useState(true);
 
@@ -82,7 +78,6 @@ export default function RubroNewScreen() {
           label="Está dado de alta?"
           checked={altaRubro}
           onChange={(e) => setAltaRubro(e.target.checked)}
-          
         ></Form.Check>
 
         <div className="mb-3">
@@ -90,8 +85,11 @@ export default function RubroNewScreen() {
             Crear rubro
           </Button>
           {loadingCreate && <LoadingBox></LoadingBox>}{' '}
-          {/* <Button type="button" onClick={() => navigate(`/admin/rubros`)}> */}
-          <Button type="button" onClick={() => navigate(-1)}>
+          <Button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => navigate(-1)}
+          >
             Cancelar
           </Button>
         </div>

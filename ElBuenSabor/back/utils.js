@@ -18,7 +18,7 @@ export const generateToken = (user) => {
 };
 
 //middleware function. Al momento de enviar una orden al back comprueba que el usuario
-//este logueado
+//esté logueado
 export const isAuth = (req, res, next) => {
   const authorization = req.headers.authorization;
   if (authorization) {

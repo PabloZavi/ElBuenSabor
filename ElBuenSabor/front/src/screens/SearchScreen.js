@@ -37,7 +37,7 @@ export default function SearchScreen() {
   //search tiene la query
   const { search } = useLocation();
   //seteo la query en sp
-  const sp = new URLSearchParams(search); //search?category=hamburguesas
+  const sp = new URLSearchParams(search); //Ej: search?category=hamburguesas
   const category = sp.get('category') || 'all'; //si no hay categoría, muestro todos los productos (viene de barra lateral)
   const query = sp.get('query') || 'all'; //(viene de cuadro de búsqueda)
   const page = sp.get('page') || 1; //para paginación
@@ -106,12 +106,12 @@ export default function SearchScreen() {
               </li>
               {categories.map((c) => (
                 <li key={c}>
-                <Link
-                  className={c === category ? 'text-bold' : ''}
-                  to={getFilterUrl({ category: c })}
-                >
-                  {c}
-                </Link>
+                  <Link
+                    className={c === category ? 'text-bold' : ''}
+                    to={getFilterUrl({ category: c })}
+                  >
+                    {c}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -157,17 +157,19 @@ export default function SearchScreen() {
                 {/* creamos un Array según la cantidad de pages
                 (si tenemos 10 pages, habrá 10 ítems, y para cada ítem un LinkContainer
                 */}
-                {[...Array(pages).keys()].map((x)=>(
-                    <LinkContainer
-                    key={x+1}
+                {[...Array(pages).keys()].map((x) => (
+                  <LinkContainer
+                    key={x + 1}
                     className="mx-1"
-                    to={getFilterUrl({page: x+1})}
+                    to={getFilterUrl({ page: x + 1 })}
+                  >
+                    <Button
+                      className={Number(page) === x + 1 ? 'text-bold' : ''}
+                      variant="light"
                     >
-                        <Button
-                        className={Number(page)=== x+1 ? 'text-bold': ''}
-                        variant="light"
-                        >{x+1}</Button>
-                    </LinkContainer>
+                      {x + 1}
+                    </Button>
+                  </LinkContainer>
                 ))}
               </div>
             </>

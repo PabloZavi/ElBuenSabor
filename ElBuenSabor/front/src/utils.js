@@ -168,8 +168,8 @@ export const numeroALetras = (function () {
       enteros: Math.floor(num),
       centavos: Math.round(num * 100) - Math.floor(num) * 100,
       letrasCentavos: '',
-      letrasMonedaPlural: currency.plural || 'PESOS', 
-      letrasMonedaSingular: currency.singular || 'PESO', 
+      letrasMonedaPlural: currency.plural || 'PESOS',
+      letrasMonedaSingular: currency.singular || 'PESO',
       letrasMonedaCentavoPlural: currency.centPlural || 'CENTAVOS',
       letrasMonedaCentavoSingular: currency.centSingular || 'CENTAVOS',
     };

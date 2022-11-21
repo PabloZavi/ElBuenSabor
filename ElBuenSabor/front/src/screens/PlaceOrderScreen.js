@@ -43,14 +43,12 @@ export default function PlaceOrderScreen() {
 
   cart.tiempoPreparacion = calcularTiempoPreparacion();
 
-  //cart.taxPrice = round2(0.21 * cart.itemsPrice);
-
   cart.discount =
     cart.shippingOption === 'local'
-      ? -round2(cart.itemsPrice /*  + cart.taxPrice */ * 0.1)
+      ? -round2(cart.itemsPrice * 0.1)
       : round2(0);
 
-  cart.totalPrice = cart.itemsPrice + cart.discount /*  + cart.taxPrice */;
+  cart.totalPrice = cart.itemsPrice + cart.discount;
 
   cart.totalCost = calcularCosto();
 
@@ -60,14 +58,13 @@ export default function PlaceOrderScreen() {
     try {
       dispatch({ type: 'CREATE_REQUEST' });
       const { data } = await axios.post(
-        '/api/orders',
+                '/api/orders',
         {
           orderItems: cart.cartItems,
           shippingAddress: cart.shippingAddress,
           paymentMethod: cart.paymentMethod,
           itemsPrice: cart.itemsPrice,
           discount: cart.discount,
-          //taxPrice: cart.taxPrice,
           totalPrice: cart.totalPrice,
           totalCost: cart.totalCost,
           shippingOption: cart.shippingOption,
@@ -90,7 +87,7 @@ export default function PlaceOrderScreen() {
       localStorage.removeItem('shippingAddress');
       localStorage.removeItem('paymentMethod');
       localStorage.removeItem('shippingOption');
-      await discountIngredients();
+      discountIngredients();
       navigate(`/order/${data.order._id}`);
     } catch (err) {
       dispatch({ type: 'CREATE_FAIL' });
@@ -102,21 +99,7 @@ export default function PlaceOrderScreen() {
     try {
       for (let i = 0; i < cart.cartItems.length; i++) {
         for (let j = 0; j < cart.cartItems[i].ingredientes.length; j++) {
-          /* console.log(
-            'nombre ingrediente: ' +
-              cart.cartItems[i].ingredientes[j].ingrediente.nombreIngrediente
-          );
-          console.log(
-            'id ingrediente: ' +
-              cart.cartItems[i].ingredientes[j].ingrediente._id
-          );
-          console.log(
-            'cantidad a descontar: ' +
-              cart.cartItems[i].cantidad *
-                cart.cartItems[i].ingredientes[j].cantidad
-          ); */
-
-          /* const resp =  */ await axios.put(
+          await axios.put(
             `/api/ingredientes/${cart.cartItems[i].ingredientes[j].ingrediente._id}/discount`,
             {
               _id: cart.cartItems[i].ingredientes[j].ingrediente._id,
@@ -126,7 +109,6 @@ export default function PlaceOrderScreen() {
             },
             { headers: { Authorization: `Bearer ${userInfo.token}` } }
           );
-          //console.log(resp);
         }
       }
     } catch (err) {
@@ -134,11 +116,12 @@ export default function PlaceOrderScreen() {
     }
   };
 
-  useEffect(() => {
+  /* useEffect(() => {
+    console.log("estamos en PlaceorderScreen PAYMENTmETHOD: " + cart.paymentMethod)
     if (!cart.paymentMethod) {
       navigate('/payment');
     }
-  }, [cart, navigate]);
+  }, [cart, navigate]); */
 
   function calcularCosto() {
     let costo = 0;
@@ -170,10 +153,9 @@ export default function PlaceOrderScreen() {
     });
 
     let tiempoDemoraCocina = Date.now() + data.message * 60000;
-    //console.log("tiempo demora cocina " + tiempoDemoraCocina)
 
     let cantidadCocineros = await getCantidadCocineros();
-    //console.log("cantidad cocineros " + cantidadCocineros)
+
     let tiempoPreparacion = calcularTiempoPreparacion();
 
     let retorno = tiempoPreparacion + tiempoDemoraCocina / cantidadCocineros;
@@ -181,7 +163,7 @@ export default function PlaceOrderScreen() {
     if (cart.shippingOption === 'domicilio') {
       retorno += 10;
     }
-    //console.log(Math.round(retorno))
+
     return Math.round(retorno);
   }
 
@@ -284,12 +266,6 @@ export default function PlaceOrderScreen() {
                   </Row>
                 </ListGroup.Item>
 
-                {/* <ListGroup.Item>
-                  <Row>
-                    <Col>IVA</Col>
-                    <Col>$ {cart.taxPrice.toFixed(2)}</Col>
-                  </Row>
-                </ListGroup.Item> */}
                 <ListGroup.Item>
                   <Row>
                     <Col>Descuento</Col>

@@ -30,8 +30,6 @@ export default function SignupScreen() {
   const [location, setLocation] = useState('');
   const [phone, setPhone] = useState('');
 
-
-  //const googleAuth = process.env.ID_GOOGLE_AUTH;
   const clientId =
     '147686912643-ltnii4fb12jf91mhvgfdmk6qp520s3j8.apps.googleusercontent.com';
 
@@ -76,7 +74,7 @@ export default function SignupScreen() {
     });
   }, []);
 
-  //Si el usuario no se regitra en el formulario, sino con Google, se usará esta función
+  //Si el usuario no se registra en el formulario, sino con Google, se usará esta función
   const responseGoogle = async (response) => {
     try {
       const { data } = await Axios.post('/api/users/signupgoogle', {
@@ -107,17 +105,9 @@ export default function SignupScreen() {
 
       <h1 className="my-3">Registro de usuario</h1>
       <Form onSubmit={submitHandler}>
-        {/* <Form.Group className="mb-3" controlId="nombreUsuario">
-          <Form.Label>Nombre y apellido</Form.Label>
-          <Form.Control
-            required
-            onChange={(e) => setNombreUsuario(e.target.value)}
-          ></Form.Control>
-        </Form.Group> */}
         <br />
         <TextField
           className="mb-3 large-input"
-          //fullWidth
           required
           id="nombreUsuario"
           label="Nombre y apellido"
@@ -129,17 +119,8 @@ export default function SignupScreen() {
 
         <br />
 
-        {/* <Form.Group className="mb-3" controlId="emailUsuario">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="email"
-            required
-            onChange={(e) => setEmailUsuario(e.target.value)}
-          ></Form.Control>
-        </Form.Group> */}
         <TextField
           className="mb-3 large-input"
-          //fullWidth
           required
           type="email"
           id="emailUsuario"
@@ -150,15 +131,6 @@ export default function SignupScreen() {
           }}
         />
         <br />
-        {/* <Form.Group className="mb-3" controlId="passwordUsuario">
-          <Form.Label>Contraseña</Form.Label>
-          <Form.Control
-            type="password"
-            required
-            autoComplete="new-password"
-            onChange={(e) => setPasswordUsuario(e.target.value)}
-          ></Form.Control>
-        </Form.Group> */}
 
         <TextField
           className="mb-3 medium-input"
@@ -173,15 +145,6 @@ export default function SignupScreen() {
           }}
         />
         <br />
-        {/* <Form.Group className="mb-3" controlId="confirmPasswordUsuario">
-          <Form.Label>Confirmar contraseña</Form.Label>
-          <Form.Control
-            type="password"
-            required
-            autoComplete="new-password"
-            onChange={(e) => setConfirmPasswordUsuario(e.target.value)}
-          ></Form.Control>
-        </Form.Group> */}
 
         <TextField
           className="mb-3 medium-input"
@@ -236,13 +199,11 @@ export default function SignupScreen() {
 
         <div className="mb-3">
           <GoogleLogin
-            //clientId={googleAuth}
             clientId="147686912643-ltnii4fb12jf91mhvgfdmk6qp520s3j8.apps.googleusercontent.com"
             buttonText="Registrate con Google"
             onSuccess={responseGoogle}
             onFailure={responseGoogle}
             cookiePolicy={'single_host_origin'}
-            //isSignedIn={true}
           />
         </div>
 
