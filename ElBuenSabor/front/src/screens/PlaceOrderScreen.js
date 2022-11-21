@@ -58,7 +58,7 @@ export default function PlaceOrderScreen() {
     try {
       dispatch({ type: 'CREATE_REQUEST' });
       const { data } = await axios.post(
-        '/api/orders',
+                '/api/orders',
         {
           orderItems: cart.cartItems,
           shippingAddress: cart.shippingAddress,
@@ -87,7 +87,7 @@ export default function PlaceOrderScreen() {
       localStorage.removeItem('shippingAddress');
       localStorage.removeItem('paymentMethod');
       localStorage.removeItem('shippingOption');
-      await discountIngredients();
+      discountIngredients();
       navigate(`/order/${data.order._id}`);
     } catch (err) {
       dispatch({ type: 'CREATE_FAIL' });
@@ -116,11 +116,12 @@ export default function PlaceOrderScreen() {
     }
   };
 
-  useEffect(() => {
+  /* useEffect(() => {
+    console.log("estamos en PlaceorderScreen PAYMENTmETHOD: " + cart.paymentMethod)
     if (!cart.paymentMethod) {
       navigate('/payment');
     }
-  }, [cart, navigate]);
+  }, [cart, navigate]); */
 
   function calcularCosto() {
     let costo = 0;
