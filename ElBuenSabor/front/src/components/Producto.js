@@ -15,13 +15,6 @@ function Producto(props) {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart } = state;
 
-  /* const stock = async (prod)=>{
-    for(const ing in prod.ingredientes){
-      const ingDB = await axios.get(`api/ingredientes/${ing.ingrediente._id}`)
-
-    }
-  } */
-
   function stock(prod) {
     for (let ing = 0; ing < prod.ingredientes.length; ing++) {
       if (
@@ -34,35 +27,7 @@ function Producto(props) {
     return true;
   }
 
-  // const comprobarDisponibilidad = (prod) => {
-  //   const existItem = cart.cartItems.find((x) => x._id === producto._id);
-  //   if (existItem.cantidad === calcularCantidad(prod)) {
-  //     return false;
-  //   }
-  //   return true;
-  // };
-
-  // const comp = async (item) => {
-  //   //Comprobamos si ya existe en el carrito el item que queremos agregar
-  //   const existItem = cart.cartItems.find((x) => x._id === producto._id);
-  //   //si existe le agregamos 1 a la cantidad, si no la ponemos en 1
-  //   const cantidad = existItem ? existItem.cantidad + 1 : 1;
-  //   const { data } = await axios.get(`api/productos/${item._id}`);
-  //   //OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES!
-  //   /* if (data.stockProducto < cantidad) {
-  //     toast.error('No hay stock del producto');
-  //     return;
-  //   } */
-
-  //   if (calcularCantidad(data) < cantidad) {
-      
-  //     return false;
-  //   }
-  //   return true;
-  // }
-
   const calcularCantidad = (item) => {
-    //const { data: producto } = await axios.get(`api/productos/${item._id}`);
     let cantidad = 0;
     for (let i = 0; i < item.ingredientes.length; i++) {
       if (i === 0) {
@@ -83,7 +48,6 @@ function Producto(props) {
         );
       }
     }
-    //console.log(cantidad);
     return cantidad;
   };
 
@@ -93,14 +57,9 @@ function Producto(props) {
     //si existe le agregamos 1 a la cantidad, si no la ponemos en 1
     const cantidad = existItem ? existItem.cantidad + 1 : 1;
     const { data } = await axios.get(`api/productos/${item._id}`);
-    //OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES!
-    /* if (data.stockProducto < cantidad) {
-      toast.error('No hay stock del producto');
-      return;
-    } */
 
     if (calcularCantidad(data) < cantidad) {
-      window.alert('No hay stock del producto');
+      toast.error('No hay stock del producto');
       return;
     }
     ctxDispatch({
@@ -110,7 +69,8 @@ function Producto(props) {
   };
   return (
     <div className="text-center">
-      <Card style={{ width: '18rem', height: '24rem' }}>
+      <Card style={{ width: '18rem', height: '24em' }} className=" border-radius">
+        
         <Link to={`/producto/${producto._id}`}>
           <img
             src={producto.imagenProducto}
@@ -140,10 +100,8 @@ function Producto(props) {
                 )}
               </Col>
             </Row>
-          </Card.Text>
-          {/* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */}
-          {/* {producto.stockProducto === 0 ? ( */}
-          {!stock(producto) ? (
+          </Card.Text></Card.Body>
+        <Card.Footer>{!stock(producto) ? (
             <Button variant="light" disabled>
               Sin stock
             </Button>
@@ -153,11 +111,10 @@ function Producto(props) {
               onClick={() => addToCartHandler(producto)}
             >
               {localStorage.getItem('localAbierto') !== 'false'
-                ? 'Agregar al carrito'
+                ? <span class="bi bi-cart-fill">&nbsp;&nbsp;Agregar al carrito</span>
                 : 'Local cerrado'}
             </Button>
-          )}
-        </Card.Body>
+          )}</Card.Footer>
       </Card>
     </div>
   );

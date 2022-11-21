@@ -1,12 +1,13 @@
 import React, { useContext, useReducer, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import Form from 'react-bootstrap/Form';
 import { Store } from '../Store';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import { getError } from '../utils';
 import axios from 'axios';
 import TextField from '@mui/material/TextField';
+import LoadingBox from '../components/LoadingBox';
+import { useNavigate } from 'react-router-dom';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -33,6 +34,8 @@ export default function ProfileScreen() {
   const [location, setLocation] = useState(userInfo.location);
   const [phone, setPhone] = useState(userInfo.phone);
 
+  const navigate = useNavigate();
+
   const [{ loadingUpdate }, dispatch] = useReducer(reducer, {
     loadingUpdate: false,
   });
@@ -44,6 +47,7 @@ export default function ProfileScreen() {
       return;
     }
     try {
+      dispatch({ type: 'UPDATE_REQUEST' });
       const { data } = await axios.put(
         '/api/users/profile',
         {
@@ -78,45 +82,9 @@ export default function ProfileScreen() {
 
       <h1 className="my-3">Perfil de usuario</h1>
       <form onSubmit={submitHandler}>
-        {/* <Form.Group className="mb-3" controlId="nombreUsuario">
-          <Form.Label>Nombre y apellido</Form.Label>
-          <Form.Control
-            value={nombreUsuario}
-            onChange={(e) => setNombreUsuario(e.target.value)}
-            required
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="emailUsuario">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="email"
-            value={emailUsuario}
-            onChange={(e) => setEmailUsuario(e.target.value)}
-            required
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="passwordUsuario">
-          <Form.Label>Contraseña</Form.Label>
-          <Form.Control
-            type="password"
-            onChange={(e) => setPasswordUsuario(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="confirmPasswordUsuario">
-          <Form.Label>Confirmar Contraseña</Form.Label>
-          <Form.Control
-            type="password"
-            onChange={(e) => setConfirmPasswordUsuario(e.target.value)}
-          ></Form.Control>
-        </Form.Group> */}
-
         <br />
         <TextField
           className="mb-3 large-input"
-          //fullWidth
           required
           id="nombreUsuario"
           label="Nombre y apellido"
@@ -130,7 +98,6 @@ export default function ProfileScreen() {
 
         <TextField
           className="mb-3 large-input"
-          //fullWidth
           required
           type="email"
           id="emailUsuario"
@@ -202,6 +169,14 @@ export default function ProfileScreen() {
 
         <div className="mb-3">
           <Button type="submit">Actualizar</Button>
+          {loadingUpdate && <LoadingBox></LoadingBox>}{' '}
+          <Button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => navigate(-1)}
+          >
+            Cancelar
+          </Button>
         </div>
       </form>
     </div>

@@ -34,10 +34,10 @@ orderRouter.post(
       totalPrice: req.body.totalPrice,
       shippingOption: req.body.shippingOption,
       totalCost: req.body.totalCost,
-      //Esta info la tengo después de que el middleware 'isAuth' verifica el token
-      user: req.user._id,
       tiempoPreparacion: req.body.tiempoPreparacion,
       horaEstimada: new Date(req.body.horaEstimada),
+      //Esta info la tengo después de que el middleware 'isAuth' verifica el token
+      user: req.user._id,
     });
 
     const order = await newOrder.save();
@@ -51,7 +51,6 @@ orderRouter.get(
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
-
     const orders = await Order.aggregate([
       //pipeline
       {
@@ -81,7 +80,7 @@ orderRouter.get(
           _id: { $dateToString: { format: '%d-%m-%Y', date: '$createdAt' } },
           orders: { $sum: 1 },
           sales: { $sum: '$totalPrice' },
-          costs: {$sum: '$totalCost'},
+          costs: { $sum: '$totalCost' },
         },
       },
       { $sort: { _id: 1 } },
@@ -91,7 +90,6 @@ orderRouter.get(
       {
         $group: {
           _id: { $dateToString: { date: '$createdAt' } },
-          
         },
       },
       { $sort: { _id: 1 } },
@@ -104,7 +102,7 @@ orderRouter.get(
           _id: { $dateToString: { format: '%m-%Y', date: '$createdAt' } },
           orders: { $sum: 1 },
           sales: { $sum: '$totalPrice' },
-          costs: {$sum: '$totalCost'}
+          costs: { $sum: '$totalCost' },
         },
       },
       { $sort: { _id: 1 } },
@@ -142,7 +140,7 @@ orderRouter.get(
       paymentMethod,
       allProducts,
       allOrders,
-      fechas
+      fechas,
     });
   })
 );
@@ -165,29 +163,18 @@ orderRouter.get(
   expressAsyncHandler(async (req, res) => {
     //Buscamos el pedido en la base de datos
     const orders = await Order.find().populate('orderItems.producto');
-    //console.log("La cantidad de órdenes es: " + orders.length)
-
+    let tiempo = 0;
     if (orders) {
-      let tiempo = 0;
-
-      //res.send(order);
       for (let i = 0; i < orders.length; i++) {
         if (orders[i].estadoPedido === 'En cocina') {
-          //console.log(orders[i])
-          //console.log(orders[i].orderItems)
-          //console.log(tiempo)
-          //console.log("**************************************************")
           for (let j = 0; j < orders[i].orderItems.length; j++) {
-            //console.log(orders[i].orderItems[j].producto.tiempoCocinaProducto)
             tiempo += orders[i].orderItems[j].producto.tiempoCocinaProducto;
           }
         }
       }
-      //console.log(tiempo)
       res.send({ message: tiempo });
     } else {
-      res.status(404).send({ message: 'No hay órdenes' });
-      //res.send("tiempo");
+      res.send({ message: tiempo });
     }
   })
 );
@@ -209,6 +196,10 @@ orderRouter.get(
   })
 );
 
+//Ya no se usa este método ya que se cambió por la lógica de cambio
+//de estados de cada pedido (ver abajo .put /:id/state que cuando el
+//estado pasa a "Entregado" se actualizan los campos isDelivered y deliveredAt)
+//Método que marca un pedido como entregado
 orderRouter.put(
   '/:id/deliver',
   isAuth,
@@ -254,7 +245,6 @@ orderRouter.put(
       order.isPaid = true;
       order.paidAt = Date.now();
       order.payment_id = req.body.payment_id;
-
       const updatedOrder = await order.save();
       res.send({ message: 'Pedido pagado', order: updatedOrder });
     } else {

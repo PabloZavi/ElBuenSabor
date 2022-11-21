@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useContext, useEffect, useReducer } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
@@ -12,6 +12,7 @@ import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { getError } from '../utils';
 import { Store } from '../Store';
+import { toast } from 'react-toastify';
 
 //reducer acepta dos parámetros, el primero es el estado actual y el segundo es la acción que cambia
 //el estado y crea un nuevo estado
@@ -29,7 +30,7 @@ const reducer = (state, action) => {
 };
 
 function ProductScreen() {
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const params = useParams();
   const { _id } = params;
 
@@ -39,7 +40,7 @@ function ProductScreen() {
     error: '',
   });
 
-  function stock (prod)  {
+  function stock(prod) {
     for (let ing = 0; ing < prod.ingredientes.length; ing++) {
       if (
         prod.ingredientes[ing].cantidad >
@@ -49,23 +50,30 @@ function ProductScreen() {
       }
     }
     return true;
-  };
+  }
 
   const calcularCantidad = (item) => {
-    //const { data: producto } = await axios.get(`api/productos/${item._id}`);
     let cantidad = 0;
     for (let i = 0; i < item.ingredientes.length; i++) {
       if (i === 0) {
         cantidad = Math.floor(
           item.ingredientes[i].ingrediente.stockActualIngrediente /
-          item.ingredientes[i].cantidad);
-          
+            item.ingredientes[i].cantidad
+        );
       }
-      if (Math.floor(item.ingredientes[i].ingrediente.stockActualIngrediente/item.ingredientes[i].cantidad) < cantidad) {
-        cantidad = Math.floor(item.ingredientes[i].ingrediente.stockActualIngrediente/item.ingredientes[i].cantidad);
+      if (
+        Math.floor(
+          item.ingredientes[i].ingrediente.stockActualIngrediente /
+            item.ingredientes[i].cantidad
+        ) < cantidad
+      ) {
+        cantidad = Math.floor(
+          item.ingredientes[i].ingrediente.stockActualIngrediente /
+            item.ingredientes[i].cantidad
+        );
       }
     }
-    //console.log(cantidad);
+
     return cantidad;
   };
 
@@ -90,15 +98,15 @@ function ProductScreen() {
   //Antes de agregar algo al carrito, vemos que no esté ya agregado
   //Traemos 'cart' desde state y la usamos en addCartToHandler
   const { cart } = state;
-  
-  const comprobarDisponibilidad = (prod) => {
+
+  /* const comprobarDisponibilidad = (prod) => {
     const existItem = cart.cartItems.find((x) => x._id === producto._id);
-    if(existItem.cantidad===calcularCantidad(prod)){
+    if (existItem.cantidad === calcularCantidad(prod)) {
       return false;
     }
     return true;
-  }
-  
+  }; */
+
   //Esta será la función que se ejecuta al hacer clic en "Agregar al carrito"
   const addToCartHandler = async () => {
     //Comprobamos si ya existe en el carrito el item que queremos agregar
@@ -108,13 +116,11 @@ function ProductScreen() {
     //Nos traemos los datos del producto que queremos agregar...
     const { data } = await axios.get(`/api/productos/${producto._id}`);
     //y verificamos si hay stock
-    /* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */
-    //console.log(calcularCantidad(data))
     if (calcularCantidad(data) < cantidad) {
-      window.alert('No hay stock del producto');
+      toast.error('No hay stock del producto');
       return;
     }
-    
+
     ctxDispatch({
       type: 'CART_ADD_ITEM',
       payload: { ...producto, cantidad },
@@ -125,7 +131,6 @@ function ProductScreen() {
   };
 
   return loading ? (
-    //<div>Cargando...</div>
     <LoadingBox></LoadingBox>
   ) : error ? (
     <MessageBox variant="danger">{error}</MessageBox>
@@ -183,7 +188,6 @@ function ProductScreen() {
                   <Row>
                     <Col>Estado: </Col>
                     <Col>
-                      {/* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */}
                       {stock(producto) ? (
                         <Badge bg="success"> Disponible </Badge>
                       ) : (
@@ -193,18 +197,6 @@ function ProductScreen() {
                   </Row>
                 </ListGroup.Item>
 
-                {/* OJO CAMBIAR LÓGICA, AHORA CON INGREDIENTES! */}
-                {/*
-                        if(producto.stockProducto > 0){
-                          (<ListGroup.Item>
-                    <div className="d-grid">
-                      <Button onClick={addToCartHandler} variant="primary">
-                        Agregar al carrito
-                      </Button>
-                    </div>
-                  </ListGroup.Item>)
-                        }
-                        */}
                 {stock(producto) && (
                   <ListGroup.Item>
                     <div className="d-grid">
@@ -214,13 +206,14 @@ function ProductScreen() {
                         }
                         onClick={() => addToCartHandler(producto)}
                       >
-                        {localStorage.getItem('localAbierto') !== 'false'
-                          ? 'Agregar al carrito'
-                          : 'Local cerrado'}
+                        {localStorage.getItem('localAbierto') !== 'false' ? (
+                          <span class="bi bi-cart-fill">
+                            &nbsp;&nbsp;Agregar al carrito
+                          </span>
+                        ) : (
+                          'Local cerrado'
+                        )}
                       </Button>
-                      {/* <Button onClick={addToCartHandler} variant="primary">
-                        Agregar al carrito
-                      </Button> */}
                     </div>
                   </ListGroup.Item>
                 )}

@@ -38,23 +38,13 @@ ingredienteRouter.put(
       { $inc: { stockActualIngrediente: -req.body.cantidad } },
       { new: true }
     );
-    res.send({
+    /* res.send({
       message:
         'Ingrediente ' +
         ingrediente.nombreIngrediente +
         ' stock nuevo: ' +
         ingrediente.stockActualIngrediente,
-    });
-    // const ingrediente = await Ingrediente.findById(req.params.id);
-    // if (ingrediente) {
-
-    //   //order.isDelivered = true;
-    //   //order.deliveredAt = Date.now();
-    //   await ingrediente.save();
-    //   //res.send({ message: 'Pedido entregado!' });
-    // } else {
-    //   res.status(404).send({ message: 'Ingrediente no encontrado' });
-    // }
+    }); */
   })
 );
 
@@ -98,8 +88,6 @@ ingredienteRouter.delete(
 );
 
 //Ojo usamos expressAsyncHandler
-//const PAGE_SIZE = 6;
-
 ingredienteRouter.get(
   '/admin',
   isAuth,

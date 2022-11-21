@@ -122,24 +122,27 @@ export default function IngredienteEditScreen() {
             localStorage.getItem('stockMinimoIngredienteEdit')
           );
         localStorage.getItem('stockActualIngredienteEdit') &&
-          setStockActualIngrediente(localStorage.getItem('stockActualIngredienteEdit'));
+          setStockActualIngrediente(
+            localStorage.getItem('stockActualIngredienteEdit')
+          );
         localStorage.getItem('unidadDeMedidaIngredienteEdit') &&
           setUnidadDeMedidaIngrediente(
             localStorage.getItem('unidadDeMedidaIngredienteEdit')
           );
-        
+
         localStorage.getItem('precioCostoIngredienteEdit') &&
           setPrecioCostoIngrediente(
             localStorage.getItem('precioCostoIngredienteEdit')
           );
         localStorage.getItem('altaIngredienteEdit') &&
           setAltaIngrediente(
-            localStorage.getItem('altaIngredienteEdit') === 'true' ? true : false
+            localStorage.getItem('altaIngredienteEdit') === 'true'
+              ? true
+              : false
           );
-        
+
         localStorage.getItem('rubroIngredienteEdit') &&
           setRubroIngrediente(localStorage.getItem('rubroIngredienteEdit'));
-        
 
         dispatch({ type: 'FETCH_SUCCESS' });
       } catch (err) {
@@ -213,16 +216,15 @@ export default function IngredienteEditScreen() {
     }
   };
 
-  
-
   return (
     <Container className="small-container">
       <Helmet>
-        {/* <title>Editar ingrediente {ingredienteId}</title> */}
         <title>Editar ingrediente {nombreIngrediente}</title>
       </Helmet>
-      {/* <h1>Editar ingrediente {ingredienteId}</h1> */}
-      <h1>Editar ingrediente <br/><p style={ { color: 'blue' } }>{nombreIngrediente}</p></h1>
+      <h1>
+        Editar ingrediente <br />
+        <p style={{ color: 'blue' }}>{nombreIngrediente}</p>
+      </h1>
 
       {loading ? (
         <LoadingBox></LoadingBox>
@@ -230,145 +232,156 @@ export default function IngredienteEditScreen() {
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
         <Form onSubmit={submitHandler}>
-        <Form.Group className="mb-3" controlId="nombreIngrediente">
-          <Form.Label>Nombre</Form.Label>
-          <Form.Control
-            value={nombreIngrediente}
+          <Form.Group className="mb-3" controlId="nombreIngrediente">
+            <Form.Label>Nombre</Form.Label>
+            <Form.Control
+              value={nombreIngrediente}
+              onChange={(e) => {
+                setNombreIngrediente(e.target.value);
+                localStorage.setItem('nombreIngredienteEdit', e.target.value);
+              }}
+              required
+            ></Form.Control>
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="stockMinimoIngrediente">
+            <Form.Label>Stock mínimo </Form.Label>
+            <Form.Control
+              type="Number"
+              min="0"
+              step="0.01"
+              value={stockMinimoIngrediente}
+              onChange={(e) => {
+                setStockMinimoIngrediente(e.target.value);
+                localStorage.setItem(
+                  'stockMinimoIngredienteEdit',
+                  e.target.value
+                );
+              }}
+              required
+            ></Form.Control>
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="stockActualIngrediente">
+            <Form.Label>Stock actual </Form.Label>
+            <Form.Control
+              type="Number"
+              min="0"
+              step="0.01"
+              value={stockActualIngrediente}
+              onChange={(e) => {
+                setStockActualIngrediente(e.target.value);
+                localStorage.setItem(
+                  'stockActualIngredienteEdit',
+                  e.target.value
+                );
+              }}
+              required
+            ></Form.Control>
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="unidadDeMedidaIngrediente">
+            <Row>
+              <Col>
+                <Select
+                  defaultValue={
+                    unidadDeMedidaIngrediente
+                      ? { label: unidadDeMedidaIngrediente }
+                      : { label: 'Seleccionar unidad' }
+                  }
+                  options={unidades.map((unidad) => ({
+                    label: unidad.nombreUnidad,
+                    value: unidad.nombreUnidad,
+                  }))}
+                  onChange={(e) => {
+                    setUnidadDeMedidaIngrediente(e.value);
+                    localStorage.setItem(
+                      'unidadDeMedidaIngredienteEdit',
+                      e.value
+                    );
+                  }}
+                ></Select>
+              </Col>
+            </Row>
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="rubroIngrediente">
+            <Row>
+              <Col>
+                <Select
+                  defaultValue={
+                    rubroIngrediente
+                      ? { label: rubroIngrediente }
+                      : { label: 'Seleccionar rubro' }
+                  }
+                  options={rubros.map((rubro) => ({
+                    label: rubro.nombreRubro,
+                    value: rubro.nombreRubro,
+                  }))}
+                  onChange={(e) => {
+                    setRubroIngrediente(e.value);
+                    localStorage.setItem('rubroIngredienteEdit', e.value);
+                  }}
+                ></Select>
+              </Col>
+              <Col>
+                ¿No está el rubro? &rArr; &nbsp;
+                <Button
+                  type="button"
+                  onClick={() => navigate(`/admin/rubroingrediente/new`)}
+                >
+                  Crear rubro
+                </Button>
+              </Col>
+            </Row>
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="precioCostoIngrediente">
+            <Form.Label>Precio de costo</Form.Label>
+            <Form.Control
+              type="Number"
+              min="0"
+              step="0.01"
+              value={precioCostoIngrediente}
+              onChange={(e) => {
+                setPrecioCostoIngrediente(e.target.value);
+                localStorage.setItem(
+                  'precioCostoIngredienteEdit',
+                  e.target.value
+                );
+              }}
+              required
+            ></Form.Control>
+          </Form.Group>
+
+          <Form.Check
+            className="mb-3"
+            type="checkbox"
+            id="altaIngrediente"
+            label="Está dado de alta?"
+            checked={altaIngrediente}
             onChange={(e) => {
-              setNombreIngrediente(e.target.value);
-              localStorage.setItem('nombreIngredienteEdit', e.target.value);
+              setAltaIngrediente(e.target.checked);
+              localStorage.setItem('altaIngredienteEdit', e.target.checked);
             }}
-            required
-          ></Form.Control>
-        </Form.Group>
+          ></Form.Check>
 
-        <Form.Group className="mb-3" controlId="stockMinimoIngrediente">
-          <Form.Label>Stock mínimo </Form.Label>
-          <Form.Control
-            type="Number"
-            min="0"
-            step="0.01"
-            value={stockMinimoIngrediente}
-            onChange={(e) => {
-              setStockMinimoIngrediente(e.target.value);
-              localStorage.setItem('stockMinimoIngredienteEdit', e.target.value);
-            }}
-            required
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="stockActualIngrediente">
-          <Form.Label>Stock actual </Form.Label>
-          <Form.Control
-            type="Number"
-            min="0"
-            step="0.01"
-            value={stockActualIngrediente}
-            onChange={(e) => {
-              setStockActualIngrediente(e.target.value);
-              localStorage.setItem('stockActualIngredienteEdit', e.target.value);
-            }}
-            required
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="unidadDeMedidaIngrediente">
-          <Row>
-            <Col>
-              <Select
-                defaultValue={
-                  unidadDeMedidaIngrediente
-                    ? { label: unidadDeMedidaIngrediente }
-                    : { label: 'Seleccionar unidad' }
-                }
-                options={unidades.map((unidad) => ({
-                  label: unidad.nombreUnidad,
-                  value: unidad.nombreUnidad,
-                }))}
-                onChange={(e) => {
-                  setUnidadDeMedidaIngrediente(e.value);
-                  localStorage.setItem('unidadDeMedidaIngredienteEdit', e.value);
-                }}
-              ></Select>
-            </Col>
-          </Row>
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="rubroIngrediente">
-          <Row>
-            <Col>
-              <Select
-                defaultValue={
-                  rubroIngrediente
-                    ? { label: rubroIngrediente }
-                    : { label: 'Seleccionar rubro' }
-                }
-                options={rubros.map((rubro) => ({
-                  label: rubro.nombreRubro,
-                  value: rubro.nombreRubro,
-                }))}
-                onChange={(e) => {
-                  setRubroIngrediente(e.value);
-                  localStorage.setItem('rubroIngredienteEdit', e.value);
-                }}
-              ></Select>
-            </Col>
-            <Col>
-              ¿No está el rubro? &rArr; &nbsp;
-              <Button
-                type="button"
-                onClick={() => navigate(`/admin/rubroingrediente/new`)}
-              >
-                Crear rubro
-              </Button>
-            </Col>
-          </Row>
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="precioCostoIngrediente">
-          <Form.Label>Precio de costo</Form.Label>
-          <Form.Control
-            type="Number"
-            min="0"
-            step="0.01"
-            value={precioCostoIngrediente}
-            onChange={(e) => {
-              setPrecioCostoIngrediente(e.target.value);
-              localStorage.setItem('precioCostoIngredienteEdit', e.target.value);
-            }}
-            required
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Check
-          className="mb-3"
-          type="checkbox"
-          id="altaIngrediente"
-          label="Está dado de alta?"
-          checked={altaIngrediente}
-          onChange={(e) => {
-            setAltaIngrediente(e.target.checked);
-            localStorage.setItem('altaIngredienteEdit', e.target.checked);
-          }}
-        ></Form.Check>
-
-        <div className="mb-3">
-          
-          <Button disabled={loadingUpdate || loadingUpload} type="submit">
-            Actualizar
-          </Button>
-          {loadingUpdate && <LoadingBox></LoadingBox>}{' '}
-
-          <Button
-            type="button"
-            onClick={() => {
-              deleteLocalStorage();
-              /* navigate(`/admin/ingredientes`); */
-              navigate(-1);
-            }}
-          >
-            Cancelar
-          </Button>
+          <div className="mb-3">
+            <Button disabled={loadingUpdate || loadingUpload} type="submit">
+              Actualizar
+            </Button>
+            {loadingUpdate && <LoadingBox></LoadingBox>}{' '}
+            <Button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => {
+                deleteLocalStorage();
+                /* navigate(`/admin/ingredientes`); */
+                navigate(-1);
+              }}
+            >
+              Cancelar
+            </Button>
           </div>
         </Form>
       )}

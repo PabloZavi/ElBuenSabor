@@ -12,15 +12,12 @@ const productoSchema = new mongoose.Schema(
     isCeliaco: { type: Boolean, required: true },
     isVegetariano: { type: Boolean, required: true },
     rubroProducto: { type: String, required: true },
-    //Atributo a eliminar:
-    //stockProducto: { type: Number, required: true },
     ingredientes: [
       {
         ingrediente: { type: Schema.Types.ObjectId, ref: 'Ingrediente' },
         cantidad: { type: Number, min: 0 },
       },
     ],
-    //rubroProducto: { type: mongoose.Schema.Types.ObjectId, ref: 'Rubro', required: true },
   },
   {
     timestamps: true,

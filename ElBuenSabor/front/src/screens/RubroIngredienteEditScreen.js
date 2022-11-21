@@ -37,11 +37,10 @@ export default function RubroIngredienteEditScreen() {
   const { state } = useContext(Store);
   const { userInfo } = state;
 
-  const [{ loading, error, loadingUpdate }, dispatch] =
-    useReducer(reducer, {
-      loading: true,
-      error: '',
-    });
+  const [{ loading, error, loadingUpdate }, dispatch] = useReducer(reducer, {
+    loading: true,
+    error: '',
+  });
 
   const [nombreRubro, setNombreRubro] = useState('');
   const [altaRubro, setAltaRubro] = useState(true);
@@ -89,11 +88,13 @@ export default function RubroIngredienteEditScreen() {
   return (
     <Container className="small-container">
       <Helmet>
-        {/* <title>Editar rubro de Ingredientes{rubroId}</title> */}
         <title>Editar rubro de Ingredientes{nombreRubro}</title>
       </Helmet>
-      {/* <h1>Editar rubro de Ingredientes {rubroId}</h1> */}
-      <h1>Editar rubro de Ingredientes <br/><p style={ { color: 'blue' } }>{nombreRubro}</p></h1>
+
+      <h1>
+        Editar rubro de Ingredientes <br />
+        <p style={{ color: 'blue' }}>{nombreRubro}</p>
+      </h1>
 
       {loading ? (
         <LoadingBox></LoadingBox>
@@ -124,7 +125,11 @@ export default function RubroIngredienteEditScreen() {
               Actualizar
             </Button>
             {loadingUpdate && <LoadingBox></LoadingBox>}{' '}
-            <Button type="button" onClick={() => navigate(-1)}>
+            <Button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => navigate(-1)}
+            >
               Cancelar
             </Button>
           </div>

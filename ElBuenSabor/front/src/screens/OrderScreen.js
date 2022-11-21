@@ -12,10 +12,7 @@ import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
-//import Modal from 'react-bootstrap/Modal';
 import RecetaItem from '../components/RecetaItem';
-//const mercadopago = require('mercadopago');
-//import mercadopago from 'mercadopago';
 import Form from 'react-bootstrap/Form';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
@@ -49,12 +46,6 @@ function reducer(state, action) {
         loadingDeliver: false,
         successDeliver: false,
       };
-    /* case 'PAID_REQUEST':
-      return { ...state};
-    case 'PAID_SUCCESS':
-      return { ...state, successPaid: true};
-    case 'PAID_FAIL':
-      return { ...state }; */
 
     default:
       return state;
@@ -65,8 +56,6 @@ export default function OrderScreen() {
   const { state } = useContext(Store);
   const { userInfo } = state;
 
-  //const [isPending, setIsPending] = useState(false);
-
   //El id viene de los parámetros
   const params = useParams();
   //el id lo sacamos de los parámetros y lo renombramos como 'orderId'
@@ -74,168 +63,47 @@ export default function OrderScreen() {
 
   const valores = window.location.search;
   const urlParams = new URLSearchParams(valores);
-  //let paid = urlParams.get('paid');
 
   const [paid, setPaid] = useState('');
   const [estado, setEstado] = useState('');
 
-  //const [tiempoDemora, setTiempoDemora] = useState('');
-
-  //const payment_id = urlParams.get('payment_id');
-
-  //const { collection_status, payment_id } = params;
-  //console.log(collection_status);
-  //console.log(payment_id);
   const [totalPrice, setTotalPrice] = useState(0);
-  //const [collection_status, setCollection_status] = useState(undefined);
-  //setCollection_status(urlParams.get('collection_status'));
-  //const [pagada, setPagada] = useState(false);
-
-  /* if (collection_status !== undefined) {
-    if (collection_status === 'approved') {
-      onApprove();
-      setCollection_status(undefined);
-    }
-  }
-
-  
-
-  async function onApprove(data, actions) {
-    try {
-      dispatch({ type: 'PAY_REQUEST' });
-      //console.log(userInfo.token);
-      const { data } = await axios.put(
-        `/api/orders/${orderId}/pay`,{
-          headers: { authorization: `Bearer ${userInfo.token}` },
-        });
-      dispatch({ type: 'PAY_SUCCESS', payload: data });
-      toast.success('Order is paid');
-    } catch (err) {
-      dispatch({ type: 'PAY_FAIL', payload: getError(err) });
-      toast.error(getError(err));
-    }
-  } */
 
   const navigate = useNavigate();
 
-  const [
-    {
-      loading,
-      error,
-      order /* , successPay  */,
-      //loadingDeliver,
-      successDeliver,
-      successPay,
-    },
-    dispatch,
-  ] = useReducer(reducer, {
-    loading: true,
-    order: {},
-    error: '',
-    successPay: false,
-  });
+  const [{ loading, error, order, successDeliver, successPay }, dispatch] =
+    useReducer(reducer, {
+      loading: true,
+      order: {},
+      error: '',
+      successPay: false,
+    });
 
   const handleChange = (event) => {
     setEstado(event.target.value);
   };
 
   const verFacturaHandler = () => {
-    //window.open(`/order/factura/${order._id}`, '', 'fullscreen=yes, toolbar=yes,scrollbars=yes,resizable=yes, menubar=yes', 'status=yes', 'titlebar=yes');
     window.open(`/order/factura/${order._id}`);
   };
 
   const pagoMercadoPagoHandler = async (e) => {
     e.preventDefault();
-    //dispatch({ type: 'PAY_REQUEST' });
     try {
-      //Mando a pagoMercadoPagoRoutes el número de pedido y el total
-      //console.log(order.totalPrice);
-      //console.log(orderId);
-      //guardo en 'data' la respuesta de MP
       const { data } = await axios.post('/pago', {
         orderId,
         totalPrice,
       });
-      //data.message contiene la dirección!
-      //console.log(data.message);
-      //order.isPaid = true;
       //Extraigo la dirección de MP para pagar y redirecciono
       //Abre en la misma ventana
       window.location.href = data.message;
       //Abre en otra
       //window.open (data.message);
-
-      //console.log(dataMP);
-      //dispatch({ type: 'PAY_SUCCESS', payload: data });
-      //toast.success('Order is paid');
     } catch (err) {
-      //dispatch({ type: 'PAY_FAIL', payload: getError(error) });
       toast.error(getError(err));
     }
   };
 
-  /* const pagoMercadoPagoHandler = (e) => {
-    e.preventDefault();
-    // Crea un objeto de preferencia
-    let preference = {
-      items: [
-        {
-          title: orderId,
-          unit_price: order.totalPrice.toFixed(2),
-          quantity: 1,
-        },
-      ],
-    };
-
-    const responseMercadoPago = await mercadopago.preferences.create(preference);
-
-     mercadopago.preferences
-      .create(preference)
-      .then(function (response) {
-        const external_referenceMP = response.body.id;
-      })
-      .catch(function (error) {
-        console.log(error);
-      });  
-  }; 
-
-
-  const redirectToMercadoPago = (preferenceId) => {
-    const loadScript = (url, callback) => {
-      let script = document.createElement('script');
-      script.type = 'text/javascript';
-  
-      if (script.readyState) {
-        script.onreadystatechange = () => {
-          if (
-            script.readyState === 'loaded' ||
-            script.readyState === 'complete'
-          ) {
-            script.onreadystatechange = null;
-            callback();
-          }
-        };
-      } else {
-        script.onload = () => callback();
-      }
-      script.src = url;
-      document.getElementsByTagName('head')[0].appendChild(script);
-    };
-  
-    const handleScriptLoad = () => {
-      const mp = new window.MercadoPago(process.env.REACT_APP_MERCADOPAGO_KEY, {
-        locale: 'es-AR'
-      });
-      mp.checkout({
-        preference: {
-          id: preferenceId
-        },
-        autoOpen: true
-      });
-    };
-  
-    loadScript('https://sdk.mercadopago.com/js/v2', handleScriptLoad);
-  }; */
   useEffect(() => {
     if (urlParams.get('paid')) {
       setPaid(urlParams.get('paid'));
@@ -282,48 +150,7 @@ export default function OrderScreen() {
         dispatch({ type: 'PAY_RESET' });
       }
     }
-    //Si tenemos la orden ... obtenemos el token de MP y lo configuramos
-    /* else {
-      const loadMercadoPagoScript = async () => {
-        const mercadopagotoken = await axios.get('/api/keys/mercadopago', {
-          headers: { authorization: `Bearer ${userInfo.token}` },
-        });
-        mercadopago.configure({ access_token: mercadopagotoken });
-      };
-      loadMercadoPagoScript();
-    } */
   }, [navigate, order._id, orderId, successDeliver, successPay, userInfo]);
-
-  /*   useEffect(() => {
-    const fetchTiempo = async () => {
-      try {
-        const { data } = await axios.get(`/api/orders/tiempo`, {
-          headers: { authorization: `Bearer ${userInfo.token}` },
-        });
-        //console.log("DATA" + data.message)
-        setTiempoDemora(data.message);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchTiempo();
-  }, [userInfo]); */
-
-  /* async function deliverOrderHandler() {
-    try {
-      dispatch({ type: 'DELIVER_REQUEST' });
-      const { data } = await axios.put(
-        `/api/orders/${order._id}/deliver`,
-        {},
-        { headers: { authorization: `Bearer ${userInfo.token}` } }
-      );
-      dispatch({ type: 'DELIVER_SUCCESS', payload: data });
-      toast.success('Pedido entregado!');
-    } catch (err) {
-      toast.error(getError(err));
-      dispatch({ type: 'DELIVER_FAIL' });
-    }
-  } */
 
   async function pagoHandler() {
     try {
@@ -343,49 +170,15 @@ export default function OrderScreen() {
 
   const changeOrderStateHandler = async (e) => {
     try {
-      //dispatch({ type: 'PAY_REQUEST' });
-      /* const { data } =  */ await axios.put(
+      await axios.put(
         `/api/orders/${order._id}/state`,
         { estado },
         { headers: { authorization: `Bearer ${userInfo.token}` } }
       );
       navigate(0);
-      //dispatch({ type: 'PAY_SUCCESS', payload: data });
-      //toast.success('Pedido pagado!');
     } catch (err) {
       toast.error(getError(err));
-      //dispatch({ type: 'PAY_FAIL' });
     }
-    /* e.preventDefault();
-    try {
-      dispatch({ type: 'CREATE_REQUEST' });
-      await axios.post(
-        `/api/productos`,
-        {
-          nombreProducto,
-          tiempoCocinaProducto,
-          recetaProducto,
-          descripcionProducto,
-          imagenProducto,
-          precioVentaProducto,
-          altaProducto,
-          rubroProducto,
-          //stockProducto,
-          isCeliaco,
-          isVegetariano,
-          ingredientesProducto,
-        },
-        { headers: { Authorization: `Bearer ${userInfo.token}` } }
-      );
-      dispatch({ type: 'CREATE_SUCCESS' });
-      toast.success('Producto creado!');
-      deleteLocalStorage();
-      navigate('/admin/products');
-    } catch (err) {
-      toast.error(getError(err));
-      dispatch({ type: 'CREATE_FAIL' });
-      deleteLocalStorage();
-    } */
   };
 
   // Random component
@@ -541,13 +334,6 @@ export default function OrderScreen() {
                   </Row>
                 </ListGroup.Item>
 
-                {/* <ListGroup.Item>
-                  <Row>
-                    <Col>IVA</Col>
-                    <Col>${order.taxPrice.toFixed(2)}</Col>
-                  </Row>
-                </ListGroup.Item> */}
-
                 <ListGroup.Item>
                   <Row>
                     <Col>Descuento</Col>
@@ -610,7 +396,6 @@ export default function OrderScreen() {
                     required
                     id="estadoPedido"
                     select
-                    /* label="Estado del pedido" */
                     defaultValue={order.estadoPedido}
                     onChange={handleChange}
                   >
@@ -624,8 +409,6 @@ export default function OrderScreen() {
                         (!order.isPaid &&
                           (order.shippingOption === 'domicilio' ||
                             order.paymentMethod === 'MercadoPago'))
-                        /* (order.shippingOption === 'domicilio' && !order.isPaid) ||
-                        (order.paymentMethod === 'MercadoPago' && !order.isPaid) */
                       }
                       value={'En cocina'}
                     >
@@ -639,7 +422,6 @@ export default function OrderScreen() {
                         (!order.isPaid &&
                           (order.shippingOption === 'domicilio' ||
                             order.paymentMethod === 'MercadoPago'))
-                        /* (order.shippingOption === 'domicilio' && !order.isPaid) */
                       }
                       value={'Listo'}
                     >
@@ -661,18 +443,10 @@ export default function OrderScreen() {
 
                     <MenuItem
                       disabled={
-                        /* (order.estadoPedido !== 'En delivery' &&
-                          order.estadoPedido !== 'Listo') ||
-                        !order.isPaid || order.shippingOption!=='local' */
                         !order.isPaid ||
                         order.estadoPedido === 'Entregado' ||
                         (order.estadoPedido !== 'Listo' &&
-                          order.estadoPedido !== 'En delivery') /*||
-                         (order.estadoPedido !== 'En delivery' &&
-                          order.shippingOption !== 'local' &&
-                          order.estadoPedido !== 'Listo') ||  (!order.isPaid &&
-                            (order.shippingOption === 'domicilio' ||
-                              order.paymentMethod === 'MercadoPago'))*/
+                          order.estadoPedido !== 'En delivery')
                       }
                       value={'Entregado'}
                     >
