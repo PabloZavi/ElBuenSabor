@@ -498,7 +498,7 @@ export default function OrderScreen() {
             <Card className="mb-3 align-center">
               <Card.Body>
                 <Button onClick={verFacturaHandler}>Ver factura</Button>
-                Tiempo: {order.horaEstimada && order.horaEstimada}
+                
               </Card.Body>
             </Card>
           )}
