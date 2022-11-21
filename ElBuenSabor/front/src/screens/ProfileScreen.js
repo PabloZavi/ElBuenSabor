@@ -7,6 +7,7 @@ import { getError } from '../utils';
 import axios from 'axios';
 import TextField from '@mui/material/TextField';
 import LoadingBox from '../components/LoadingBox';
+import { useNavigate } from 'react-router-dom';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -32,6 +33,8 @@ export default function ProfileScreen() {
   const [address, setAddress] = useState(userInfo.address);
   const [location, setLocation] = useState(userInfo.location);
   const [phone, setPhone] = useState(userInfo.phone);
+
+  const navigate = useNavigate();
 
   const [{ loadingUpdate }, dispatch] = useReducer(reducer, {
     loadingUpdate: false,
@@ -165,7 +168,15 @@ export default function ProfileScreen() {
         />
 
         <div className="mb-3">
-          <Button type="submit">Actualizar</Button>{loadingUpdate && <LoadingBox></LoadingBox>}{' '}
+          <Button type="submit">Actualizar</Button>
+          {loadingUpdate && <LoadingBox></LoadingBox>}{' '}
+          <Button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => navigate(-1)}
+          >
+            Cancelar
+          </Button>
         </div>
       </form>
     </div>

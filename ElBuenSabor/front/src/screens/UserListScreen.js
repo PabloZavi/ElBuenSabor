@@ -125,13 +125,9 @@ export default function UserListScreen() {
                 <td>{user.location}</td>
                 <td>{user.phone}</td>
                 <td className="text-align-center">
-                  {user.isAdmin ? (
-                    <h3 className="red ">
+                  {user.isAdmin && (
+                    <h3 className="green">
                       <i className="bi bi-check"></i>
-                    </h3>
-                  ) : (
-                    <h3>
-                      <i className="bi bi-x"></i>
                     </h3>
                   )}
                 </td>

@@ -69,7 +69,8 @@ function Producto(props) {
   };
   return (
     <div className="text-center">
-      <Card style={{ width: '18rem', height: '24rem' }}>
+      <Card style={{ width: '18rem', height: '24em' }} className=" border-radius">
+        
         <Link to={`/producto/${producto._id}`}>
           <img
             src={producto.imagenProducto}
@@ -99,8 +100,8 @@ function Producto(props) {
                 )}
               </Col>
             </Row>
-          </Card.Text>
-          {!stock(producto) ? (
+          </Card.Text></Card.Body>
+        <Card.Footer>{!stock(producto) ? (
             <Button variant="light" disabled>
               Sin stock
             </Button>
@@ -110,11 +111,10 @@ function Producto(props) {
               onClick={() => addToCartHandler(producto)}
             >
               {localStorage.getItem('localAbierto') !== 'false'
-                ? 'Agregar al carrito'
+                ? <span class="bi bi-cart-fill">&nbsp;&nbsp;Agregar al carrito</span>
                 : 'Local cerrado'}
             </Button>
-          )}
-        </Card.Body>
+          )}</Card.Footer>
       </Card>
     </div>
   );

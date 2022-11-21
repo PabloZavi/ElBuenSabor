@@ -224,7 +224,8 @@ export default function OrderListScreen() {
                       variant="light"
                       onClick={() => deleteHandler(order)}
                     >
-                      Eliminar
+                      <i className="bi bi-trash"></i>
+                      {/* Eliminar */}
                     </Button>
                     {order.isPaid && (
                       <Button

@@ -125,7 +125,11 @@ export default function RubroEditScreen() {
               Actualizar
             </Button>
             {loadingUpdate && <LoadingBox></LoadingBox>}{' '}
-            <Button type="button" onClick={() => navigate(-1)}>
+            <Button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => navigate(-1)}
+            >
               Cancelar
             </Button>
           </div>

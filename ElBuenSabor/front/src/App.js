@@ -291,7 +291,7 @@ function App() {
             <Nav.Item>
               <strong>Categorías</strong>
             </Nav.Item>
-            {categories.map((category) => (
+            {categories && categories.map((category) => (
               <Nav.Item key={category}>
                 <LinkContainer
                   to={`/search?category=${category}`}

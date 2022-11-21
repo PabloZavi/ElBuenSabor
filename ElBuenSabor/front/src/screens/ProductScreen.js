@@ -206,9 +206,13 @@ function ProductScreen() {
                         }
                         onClick={() => addToCartHandler(producto)}
                       >
-                        {localStorage.getItem('localAbierto') !== 'false'
-                          ? 'Agregar al carrito'
-                          : 'Local cerrado'}
+                        {localStorage.getItem('localAbierto') !== 'false' ? (
+                          <span class="bi bi-cart-fill">
+                            &nbsp;&nbsp;Agregar al carrito
+                          </span>
+                        ) : (
+                          'Local cerrado'
+                        )}
                       </Button>
                     </div>
                   </ListGroup.Item>

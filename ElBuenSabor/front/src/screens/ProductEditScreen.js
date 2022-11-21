@@ -272,7 +272,6 @@ export default function ProductEditScreen() {
       ? (list[index][name] = parseFloat(value))
       : (list[index][name] = value);
     setIngredientesProducto(list);
-
   };
 
   function deleteLocalStorage() {
@@ -606,6 +605,7 @@ export default function ProductEditScreen() {
             {loadingUpdate && <LoadingBox></LoadingBox>}{' '}
             <Button
               type="button"
+              className="btn btn-secondary"
               onClick={() => {
                 deleteLocalStorage();
                 navigate(-1);

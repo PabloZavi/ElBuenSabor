@@ -185,7 +185,14 @@ export default function UserEditScreen() {
             <Button disabled={loadingUpdate} type="submit">
               Actualizar
             </Button>
-            {loadingUpdate && <LoadingBox></LoadingBox>}
+            {loadingUpdate && <LoadingBox></LoadingBox>}{' '}
+            <Button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => navigate(-1)}
+            >
+              Cancelar
+            </Button>
           </div>
         </Form>
       )}

@@ -280,6 +280,7 @@ export default function IngredienteNewScreen() {
           {loadingCreate && <LoadingBox></LoadingBox>}{' '}
           <Button
             type="button"
+            className="btn btn-secondary"
             onClick={() => {
               deleteLocalStorage();
               navigate(-1);

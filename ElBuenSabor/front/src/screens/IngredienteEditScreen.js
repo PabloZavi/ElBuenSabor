@@ -373,6 +373,7 @@ export default function IngredienteEditScreen() {
             {loadingUpdate && <LoadingBox></LoadingBox>}{' '}
             <Button
               type="button"
+              className="btn btn-secondary"
               onClick={() => {
                 deleteLocalStorage();
                 /* navigate(`/admin/ingredientes`); */

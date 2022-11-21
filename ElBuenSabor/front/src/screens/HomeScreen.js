@@ -90,7 +90,7 @@ function HomeScreen() {
       ) : (
         categorias.map((cat) => (
           <div key={cat} className="productos">
-            <h1>{cat}</h1>
+            <h1><hr/>{cat}<hr/></h1>
             <Carousel breakPoints={breakPoints} itemPadding={[0, 0]}>
               {productos
                 .filter(

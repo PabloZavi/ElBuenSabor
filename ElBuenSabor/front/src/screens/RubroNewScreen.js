@@ -85,7 +85,11 @@ export default function RubroNewScreen() {
             Crear rubro
           </Button>
           {loadingCreate && <LoadingBox></LoadingBox>}{' '}
-          <Button type="button" onClick={() => navigate(-1)}>
+          <Button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => navigate(-1)}
+          >
             Cancelar
           </Button>
         </div>
