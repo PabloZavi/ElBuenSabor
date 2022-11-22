@@ -104,6 +104,21 @@ export default function SignupScreen() {
       </Helmet>
 
       <h1 className="my-3">Registro de usuario</h1>
+      <hr />
+      <br />
+      <div className="mb-3">
+        <GoogleLogin
+          clientId="147686912643-ltnii4fb12jf91mhvgfdmk6qp520s3j8.apps.googleusercontent.com"
+          buttonText="Registrate con Google"
+          onSuccess={responseGoogle}
+          onFailure={responseGoogle}
+          cookiePolicy={'single_host_origin'}
+        />
+      </div>
+      <br />
+      <hr />
+
+      <b>O ingresá tus datos</b>
       <Form onSubmit={submitHandler}>
         <br />
         <TextField
@@ -197,17 +212,6 @@ export default function SignupScreen() {
 
         <hr />
 
-        <div className="mb-3">
-          <GoogleLogin
-            clientId="147686912643-ltnii4fb12jf91mhvgfdmk6qp520s3j8.apps.googleusercontent.com"
-            buttonText="Registrate con Google"
-            onSuccess={responseGoogle}
-            onFailure={responseGoogle}
-            cookiePolicy={'single_host_origin'}
-          />
-        </div>
-
-        <hr />
         <div className="mb-3">
           ¿Ya tenés una cuenta?{' '}
           {/* Se dirigirá al usuario a la pantalla de Sign In y después a la dirección
