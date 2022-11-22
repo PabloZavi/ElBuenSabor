@@ -33,18 +33,21 @@ ingredienteRouter.put(
   '/:id/discount',
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    const ingrediente = await Ingrediente.findOneAndUpdate(
-      { _id: req.body._id },
+    try {
+      const ingrediente = await Ingrediente.findOneAndUpdate(
+      { _id: req.params.id },
       { $inc: { stockActualIngrediente: -req.body.cantidad } },
       { new: true }
     );
-    /* res.send({
+    res.send({
       message:
         'Ingrediente ' +
-        ingrediente.nombreIngrediente +
-        ' stock nuevo: ' +
-        ingrediente.stockActualIngrediente,
-    }); */
+        ingrediente.nombreIngrediente + ' descontado'
+    });
+    } catch (error) {
+      res.status(500).send({ message: error });
+    }
+    
   })
 );
 
