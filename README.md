@@ -62,3 +62,6 @@ center
   - Deshabilitado el mostrar categorías que no tengan productos en página principal del cliente para evitar la muestra o búsqueda en contenido vacío
   - Subida automática de imágenes de productos al servicio Cloudinary en la nube para evitar problemas a la hora de enlazar una imagen
   - Middlewares para evitar accesos no permitidos según el rol de cada usuario y para evitar accesos cuando faltan datos (por ejemplo confirmar un pedido cuando todavía no se eligió la forma de pago, la forma de envío, etc.
+
+# Stack tecnológico
+<img src="https://res.cloudinary.com/elbuensabor-mern/image/upload/v1669129025/stack_n6ennz.jpg">
