@@ -11,7 +11,6 @@ import Badge from 'react-bootstrap/Badge';
 
 function Producto(props) {
   const { producto } = props;
-
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart } = state;
 
@@ -69,8 +68,10 @@ function Producto(props) {
   };
   return (
     <div className="text-center">
-      <Card style={{ width: '18rem', height: '24em' }} className=" border-radius">
-        
+      <Card
+        style={{ width: '18rem', height: '24em' }}
+        className=" border-radius"
+      >
         <Link to={`/producto/${producto._id}`}>
           <img
             src={producto.imagenProducto}
@@ -100,8 +101,10 @@ function Producto(props) {
                 )}
               </Col>
             </Row>
-          </Card.Text></Card.Body>
-        <Card.Footer>{!stock(producto) ? (
+          </Card.Text>
+        </Card.Body>
+        <Card.Footer>
+          {!stock(producto) ? (
             <Button variant="light" disabled>
               Sin stock
             </Button>
@@ -110,11 +113,16 @@ function Producto(props) {
               disabled={localStorage.getItem('localAbierto') === 'false'}
               onClick={() => addToCartHandler(producto)}
             >
-              {localStorage.getItem('localAbierto') !== 'false'
-                ? <span class="bi bi-cart-fill">&nbsp;&nbsp;Agregar al carrito</span>
-                : 'Local cerrado'}
+              {localStorage.getItem('localAbierto') !== 'false' ? (
+                <span class="bi bi-cart-fill">
+                  &nbsp;&nbsp;Agregar al carrito
+                </span>
+              ) : (
+                'Local cerrado'
+              )}
             </Button>
-          )}</Card.Footer>
+          )}
+        </Card.Footer>
       </Card>
     </div>
   );

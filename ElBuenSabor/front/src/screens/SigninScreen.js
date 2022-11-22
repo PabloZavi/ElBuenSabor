@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { getError } from '../utils';
 import GoogleLogin from 'react-google-login';
 import { gapi } from 'gapi-script';
+import TextField from '@mui/material/TextField';
 
 export default function SigninScreen() {
   const navigate = useNavigate();
@@ -102,39 +103,52 @@ export default function SigninScreen() {
       </Helmet>
 
       <h1 className="my-3">Acceso</h1>
+      <hr />
+      <br />
+
+      <div className="mb-3">
+        <GoogleLogin
+          clientId="147686912643-ltnii4fb12jf91mhvgfdmk6qp520s3j8.apps.googleusercontent.com"
+          buttonText="Ingresá con Google"
+          onSuccess={responseGoogle}
+          onFailure={responseGoogle}
+          cookiePolicy={'single_host_origin'}
+        />
+      </div>
+      <br />
+      <hr />
+      <b>O ingresá tus datos</b>
       <Form onSubmit={submitHandler}>
-        <Form.Group className="mb-3" controlId="emailUsuario">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="email"
-            autoComplete="username"
-            required
-            onChange={(e) => setEmailUsuario(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="passwordUsuario">
-          <Form.Label>Contraseña</Form.Label>
-          <Form.Control
-            type="password"
-            autoComplete="current-password"
-            required
-            onChange={(e) => setPasswordUsuario(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-        <div className="mb-3">
-          <Button type="submit">Ingresa</Button>
-        </div>
+        <br />
+        <TextField
+          className="mb-3 large-input"
+          required
+          type="email"
+          id="emailUsuario"
+          label="Email"
+          value={emailUsuario}
+          onChange={(e) => {
+            setEmailUsuario(e.target.value);
+          }}
+        />
+        <br />
 
-        <hr />
+        <TextField
+          className="mb-3 medium-input"
+          required
+          type="password"
+          id="passwordUsuario"
+          label="Contraseña"
+          value={passwordUsuario}
+          autoComplete="current-password"
+          onChange={(e) => {
+            setPasswordUsuario(e.target.value);
+          }}
+        />
 
+        <br />
         <div className="mb-3">
-          <GoogleLogin
-            clientId="147686912643-ltnii4fb12jf91mhvgfdmk6qp520s3j8.apps.googleusercontent.com"
-            buttonText="Ingresá con Google"
-            onSuccess={responseGoogle}
-            onFailure={responseGoogle}
-            cookiePolicy={'single_host_origin'}
-          />
+          <Button type="submit">Ingresá</Button>
         </div>
 
         <hr />

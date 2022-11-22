@@ -17,6 +17,7 @@ import Form from 'react-bootstrap/Form';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Countdown from 'react-countdown';
+import Swal from 'sweetalert2';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -117,6 +118,19 @@ export default function OrderScreen() {
     }
     setTotalPrice(order.totalPrice);
   }, [order.totalPrice, paid, urlParams]);
+
+  useEffect(() => {
+    if (
+      !order.isPaid &&
+      order.paymentMethod === 'MercadoPago' &&
+      !userInfo.isAdmin &&
+      order.shippingOption === 'domicilio'
+    ) {
+      Swal.fire(
+        'Al ser un envío a domicilio, el pedido no será procesado hasta no ser pagado por Mercado Pago'
+      );
+    }
+  }, [order.isPaid, order.paymentMethod, order.shippingOption, userInfo.isAdmin]);
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -354,13 +368,15 @@ export default function OrderScreen() {
           <Card className="mb-3">
             <Card.Body>
               <Card.Title>Opciones</Card.Title>
-              {!order.isPaid && order.paymentMethod === 'MercadoPago' && (
-                <ListGroup.Item>
-                  <Button onClick={pagoMercadoPagoHandler}>
-                    Pagar con Mercado Pago
-                  </Button>
-                </ListGroup.Item>
-              )}
+              {!order.isPaid &&
+                order.paymentMethod === 'MercadoPago' &&
+                !userInfo.isAdmin && (
+                  <ListGroup.Item>
+                    <Button onClick={pagoMercadoPagoHandler}>
+                      Pagar con Mercado Pago
+                    </Button>
+                  </ListGroup.Item>
+                )}
 
               {!order.isPaid &&
                 order.paymentMethod !== 'MercadoPago' &&
@@ -498,7 +514,6 @@ export default function OrderScreen() {
             <Card className="mb-3 align-center">
               <Card.Body>
                 <Button onClick={verFacturaHandler}>Ver factura</Button>
-                
               </Card.Body>
             </Card>
           )}

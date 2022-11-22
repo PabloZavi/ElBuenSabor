@@ -9,9 +9,10 @@ import Button from 'react-bootstrap/Button';
 import LoadingBox from '../components/LoadingBox';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
-import Select from 'react-select';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -151,115 +152,119 @@ export default function IngredienteNewScreen() {
       <h1>Crear ingrediente </h1>
 
       <Form onSubmit={submitHandler}>
-        <Form.Group className="mb-3" controlId="nombreIngrediente">
-          <Form.Label>Nombre</Form.Label>
-          <Form.Control
-            value={nombreIngrediente}
-            onChange={(e) => {
-              setNombreIngrediente(e.target.value);
-              localStorage.setItem('nombreIngrediente', e.target.value);
-            }}
-            required
-          ></Form.Control>
-        </Form.Group>
+        
+        <TextField
+          inputProps={{ maxLength: 40 }}
+          className="mb-3"
+          fullWidth
+          required
+          id="nombreIngrediente"
+          label="Nombre"
+          value={nombreIngrediente}
+          onChange={(e) => {
+            setNombreIngrediente(e.target.value);
+            localStorage.setItem('nombreIngrediente', e.target.value);
+          }}
+        />
 
-        <Form.Group className="mb-3" controlId="stockMinimoIngrediente">
-          <Form.Label>Stock mínimo </Form.Label>
-          <Form.Control
-            type="Number"
-            min="0"
-            step="0.01"
-            value={stockMinimoIngrediente}
-            onChange={(e) => {
-              setStockMinimoIngrediente(e.target.value);
-              localStorage.setItem('stockMinimoIngrediente', e.target.value);
-            }}
-            required
-          ></Form.Control>
-        </Form.Group>
+        <TextField
+          InputProps={{ inputProps: { min: 0, step: 0.01 } }}
+          type="Number"
+          className="medium-small-input mb-3"
+          required
+          id="stockMinimoIngrediente"
+          label="Stock mínimo"
+          value={stockMinimoIngrediente}
+          onChange={(e) => {
+            setStockMinimoIngrediente(e.target.value);
+            localStorage.setItem('stockMinimoIngrediente', e.target.value);
+          }}
+        />
+        <br />
+        <TextField
+          InputProps={{ inputProps: { min: 0, step: 0.01 } }}
+          type="Number"
+          className="medium-small-input mb-3"
+          required
+          id="stockActualIngrediente"
+          label="Stock actual"
+          value={stockActualIngrediente}
+          onChange={(e) => {
+            setStockActualIngrediente(e.target.value);
+            localStorage.setItem('stockActualIngrediente', e.target.value);
+          }}
+        />
 
-        <Form.Group className="mb-3" controlId="stockActualIngrediente">
-          <Form.Label>Stock actual </Form.Label>
-          <Form.Control
-            type="Number"
-            min="0"
-            step="0.01"
-            value={stockActualIngrediente}
-            onChange={(e) => {
-              setStockActualIngrediente(e.target.value);
-              localStorage.setItem('stockActualIngrediente', e.target.value);
-            }}
-            required
-          ></Form.Control>
-        </Form.Group>
+        <Row>
+          <Col>
+            <TextField
+              className="mb-3 medium-small-input"
+              required
+              id="unidadDeMedidaIngrediente"
+              select
+              label="Unidad de medida"
+              value={unidadDeMedidaIngrediente}
+              onChange={(e) => {
+                setUnidadDeMedidaIngrediente(e.target.value);
+                localStorage.setItem(
+                  'unidadDeMedidaIngrediente',
+                  e.target.value
+                );
+              }}
+            >
+              {unidades.map((unidad) => (
+                <MenuItem key={unidad.nombreUnidad} value={unidad.nombreUnidad}>
+                  {unidad.nombreUnidad}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <TextField
+              className="medium-large-input mb-3"
+              required
+              id="rubroIngrediente"
+              select
+              label="Seleccionar rubro"
+              value={rubroIngrediente}
+              onChange={(e) => {
+                setRubroIngrediente(e.target.value);
+                localStorage.setItem('rubroIngrediente', e.target.value);
+              }}
+            >
+              {rubros.map((rubro) => (
+                <MenuItem key={rubro.nombreRubro} value={rubro.nombreRubro}>
+                  {rubro.nombreRubro}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Col>
+          <Col className="d-flex align-items-center mb-3">
+            ¿No está el rubro? &rArr; &nbsp;
+            <Button
+              type="button"
+              onClick={() => navigate(`/admin/rubroingrediente/new`)}
+            >
+              Crear rubro
+            </Button>
+          </Col>
+        </Row>
 
-        <Form.Group className="mb-3" controlId="unidadDeMedidaIngrediente">
-          <Row>
-            <Col>
-              <Select
-                defaultValue={
-                  unidadDeMedidaIngrediente
-                    ? { label: unidadDeMedidaIngrediente }
-                    : { label: 'Seleccionar unidad' }
-                }
-                options={unidades.map((unidad) => ({
-                  label: unidad.nombreUnidad,
-                  value: unidad.nombreUnidad,
-                }))}
-                onChange={(e) => {
-                  setUnidadDeMedidaIngrediente(e.value);
-                  localStorage.setItem('unidadDeMedidaIngrediente', e.value);
-                }}
-              ></Select>
-            </Col>
-          </Row>
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="rubroIngrediente">
-          <Row>
-            <Col>
-              <Select
-                defaultValue={
-                  rubroIngrediente
-                    ? { label: rubroIngrediente }
-                    : { label: 'Seleccionar rubro' }
-                }
-                options={rubros.map((rubro) => ({
-                  label: rubro.nombreRubro,
-                  value: rubro.nombreRubro,
-                }))}
-                onChange={(e) => {
-                  setRubroIngrediente(e.value);
-                  localStorage.setItem('rubroIngrediente', e.value);
-                }}
-              ></Select>
-            </Col>
-            <Col>
-              ¿No está el rubro? &rArr; &nbsp;
-              <Button
-                type="button"
-                onClick={() => navigate(`/admin/rubroingrediente/new`)}
-              >
-                Crear rubro
-              </Button>
-            </Col>
-          </Row>
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="precioCostoIngrediente">
-          <Form.Label>Precio de costo</Form.Label>
-          <Form.Control
-            type="Number"
-            min="0"
-            step="0.01"
-            value={precioCostoIngrediente}
-            onChange={(e) => {
-              setPrecioCostoIngrediente(e.target.value);
-              localStorage.setItem('precioCostoIngrediente', e.target.value);
-            }}
-            required
-          ></Form.Control>
-        </Form.Group>
+        <TextField
+          InputProps={{ inputProps: { min: 0, step: 0.01 } }}
+          required
+          id="precioCostoIngrediente"
+          label="Precio de costo"
+          value={precioCostoIngrediente || ''}
+          className="medium-input mb-3"
+          type="Number"
+          onChange={(e) => {
+            setPrecioCostoIngrediente(e.target.value);
+            localStorage.setItem('precioCostoIngrediente', e.target.value);
+          }}
+        />
 
         <Form.Check
           className="mb-3"

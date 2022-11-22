@@ -102,10 +102,10 @@ export default function PlaceOrderScreen() {
           await axios.put(
             `/api/ingredientes/${cart.cartItems[i].ingredientes[j].ingrediente._id}/discount`,
             {
-              _id: cart.cartItems[i].ingredientes[j].ingrediente._id,
+              //_id: cart.cartItems[i].ingredientes[j].ingrediente._id,
               cantidad:
-                cart.cartItems[i].cantidad *
-                cart.cartItems[i].ingredientes[j].cantidad,
+                (cart.cartItems[i].cantidad *
+                cart.cartItems[i].ingredientes[j].cantidad),
             },
             { headers: { Authorization: `Bearer ${userInfo.token}` } }
           );
@@ -117,7 +117,7 @@ export default function PlaceOrderScreen() {
   };
 
   /* useEffect(() => {
-    console.log("estamos en PlaceorderScreen PAYMENTmETHOD: " + cart.paymentMethod)
+    
     if (!cart.paymentMethod) {
       navigate('/payment');
     }

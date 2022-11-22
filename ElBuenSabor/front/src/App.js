@@ -164,14 +164,28 @@ function App() {
               <NavBar.Collapse id="basic-navbar-nav">
                 <SearchBox></SearchBox>
                 <Nav className="me-auto w-100 justify-content-end">
-                  <Link to="/cart" className="nav-link">
-                    <i className="bi bi-cart"> Carrito</i>
-                    {cart.cartItems.length > 0 && (
-                      <Badge pill bg="danger">
-                        {cart.cartItems.reduce((a, c) => a + c.cantidad, 0)}
-                      </Badge>
-                    )}
-                  </Link>
+                  {userInfo ? (
+                    !userInfo.isAdmin && (
+                      <Link to="/cart" className="nav-link">
+                        <i className="bi bi-cart"> Carrito</i>
+                        {cart.cartItems.length > 0 && (
+                          <Badge pill bg="danger">
+                            {cart.cartItems.reduce((a, c) => a + c.cantidad, 0)}
+                          </Badge>
+                        )}
+                      </Link>
+                    )
+                  ) : (
+                    <Link to="/cart" className="nav-link">
+                      <i className="bi bi-cart"> Carrito</i>
+                      {cart.cartItems.length > 0 && (
+                        <Badge pill bg="danger">
+                          {cart.cartItems.reduce((a, c) => a + c.cantidad, 0)}
+                        </Badge>
+                      )}
+                    </Link>
+                  )}
+
                   {userInfo ? (
                     <NavDropdown
                       title={
@@ -291,16 +305,17 @@ function App() {
             <Nav.Item>
               <strong>Categorías</strong>
             </Nav.Item>
-            {categories && categories.map((category) => (
-              <Nav.Item key={category}>
-                <LinkContainer
-                  to={`/search?category=${category}`}
-                  onClick={() => setSidebarIsOpen(false)}
-                >
-                  <Nav.Link>{category}</Nav.Link>
-                </LinkContainer>
-              </Nav.Item>
-            ))}
+            {categories &&
+              categories.map((category) => (
+                <Nav.Item key={category}>
+                  <LinkContainer
+                    to={`/search?category=${category}`}
+                    onClick={() => setSidebarIsOpen(false)}
+                  >
+                    <Nav.Link>{category}</Nav.Link>
+                  </LinkContainer>
+                </Nav.Item>
+              ))}
           </Nav>
         </div>
         <main>
