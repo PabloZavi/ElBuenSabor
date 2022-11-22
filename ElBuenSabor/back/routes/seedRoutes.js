@@ -1,21 +1,22 @@
 import express from 'express';
-import Producto from '../models/productoModel.js';
-//import data from '../data.js';
+import data from '../data.js';
 import User from '../models/userModel.js';
+import Unidad from '../models/unidadModel.js';
+import Config from '../models/configModel.js';
 
 const seedRouter = express.Router();
 
 seedRouter.get('/', async (req, res) => {
-  //removemos todos los productos anteriores
-  //await Producto.remove({});          DEPRECATED
-  //await Producto.deleteMany({});
-  //creamos nuevos productos
-  //const createdProductos = await Producto.insertMany(data.productos);
   //await User.deleteMany({});
-  //creamos nuevos usuarios
   //const createdUsers = await User.insertMany(data.users);
 
-  res.send({ createdProductos/* , createdUsers */ });
+  //await Unidad.deleteMany({});
+  //const createdUnits = await Unidad.insertMany(data.unidades);
+
+  //await Config.deleteMany({});
+  //const createdCocineros = await Config.insertMany(data.cocineros);
+
+  //res.send({ createdUnits, createdUsers, createdCocineros });
 });
 
 export default seedRouter;
