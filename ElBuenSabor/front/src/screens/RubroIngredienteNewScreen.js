@@ -9,6 +9,7 @@ import Button from 'react-bootstrap/Button';
 import LoadingBox from '../components/LoadingBox';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
+import TextField from '@mui/material/TextField';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -63,14 +64,18 @@ export default function RubroIngredienteNewScreen() {
       <h1>Crear rubro de Ingredientes</h1>
 
       <Form onSubmit={submitHandler}>
-        <Form.Group className="mb-3" controlId="nombreRubro">
-          <Form.Label>Nombre</Form.Label>
-          <Form.Control
-            value={nombreRubro}
-            onChange={(e) => setNombreRubro(e.target.value)}
-            required
-          ></Form.Control>
-        </Form.Group>
+      <TextField
+          inputProps={{ maxLength: 40 }}
+          className="mb-3"
+          fullWidth
+          required
+          id="nombreRubro"
+          label="Nombre"
+          value={nombreRubro}
+          onChange={(e) => {
+            setNombreRubro(e.target.value);
+          }}
+        />
 
         <Form.Check
           className="mb-3"

@@ -117,7 +117,7 @@ export default function PlaceOrderScreen() {
   };
 
   /* useEffect(() => {
-    console.log("estamos en PlaceorderScreen PAYMENTmETHOD: " + cart.paymentMethod)
+    
     if (!cart.paymentMethod) {
       navigate('/payment');
     }

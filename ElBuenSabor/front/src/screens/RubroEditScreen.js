@@ -10,6 +10,7 @@ import { Helmet } from 'react-helmet-async';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { toast } from 'react-toastify';
+import TextField from '@mui/material/TextField';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -102,14 +103,18 @@ export default function RubroEditScreen() {
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
         <Form onSubmit={submitHandler}>
-          <Form.Group className="mb-3" controlId="nombreRubro">
-            <Form.Label>Nombre</Form.Label>
-            <Form.Control
-              value={nombreRubro}
-              onChange={(e) => setNombreRubro(e.target.value)}
-              required
-            ></Form.Control>
-          </Form.Group>
+          <TextField
+          inputProps={{ maxLength: 40 }}
+          className="mb-3"
+          fullWidth
+          required
+          id="nombreRubro"
+          label="Nombre"
+          value={nombreRubro}
+          onChange={(e) => {
+            setNombreRubro(e.target.value);
+          }}
+        />
 
           <Form.Check
             className="mb-3"
