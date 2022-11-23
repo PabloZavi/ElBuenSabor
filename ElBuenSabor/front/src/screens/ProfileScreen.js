@@ -66,6 +66,7 @@ export default function ProfileScreen() {
       ctxDispatch({ type: 'USER_SIGNIN', payload: data });
       localStorage.setItem('userInfo', JSON.stringify(data));
       toast.success('Usuario actualizado correctamente');
+      navigate(-1);
     } catch (err) {
       dispatch({
         type: 'UPDATE_FAIL',
