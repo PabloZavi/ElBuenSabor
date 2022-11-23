@@ -29,25 +29,6 @@ userRouter.get(
     }
   })
 );
-
-userRouter.put(
-  '/:id',
-  isAuth,
-  isAdmin,
-  expressAsyncHandler(async (req, res) => {
-    const user = await User.findById(req.params.id);
-    if (user) {
-      user.nombreUsuario = req.body.nombreUsuario /*  || user.nombreUsuario */;
-      user.emailUsuario = req.body.emailUsuario /*  || user.emailUsuario */;
-      user.isAdmin = Boolean(req.body.isAdmin);
-      /* const updatedUser =  */ await user.save();
-      res.send({ message: 'Usuario actualizado!' });
-    } else {
-      res.status(404).send({ message: 'Usuario no encontrado' });
-    }
-  })
-);
-
 userRouter.put(
   '/profile',
   isAuth,
@@ -74,6 +55,24 @@ userRouter.put(
         location: updatedUser.location,
         phone: updatedUser.phone,
       });
+    } else {
+      res.status(404).send({ message: 'Usuario no encontrado' });
+    }
+  })
+);
+
+userRouter.put(
+  '/:id',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (user) {
+      user.nombreUsuario = req.body.nombreUsuario /*  || user.nombreUsuario */;
+      user.emailUsuario = req.body.emailUsuario /*  || user.emailUsuario */;
+      user.isAdmin = Boolean(req.body.isAdmin);
+      /* const updatedUser =  */ await user.save();
+      res.send({ message: 'Usuario actualizado!' });
     } else {
       res.status(404).send({ message: 'Usuario no encontrado' });
     }
@@ -141,12 +140,10 @@ userRouter.post(
       });
       return;
     }
-    res
-      .status(401)
-      .send({
-        message:
-          'No hay un cliente registrado con la cuenta de Google que deseas ingresar, por favor registrate',
-      });
+    res.status(401).send({
+      message:
+        'No hay un cliente registrado con la cuenta de Google que deseas ingresar, por favor registrate',
+    });
   })
 );
 
