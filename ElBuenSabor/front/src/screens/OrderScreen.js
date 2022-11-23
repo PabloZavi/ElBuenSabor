@@ -212,7 +212,7 @@ export default function OrderScreen() {
       // Render a countdown
       return (
         <span>
-          {hours}:{minutes}:{seconds}
+          {hours<10&& '0'}{hours}:{minutes<10&& '0'}{minutes}:{seconds<10&& '0'}{seconds}
         </span>
       );
     }
