@@ -130,7 +130,12 @@ export default function OrderScreen() {
         'Al ser un envío a domicilio, el pedido no será procesado hasta no ser pagado por Mercado Pago'
       );
     }
-  }, [order.isPaid, order.paymentMethod, order.shippingOption, userInfo.isAdmin]);
+  }, [
+    order.isPaid,
+    order.paymentMethod,
+    order.shippingOption,
+    userInfo.isAdmin,
+  ]);
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -521,11 +526,18 @@ export default function OrderScreen() {
           {order.horaEstimada && (
             <Card className="mb-3 align-center">
               <Card.Body>
-                El pedido estará listo en aproximadamente :{' '}
-                <Countdown
-                  date={Date.now() + Date.parse(order.horaEstimada)}
-                  renderer={renderer}
-                />
+                <Card.Title>
+                  Tiempo estimado restante para la entrega
+                </Card.Title>
+                {(order.isPaid ||
+                  (!order.isPaid && order.shippingOption === 'local')) ? (
+                    <Countdown
+                      date={Date.now() + Date.parse(order.horaEstimada)}
+                      renderer={renderer}
+                    />
+                  ) : (
+                    'La orden ha sido pedida a domicilio pero todavía no ha sido pagada, por lo que todavía no es procesada.'
+                  )}
               </Card.Body>
             </Card>
           )}

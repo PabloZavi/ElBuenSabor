@@ -148,7 +148,10 @@ export default function PlaceOrderScreen() {
   }
 
   async function calcularEntregaEstimada() {
-    if (calcularTiempoPreparacion() === 0) {
+    if ((calcularTiempoPreparacion()) === 0) {
+      if (cart.shippingOption === 'domicilio') {
+        return 10;
+      }
       return 0;
     }
 
