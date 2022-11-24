@@ -13,7 +13,7 @@ O ver acá mismo
 
 # Página online
 Para ver la página en funcionamiento, entrar a:
-[El Buen Sabor](https://el-buensabor.herokuapp.com/?target=_blank)
+[El Buen Sabor](https://el-buensabor.herokuapp.com/)
 
 
 # Resumen
