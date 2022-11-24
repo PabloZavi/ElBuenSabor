@@ -6,10 +6,15 @@ UTN Facultad Regional Mendoza
 Materia: Laboratorio de Computación IV
 
 # Demostración en video del funcionamiento de la app
-- [Enlace para ir a YouTube](dirección YouTube)
+[Enlace para ir a YouTube](dirección YouTube)
 
 O ver acá mismo
 @[youtube](ZYmIUiK8ZQI|dirección Youtube)
+
+# Página online
+Para ver la página en funcionamiento, entrar a:
+[El Buen Sabor](https://el-buensabor.herokuapp.com/)
+
 
 # Resumen
 Sistema web de e-commerce de un local de comidas rápidas.
@@ -75,7 +80,7 @@ Sistema web de e-commerce de un local de comidas rápidas.
 # Instrucciones de instalación
 #### Crear cuenta en Cloudinary
 Dicha cuenta proveerá cuatro variables de entorno necesarias para el manejo de archivos e imágenes del proyecto
-- [Cloudinary](https://cloudinary.com/)
+[Cloudinary](https://cloudinary.com/)
 
 #### Variables de Entorno
 Ver [`.env.example`](https://github.com/PabloZavi/ElBuenSabor/blob/master/.env.example)
@@ -97,16 +102,17 @@ Desde la raíz del proyecto tipear el comando:
 ```
 
 #### Siguientes pasos
-1. Ir al archivo ElBuenSabor/back/routes/seedRoutes y descomentar las líneas comentadas.
-1. En el navegador, acceder a localhost:5000/api/seed, lo cual creará las unidades de medida y dos usuarios en la base de datos.
-   ❗️ Volver a comentar las líneas que se descomentaron en el punto 1 para evitar futuros problemas en la base de datos.
-   ❕ Ahora se podrá acceder como administrador con el mail administrador@gmail.com y la contraseña 123456 .
-   ❕ También se podrá acceder como cliente con el mail francisco@gmail.com y la contraseña 123456 .
+- Ir al archivo ElBuenSabor/back/routes/seedRoutes y descomentar las líneas comentadas.
+- En el navegador, acceder a localhost:5000/api/seed, lo cual creará las unidades de medida y dos usuarios en la base de datos.
+- ❗️ Volver a comentar las líneas que se descomentaron en el punto 1 para evitar futuros problemas en la base de datos.
+- ❕ Ahora se podrá acceder como administrador con el mail administrador@gmail.com y la contraseña 123456 .
+- ❕ También se podrá acceder como cliente con el mail francisco@gmail.com y la contraseña 123456 .
 
 # Agradecimientos
 Las siguientes personas se prestaron generosamente y de forma incondicional a testear la app, gracias a las cuales se detectaron errores y se implementaron mejoras. 💜 ¡Gracias! 💜
+---
 (ordenadas alfabéticamente por sus nombres):
-
+---
 ⭐️Alejandro
 ⭐️Angie
 ⭐️Daiana

@@ -46,7 +46,7 @@ export default function CartScreen() {
     const { data } = await axios.get(`api/productos/${item._id}`);
 
     if (calcularCantidad(data) < cantidad) {
-      toast.error('No hay stock del producto');
+      toast.error('No hay más stock del producto');
       return;
     }
     ctxDispatch({
