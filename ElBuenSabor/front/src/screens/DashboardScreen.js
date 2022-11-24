@@ -213,7 +213,7 @@ export default function DashboardScreen() {
           <Row>
             <Col md={12}>
               <div className="my-3 div-cuadro">
-                <h2 className="align-center m-3">Ventas por día</h2>
+                <h2 className="align-center m-3">Ventas, costos y ganancias por día</h2>
                 {summary.dailyOrders.length === 0 ? (
                   <MessageBox>No hay ventas</MessageBox>
                 ) : (
@@ -240,7 +240,7 @@ export default function DashboardScreen() {
           <Row>
             <Col md={12}>
               <div className="my-3 div-cuadro">
-                <h2 className="align-center m-3">Ventas por mes</h2>
+                <h2 className="align-center m-3">Ventas, costos y ganancias por mes</h2>
                 {summary.monthOrders.length === 0 ? (
                   <MessageBox>No hay ventas</MessageBox>
                 ) : (
@@ -267,7 +267,7 @@ export default function DashboardScreen() {
           <Row>
             <Col md={6}>
               <div className="my-3 div-cuadro">
-                <h2 className="align-center m-3">Rubros</h2>
+                <h2 className="align-center m-3">Productos por rubro</h2>
                 {summary.productCategories.length === 0 ? (
                   <MessageBox>No hay rubros</MessageBox>
                 ) : (
@@ -287,7 +287,7 @@ export default function DashboardScreen() {
 
             <Col md={6}>
               <div className="my-3 div-cuadro">
-                <h2 className="align-center m-3">Forma de pago</h2>
+                <h2 className="align-center m-3">Forma de pago preferida</h2>
                 {summary.paymentMethod.length === 0 ? (
                   <MessageBox>No hay ventas</MessageBox>
                 ) : (
