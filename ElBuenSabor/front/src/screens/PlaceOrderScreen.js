@@ -58,7 +58,7 @@ export default function PlaceOrderScreen() {
     try {
       dispatch({ type: 'CREATE_REQUEST' });
       const { data } = await axios.post(
-                '/api/orders',
+        '/api/orders',
         {
           orderItems: cart.cartItems,
           shippingAddress: cart.shippingAddress,
@@ -104,8 +104,8 @@ export default function PlaceOrderScreen() {
             {
               //_id: cart.cartItems[i].ingredientes[j].ingrediente._id,
               cantidad:
-                (cart.cartItems[i].cantidad *
-                cart.cartItems[i].ingredientes[j].cantidad),
+                cart.cartItems[i].cantidad *
+                cart.cartItems[i].ingredientes[j].cantidad,
             },
             { headers: { Authorization: `Bearer ${userInfo.token}` } }
           );
@@ -148,6 +148,13 @@ export default function PlaceOrderScreen() {
   }
 
   async function calcularEntregaEstimada() {
+    if ((calcularTiempoPreparacion()) === 0) {
+      if (cart.shippingOption === 'domicilio') {
+        return 10;
+      }
+      return 0;
+    }
+
     const { data } = await axios.get(`/api/orders/tiempo`, {
       headers: { authorization: `Bearer ${userInfo.token}` },
     });
