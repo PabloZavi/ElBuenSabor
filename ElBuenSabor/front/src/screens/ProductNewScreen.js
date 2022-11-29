@@ -386,7 +386,16 @@ export default function ProductNewScreen() {
 
                   <Col>
                     <TextField
-                      InputProps={{ inputProps: { min: 0, step: 0.01 } }}
+                      InputProps={{
+                        inputProps: {
+                          min: 0,
+                          step:
+                            data.ingrediente?.unidadDeMedidaIngrediente ===
+                            'unidad'
+                              ? 1
+                              : 0.01,
+                        },
+                      }}
                       required
                       min="0"
                       id="cantidad"

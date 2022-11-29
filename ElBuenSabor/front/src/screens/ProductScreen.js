@@ -117,7 +117,7 @@ function ProductScreen() {
     const { data } = await axios.get(`/api/productos/${producto._id}`);
     //y verificamos si hay stock
     if (calcularCantidad(data) < cantidad) {
-      toast.error('No hay stock del producto');
+      toast.error('No hay más stock del producto');
       return;
     }
 
