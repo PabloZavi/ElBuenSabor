@@ -212,7 +212,10 @@ export default function OrderScreen() {
       // Render a countdown
       return (
         <span>
-          {hours<10&& '0'}{hours}:{minutes<10&& '0'}{minutes}:{seconds<10&& '0'}{seconds}
+          {hours < 10 && '0'}
+          {hours}:{minutes < 10 && '0'}
+          {minutes}:{seconds < 10 && '0'}
+          {seconds}
         </span>
       );
     }
@@ -271,7 +274,11 @@ export default function OrderScreen() {
             <Card.Body>
               <Card.Title>Pago</Card.Title>
               <Card.Text>
-                <strong>Método: </strong> {order.paymentMethod} <br />
+                <strong>Método: </strong>{' '}
+                {order.paymentMethod === 'Efectivo'
+                  ? order.paymentMethod
+                  : order.paymentMethod + '  ID: ' + order.payment_id}{' '}
+                <br />
               </Card.Text>
               {order.isPaid ? (
                 <MessageBox variant="success">
@@ -467,7 +474,9 @@ export default function OrderScreen() {
                         !order.isPaid ||
                         order.estadoPedido === 'Entregado' ||
                         (order.estadoPedido !== 'Listo' &&
-                          order.estadoPedido !== 'En delivery')
+                          order.estadoPedido !== 'En delivery') ||
+                        (order.estadoPedido === 'Listo' &&
+                          order.shippingOption === 'domicilio')
                       }
                       value={'Entregado'}
                     >
@@ -529,15 +538,29 @@ export default function OrderScreen() {
                 <Card.Title>
                   Tiempo estimado restante para la entrega
                 </Card.Title>
-                {(order.isPaid ||
-                  (!order.isPaid && order.shippingOption === 'local')) ? (
-                    <Countdown
-                      date={Date.now() + Date.parse(order.horaEstimada)}
-                      renderer={renderer}
-                    />
-                  ) : (
-                    'La orden ha sido pedida a domicilio pero todavía no ha sido pagada, por lo que todavía no es procesada.'
-                  )}
+                {!order.isPaid && order.paymentMethod === 'MercadoPago' ? (
+                  'Se ha elegido como opción de pago Mercado Pago, por lo que no se procesará el pedido hasta no ser pagado mediante la plataforma'
+                ) : order.estadoPedido === 'Listo' &&
+                  order.shippingOption === 'local' ? (
+                  <Completionist />
+                ) : (
+                  <Countdown
+                    date={Date.now() + Date.parse(order.horaEstimada)}
+                    renderer={renderer}
+                  />
+                )}
+                {/* {(order.isPaid && order.shippingOption === 'domicilio') ||
+                (!order.isPaid && order.shippingOption === 'local') ? (
+                  <Countdown
+                    date={Date.now() + Date.parse(order.horaEstimada)}
+                    renderer={renderer}
+                  />
+                ) : order.estadoPedido === 'Listo' &&
+                  order.shippingOption === 'local' ? (
+                  <Completionist />
+                ) : (
+                  'La orden ha sido pedida a domicilio pero todavía no ha sido pagada, por lo que todavía no es procesada.'
+                )} */}
               </Card.Body>
             </Card>
           )}

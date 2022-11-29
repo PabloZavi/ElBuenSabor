@@ -248,7 +248,16 @@ export default function IngredienteEditScreen() {
           />
 
           <TextField
-            InputProps={{ inputProps: { min: 0, step: 0.01 } }}
+            InputProps={{
+              inputProps: {
+                min: 0,
+                step:
+                  rubroIngrediente && rubroIngrediente ===
+                  'Bebidas'
+                    ? 1
+                    : 0.01,
+              },
+            }}
             type="Number"
             className="medium-small-input mb-3"
             required
@@ -269,7 +278,16 @@ export default function IngredienteEditScreen() {
           />
           <br />
           <TextField
-            InputProps={{ inputProps: { min: 0, step: 0.01 } }}
+            InputProps={{
+              inputProps: {
+                min: 0,
+                step:
+                  rubroIngrediente && rubroIngrediente ===
+                  'Bebidas'
+                    ? 1
+                    : 0.01,
+              },
+            }}
             type="Number"
             className="medium-small-input mb-3"
             required

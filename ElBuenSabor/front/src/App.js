@@ -524,7 +524,7 @@ function App() {
           </Container>
         </main>
         <footer>
-          <div className="text-center"> El Buen Sabor Footer</div>
+          <div className="text-center"> <i class="bi bi-c-circle"> </i>El Buen Sabor</div>
         </footer>
       </div>
     </BrowserRouter>
