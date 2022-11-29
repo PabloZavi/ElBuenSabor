@@ -7,10 +7,8 @@ Materia: Laboratorio de Computación IV
 <br><br>
 
 # Demostración en video del funcionamiento de la app
-[Enlace para ir a YouTube](dirección YouTube){:target="_blank"}
-
-O ver acá mismo
-@[youtube](ZYmIUiK8ZQI|dirección Youtube)
+[Enlace para ir a YouTube](https://youtu.be/Xvm3EZL4grA)
+[![TITLE](https://img.youtube.com/vi/Xvm3EZL4grA/0.jpg)](https://youtu.be/Xvm3EZL4grA)
 <br><br>
 
 # Página online
