@@ -97,7 +97,7 @@ Desde la raíz del proyecto tipear el comando:
   $ npm run build
 ```
 
-#### Ejectuar el proyecto
+#### Ejecutar el proyecto
 
 Desde la raíz del proyecto tipear el comando:
 
