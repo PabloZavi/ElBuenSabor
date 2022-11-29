@@ -8,8 +8,9 @@ Materia: Laboratorio de Computación IV
 
 # Demostración en video del funcionamiento de la app
 [Enlace para ir a YouTube](https://youtu.be/Xvm3EZL4grA)
+
 [![TITLE](https://img.youtube.com/vi/Xvm3EZL4grA/0.jpg)](https://youtu.be/Xvm3EZL4grA)
-<br><br>
+<br>
 
 # Página online
 Para ver la página en funcionamiento, entrar a:
