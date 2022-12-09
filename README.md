@@ -7,7 +7,8 @@ Materia: Laboratorio de Computación IV
 <br><br>
 
 # Demostración en video del funcionamiento de la app
-[Enlace para ir a YouTube](https://youtu.be/Xvm3EZL4grA)
+[Ver en Odysee (Web 3.0)](https://odysee.com/@pablozaviok:d/Presentaci%C3%B3n-Final-El-Buen-Sabor:d)
+[Ver en YouTube](https://youtu.be/Xvm3EZL4grA)
 
 [![TITLE](https://img.youtube.com/vi/Xvm3EZL4grA/0.jpg)](https://youtu.be/Xvm3EZL4grA)
 <br>
